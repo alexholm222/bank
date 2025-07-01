@@ -1,11 +1,37 @@
-import s from './Main.module.scss';
+import Transaction from "components/Transaction/Transaction";
+import s from "./Main.module.scss";
+const mockData = {
+  payer: {
+    name: "Рога и копыта ООО",
+    inn: "123456789",
+    kpp: "123456789",
+    bank: "Модуль банк АО",
+    bik: "123456789",
+    correspondentAccount: "40702810680060657001",
+    accountNumber: "40702810680060657001",
+  },
+  receiver: {
+    name: "Скилла Инновации ООО",
+    inn: "123456789",
+    kpp: "123456789",
+    bank: "Модуль банк АО",
+    bik: "123456789",
+    correspondentAccount: "40702810680060657001",
+    accountNumber: "40702810680060657001",
+  },
+  amount: "12 345.60",
+  transactionType: "Входящая",
+  paymentType: "Платежное поручение",
+  description:
+    "Поступил платеж от компании ООО “Агро 34” по счету лдотлоолиоли",
+};
 
 const Main = () => {
-    return (
-        <div className={s.root}>
-            ЬФыафыафыа
-        </div>
-    )
+  return (
+    <div className={s.root}>
+      <Transaction data={mockData} />
+    </div>
+  );
 };
 
 export default Main;

@@ -5,22 +5,12 @@ import Main from "./pages/Main/Main";
 import Detail from "./pages/Detail/Detail";
 
 const App = () => {
-
   return (
-    <div
-      id="scrollableDiv"
-      className={s.root}
-    >
+    <div id="scrollableDiv" className={s.root}>
       <Routes>
-        <Route
-          path="/"
-          element={<Main />}
-        />
+        <Route path="/" element={<Main />} />
 
-        <Route
-          path="/detail/:id"
-          element={<Detail />}
-        />
+        <Route path="/" element={<Main />} />
       </Routes>
     </div>
   );

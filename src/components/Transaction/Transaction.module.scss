@@ -1,0 +1,139 @@
+.modal {
+  padding: 20px 24px;
+  min-width: 628px;
+  &_header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    height: 40px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .close {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
+.body {
+  padding: 12px;
+  border-radius: 4px;
+  min-height: 400px;
+  background: rgba(212, 223, 243, 0.17);
+}
+.payment_details {
+  font-family: Arial, sans-serif;
+  background: #f9fbfd;
+
+  border-radius: 8px;
+  max-width: 800px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.section_header {
+  display: flex;
+  justify-content: flex-start;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #6c7a89;
+  margin-bottom: 12px;
+}
+.empty {
+  width: 132px;
+}
+.header_title {
+  width: 200px;
+  height: 30px;
+  overflow: hidden;
+  color: #71869d;
+  margin-right: 44px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  border-bottom: 1px solid #eff4fb;
+}
+.details_grid {
+  display: flex;
+  // justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.column > div {
+  margin-bottom: 8px;
+}
+
+.section_subtitle {
+  width: 200px;
+  display: flex;
+  height: 30px;
+  align-items: center;
+  border-bottom: 1px solid #eff4fb;
+  font-weight: 400;
+  color: #6c7a89;
+  margin-bottom: 12px;
+}
+
+.details_bottom {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.description {
+  grid-column: 1 / -1;
+}
+
+.label {
+  width: 120px;
+  text-align: right;
+  color: #71869d;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  margin-bottom: 12px;
+  &_empty {
+    height: 31px;
+  }
+}
+.content {
+  width: 174px;
+  color: #121922;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  margin-bottom: 12px;
+  &_wide {
+    width: 496px;
+  }
+}
+.payer {
+  margin-right: 55px;
+}
+.types_dropdown {
+  width: 200px;
+}
+.control {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
