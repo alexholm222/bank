@@ -1,26 +1,25 @@
-import { useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 
 //components
 import Modal from "components/General/Modal/Modal";
 import Dropdown from "components/General/Dropdown/Dropdown";
+import DataPickerCalendar from "components/General/DataPickerCalendar/DataPickerCalendar";
+import DateInput from "components/General/DateInput/DateInput";
+import Combobox from "components/General/Combobox/Combobox";
+import Button from "components/General/Button/Button";
+import ButtonSecond from "components/General/ButtonSecond/ButtonSecond";
 
 //libs
 import dayjs from "dayjs";
 
 //icons
-import { ReactComponent as IconChevron } from "assets/icons/iconChewron.svg";
 import { ReactComponent as IconDoneWhite } from "assets/icons/iconDoneWhite.svg";
-import { ReactComponent as IconPlusBlack } from "assets/icons/iconPlusBlack.svg";
 import { ReactComponent as IconCloseBlack } from "assets/icons/iconCloseBlack.svg";
-import { ReactComponent as IconDoneGrey } from "assets/icons/iconDoneGrey.svg";
-import { ReactComponent as FolderIcon } from "assets/icons/folderIcon.svg";
-import { ReactComponent as IconDelete } from "assets/icons/iconDelete.svg";
+import { ReactComponent as IconDeleteRed } from "assets/icons/iconDeleteRed.svg";
 
 //styles
 import classNames from "classnames";
 import s from "./Transaction.module.scss";
-import DataPickerCalendar from "components/General/DataPickerCalendar/DataPickerCalendar";
-import DateInput from "components/General/DateInput/DateInput";
 
 // const { data: parameters } = useGetParametrsQuery();
 // const [uploadDocument] = useUploadDocumentMutation();
@@ -56,7 +55,7 @@ const Transaction = ({ data }) => {
     setCloseModal(false);
   };
   return (
-    <Modal isOpen={closeModal}>
+    <Modal isOpen={closeModal} onClose={onClose}>
       <div className={s.modal}>
         <div className={s.modal_header}>
           <div className={s.title}>
@@ -69,9 +68,8 @@ const Transaction = ({ data }) => {
         <div className={s.body}>
           <PaymentDetails data={data} />
         </div>
-        <div className={s.control_section}>
+        <div className={s.controlSection}>
           <div className={s.control}>
-            {" "}
             <DateInput
               selectedDate={selectedDate}
               setOpenCalendar={setOpenCalendar}
@@ -87,22 +85,38 @@ const Transaction = ({ data }) => {
             <Dropdown
               options={incomeTransactionTypes}
               value={incomeType}
-              className={s.types_dropdown}
+              className={s.dropdown}
               onChange={setIncomeType}
             />
           </div>
-          <div>
-            <Dropdown
-              options={outcomeTransactionTypes}
-              value={outcomeType}
-              className={s.types_dropdown}
-              onChange={setOutcomeType}
-            />
+          <Combobox className={s.combobox} />
+          <div className={s.control}>
             <Dropdown
               options={docTypes}
               value={docType}
-              className={s.types_dropdown}
+              className={s.dropdown}
               onChange={setDoctype}
+            />
+            <Combobox className={s.combobox} />
+          </div>
+          <div className={s.control_btn}>
+            {" "}
+            <ButtonSecond
+              type={"red"}
+              Icon={IconDeleteRed}
+              buttonText={"Удалить"}
+              handler={() => {
+                console.log("delete");
+              }}
+            />
+            <Button
+              width={314}
+              type={"right"}
+              Icon={IconDoneWhite}
+              buttonText={"Сохранить"}
+              handler={() => {
+                console.log("save");
+              }}
             />
           </div>
         </div>
@@ -118,78 +132,58 @@ const PaymentDetails = ({ data }) => {
   const { payer, receiver, amount, transactionType, paymentType, description } =
     data;
 
-  const renderFields = (entity) => (
+  const renderFields = (entity, withLabels = false) => (
     <>
-      <div>
-        {!entity && <div className={s.label}>Наименование</div>}
-        {entity && <div className={s.content}>{entity.name}</div>}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>ИНН</div>}
-        {entity && <div className={s.content}>{entity.inn}</div>}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>КПП</div>}
-        {entity && <div className={s.content}>{entity.kpp}</div>}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>Банк</div>}
-        {entity && <div className={s.content}>{entity.bank}</div>}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>БИК</div>}
-        {entity && <div className={s.content}>{entity.bik}</div>}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>Корр. счет</div>}
-        {entity && (
-          <div className={s.content}>{entity.correspondentAccount}</div>
-        )}
-      </div>
-      <div>
-        {!entity && <div className={s.label}>Счет</div>}
-        {entity && <div className={s.content}>{entity.accountNumber}</div>}
-      </div>
+      {[
+        ["Наименование", entity?.name],
+        ["ИНН", entity?.inn],
+        ["КПП", entity?.kpp],
+        ["Банк", entity?.bank],
+        ["БИК", entity?.bik],
+        ["Корр. счет", entity?.correspondentAccount],
+        ["Расчетный счет", entity?.accountNumber],
+      ].map(([label, value], index) => (
+        <div key={index} className={s.row}>
+          {withLabels && <div className={s.label}>{label}</div>}
+          <div className={s.content}>{value}</div>
+        </div>
+      ))}
     </>
   );
 
   return (
-    <div className={s.payment_details}>
-      <div className={s.section_header}>
-        <div className={s.empty}></div>
-        <div className={s.header_title}>Плательщик</div>
-        <div className={s.header_title}>Получатель</div>
+    <div className={s.paymentDetails}>
+      <div className={s.sectionHeader}>
+        <div className={s.headerTitle}>Плательщик</div>
+        <div className={s.headerTitle}>Получатель</div>
       </div>
 
-      <div className={s.details_grid}>
-        <div className={s.column}>{renderFields()}</div>
+      <div className={s.detailsGrid}>
+        <div className={s.column}>{renderFields(null, true)}</div>
         <div className={classNames(s.column, s.payer)}>
           {renderFields(payer)}
         </div>
         <div className={s.column}>{renderFields(receiver)}</div>
       </div>
 
-      <div className={s.details_grid}>
-        <div className={s.column}>
-          {" "}
-          <div className={s.label_empty}></div>
+      <div className={s.paymentSummary}>
+        <div className={s.sectionSubtitle}>Детали платежа из выписки</div>
+
+        <div className={s.row}>
           <div className={s.label}>Сумма</div>
-          <div className={s.label}>Тип транзакции</div>
-          <div className={s.label}>Вид</div>
-          <div className={s.label}>Назначение</div>
+          <div className={s.content}>{amount}</div>
         </div>
-        <div className={s.column}>
-          <div className={s.section_subtitle}>Детали платежа из выписки</div>
-          <div className={classNames(s.content_wide, s.content)}>{amount}</div>
-          <div className={classNames(s.content_wide, s.content)}>
-            {paymentType}
-          </div>
-          <div className={classNames(s.content_wide, s.content)}>
-            {transactionType}
-          </div>
-          <div className={classNames(s.content_wide, s.content)}>
-            {description}
-          </div>
+        <div className={s.row}>
+          <div className={s.label}>Тип транзакции</div>
+          <div className={s.content}>{transactionType}</div>
+        </div>
+        <div className={s.row}>
+          <div className={s.label}>Вид</div>
+          <div className={s.content}>{paymentType}</div>
+        </div>
+        <div className={s.row}>
+          <div className={s.label}>Назначение</div>
+          <div className={s.content}>{description}</div>
         </div>
       </div>
     </div>

@@ -3,14 +3,32 @@ import { ReactComponent as CalendarIcon } from "assets/icons/iconCalendar.svg";
 import s from "./DateInput.module.scss";
 
 import dayjs from "dayjs";
+import "dayjs/locale/ru";
+import { useState } from "react";
 
-const DateInput = ({ selectedDate, setOpenCalendar }) => {
+const DateInput = ({ selectedDate, setSelectedDate, setOpenCalendar }) => {
+  dayjs.locale("ru");
+  const [inputValue, setInputValue] = useState(
+    dayjs(selectedDate).format("DD.MM.YYYY")
+  );
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+
+    const parsed = dayjs(value, "DD.MM.YYYY", true);
+    if (parsed.isValid()) setSelectedDate(parsed);
+  };
   return (
     <div className={s.wrapper} onClick={() => setOpenCalendar(true)}>
-      <div className={s.inputBox}>
-        {dayjs(selectedDate).format("DD.MM.YYYY")}
-        <CalendarIcon className={s.icon} />
-      </div>
+      <input
+        className={s.inputBox}
+        value={inputValue}
+        onChange={handleChange}
+        onFocus={() => setOpenCalendar(true)}
+        placeholder="дд.мм.гггг"
+      />
+      <CalendarIcon className={s.icon} />
     </div>
   );
 };
