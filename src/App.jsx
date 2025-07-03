@@ -1,8 +1,9 @@
-import s from "./App.module.scss";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from 'react-router-dom';
+
+import s from './App.module.scss';
+
 //components
-import Main from "./pages/Main/Main";
-import Detail from "./pages/Detail/Detail";
+import Main from './pages/Main/Main';
 
 const App = () => {
   return (

@@ -4,13 +4,16 @@
   align-items: center;
   flex-direction: row;
   border: 1px solid #e0e5f2;
-  border-radius: 6px;
+  border-radius: 4px;
   background-color: #fff;
   padding: 10px 12px;
   transition: border 0.2s ease;
 
   &:hover {
-    border-color: #b0c2e0;
+    border: 1px solid #002cfb;
+  }
+  &:active {
+    border: 1px solid #002cfb;
   }
 }
 
@@ -35,4 +38,9 @@
   margin-left: 8px;
   flex-shrink: 0;
   cursor: pointer;
+  &:hover {
+    path {
+      fill: #002cfb;
+    }
+  }
 }

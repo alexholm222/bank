@@ -10,14 +10,10 @@ export const apiActions = createApi({
     headers: {
       'Content-Type': 'application/json',
       Authorization: token ? token : '',
-      Accept: 'application/json'
-    }
+      Accept: 'application/json',
+    },
   }),
-  endpoints: (build) => ({
-
-  })
+  endpoints: (build) => ({}),
 });
 
-export const {
-
-} = apiActions;
+// export const {} = apiActions;

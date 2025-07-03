@@ -1,19 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useRef, useState } from 'react';
 //styles
-import classNames from "classnames";
-import s from "./Modal.module.scss";
+import classNames from 'classnames';
+
+import s from './Modal.module.scss';
 
 const Modal = ({ isOpen, onClose, children }) => {
   const [animate, setAnimate] = useState(false);
   const modalRef = useRef(null);
-
-  const handleClose = () => {
-    setAnimate(false);
-    setTimeout(() => {
-      onClose();
-    }, 200);
-  };
 
   useEffect(() => {
     if (isOpen) setTimeout(() => setAnimate(true), 10);
@@ -21,6 +14,12 @@ const Modal = ({ isOpen, onClose, children }) => {
   }, [isOpen]);
 
   useEffect(() => {
+    const handleClose = () => {
+      setAnimate(false);
+      setTimeout(() => {
+        onClose();
+      }, 200);
+    };
     const handleClickOutside = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
         handleClose();
@@ -28,11 +27,11 @@ const Modal = ({ isOpen, onClose, children }) => {
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
