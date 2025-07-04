@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { apiActions } from './apiActions';
+import modalReducer from './modal/modalSlice';
 //slice
 /* import filtersSlice from './filters/slice'; */
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     /*  filters: filtersSlice, */
 
     [apiActions.reducerPath]: apiActions.reducer,
+    modal: modalReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

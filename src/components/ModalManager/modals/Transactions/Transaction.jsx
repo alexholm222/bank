@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
+// Hooks
+import { useModal } from 'hooks/useModal';
+
 // Components
 import Button from 'components/General/Button/Button';
 import ButtonSecond from 'components/General/ButtonSecond/ButtonSecond';
@@ -29,24 +32,24 @@ const docTypes = ['Оказание услуг', 'Транспортный'];
 const incomeTransactionTypes = ['Поступление', 'Возврат'];
 // const outcomeTransactionTypes = ['Платеж', 'Возврат'];
 
-const Transaction = ({ data }) => {
+const Transaction = () => {
+  const { modalProps, hideModal } = useModal();
   const [incomeType, setIncomeType] = useState(incomeTransactionTypes[0]);
   const [docType, setDoctype] = useState(docTypes[0]);
-  const [closeModal, setCloseModal] = useState(true);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
-
+  const { data } = modalProps || {};
   const number = 123344;
   const date = '12.12.2022';
 
   return (
-    <Modal isOpen={closeModal} onClose={() => setCloseModal(false)}>
+    <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
         <div className={s.modal_header}>
           <div className={s.title}>
             <h3>{`Транзакция ${number} от ${date}`}</h3>
           </div>
-          <button className={s.close} onClick={() => setCloseModal(false)}>
+          <button className={s.close} onClick={hideModal}>
             <IconCloseBlack />
           </button>
         </div>
@@ -67,18 +70,18 @@ const Transaction = ({ data }) => {
               />
             )}
             <Dropdown
-              options={incomeTransactionTypes}
+              options={['Поступление', 'Возврат']}
               value={incomeType}
               style={{ width: '200px' }}
               onChange={setIncomeType}
             />
           </div>
 
-          <Combobox className={s.combobox} options={options} />
+          <Combobox className={s.combobox} options={[{ value: 'passport', label: 'Паспорт' }]} />
 
           <div className={s.control}>
             <Dropdown
-              options={docTypes}
+              options={['Оказание услуг', 'Транспортный']}
               value={docType}
               style={{ width: '200px' }}
               onChange={setDoctype}

@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.container {
+}

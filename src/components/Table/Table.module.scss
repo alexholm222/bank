@@ -1,0 +1,66 @@
+.root {
+  table-layout: fixed;
+  padding: 0 28px 20px 28px;
+  width: 100%;
+  max-width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  border-spacing: 0;
+  opacity: 1;
+  color: var(--Text-Primary, #121922);
+
+  .dataRow:hover {
+    background-color: #eff4fb;
+  }
+
+  th,
+  td {
+    height: 50px;
+    white-space: nowrap;
+    text-align: start;
+    border-bottom: 1px solid #eff4fb;
+    padding: 16px 20px 16px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+
+    p {
+      font-weight: 400;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      span {
+        color: #71869d;
+      }
+    }
+  }
+
+  th {
+    color: #71869d;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  td {
+    color: #121922;
+  }
+
+  &_anim {
+    opacity: 1;
+  }
+
+  &_fetch td {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .wide {
+    width: 100%;
+  }
+
+  .narrow {
+    width: 150px;
+  }
+}
