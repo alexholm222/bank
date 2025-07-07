@@ -6,13 +6,15 @@ import s from './UniButton.module.scss';
 const UniButton = ({
   className = '',
   style = {},
-  type = 'primary', // primary, secondary, danger
+  type = 'primary', // primary, outline, danger
   iconPosition = 'left', // left, right
   icon: Icon,
   text,
   width,
   height,
   children,
+  onClick,
+  disabled = false,
 }) => {
   const buttonStyle = {
     width: width ? `${width}px` : undefined,
@@ -22,8 +24,16 @@ const UniButton = ({
 
   return (
     <button
-      className={classNames(s.button, s[`button_${type}`], s[`icon_${iconPosition}`], className)}
+      className={classNames(
+        s.button,
+        s[`button_${type}`],
+        s[`icon_${iconPosition}`],
+        disabled && s.button_disabled,
+        className
+      )}
       style={buttonStyle}
+      onClick={onClick}
+      disabled={disabled}
     >
       {children ? (
         children
@@ -36,5 +46,4 @@ const UniButton = ({
     </button>
   );
 };
-
 export default UniButton;

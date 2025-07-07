@@ -3,20 +3,29 @@ const customStyles = {
     ...base,
     width: '100%',
     backgroundColor: '#fff',
-    borderColor: state.isFocused ? ' #002cfb' : '#e0e5f2',
+    borderColor: state.isFocused ? '#002cfb' : '#e0e5f2',
     boxShadow: 'none',
     borderRadius: '4px',
-    padding: '2px 4px',
-    minHeight: '40px',
+    cursor: 'pointer',
+    height: '40px',
     '&:hover': {
-      borderColor: ' #002cfb',
+      borderColor: '#002cfb',
     },
   }),
-  placeholder: (base) => ({
+  valueContainer: (base) => ({
+    ...base,
+    minHeight: '40px',
+    display: 'flex',
+    alignItems: 'center',
+  }),
+  placeholder: (base, state) => ({
     ...base,
     color: '#98a0af',
     fontSize: '14px',
+    opacity: state.selectProps.isEditing ? 1 : 0,
+    transition: 'opacity 0.2s ease',
   }),
+
   singleValue: (base) => ({
     ...base,
     color: '#121922',
@@ -48,6 +57,11 @@ const customStyles = {
   }),
   indicatorSeparator: () => ({
     display: 'none',
+  }),
+  input: (base, state) => ({
+    ...base,
+    opacity: state.selectProps.isEditing ? 1 : 0,
+    width: state.selectProps.isEditing ? '100%' : 0,
   }),
 };
 

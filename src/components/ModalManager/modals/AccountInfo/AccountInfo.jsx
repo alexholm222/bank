@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
@@ -18,9 +19,12 @@ import Modal from 'components/General/Modal/Modal';
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
 import { ReactComponent as IconDeleteRed } from 'assets/icons/iconDeleteRed.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as EyeRed } from 'assets/icons/eyeRed.svg';
+import { ReactComponent as IconCopyWhite } from 'assets/icons/iconCopyWhite.svg';
+import { ReactComponent as RowBlue } from 'assets/icons/rowBlue.svg';
 
 // Styles
-import s from './Transaction.module.scss';
+import s from './AccountInfo.module.scss';
 import UniButton from 'components/General/UniButton/UniButton';
 
 const options = [
@@ -126,8 +130,8 @@ const docTypes = ['Оказание услуг', 'Транспортный'];
 const incomeTransactionTypes = ['Поступление', 'Возврат'];
 // const outcomeTransactionTypes = ['Платеж', 'Возврат'];
 
-const Transaction = () => {
-  const { modalProps, hideModal } = useModal();
+const AccountInfo = () => {
+  const { modalProps, hideModal, showModal } = useModal();
   const [incomeType, setIncomeType] = useState(incomeTransactionTypes[0]);
   const [docType, setDoctype] = useState(docTypes[0]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -135,69 +139,53 @@ const Transaction = () => {
   const { data } = modalProps || {};
   const number = 123344;
   const date = '12.12.2022';
+  const count = 3;
+  const handleDoUnactive = () => {
+    hideModal();
+    showModal('CHANGE_ACCOUNT_DETAIL');
+  };
 
   return (
     <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
         <div className={s.modal_header}>
           <div className={s.title}>
-            <h3>{`Транзакция ${number} от ${date}`}</h3>
+            <h3>Банковский счет</h3>
           </div>
           <button className={s.close} onClick={hideModal}>
             <IconCloseBlack />
           </button>
         </div>
 
+        <Link to="/counterparties" className={s.link}>
+          Связанные контрагенты
+          <span className={s.count}>{count}</span>
+          <span className={s.arrow}>
+            <RowBlue />
+          </span>
+        </Link>
+
         <div className={s.body}>
           <PaymentDetails data={data} />
         </div>
 
         <div className={s.controlSection}>
-          <div className={s.control}>
-            <DateInput selectedDate={selectedDate} setOpenCalendar={setOpenCalendar} />
-            {openCalendar && (
-              <DataPickerCalendar
-                value={selectedDate}
-                setValue={setSelectedDate}
-                setOpenCalendar={setOpenCalendar}
-                nosub={false}
-              />
-            )}
-            <Dropdown
-              options={['Поступление', 'Возврат']}
-              value={incomeType}
-              style={{ width: '200px' }}
-              onChange={setIncomeType}
-            />
-          </div>
-
-          <Combobox className={s.combobox} options={data1} />
-
-          <div className={s.control}>
-            <Dropdown
-              options={['Оказание услуг', 'Транспортный']}
-              value={docType}
-              style={{ width: '200px' }}
-              onChange={setDoctype}
-            />
-            <Combobox className={s.combobox} options={{}} />
-          </div>
-
-          <div className={s.control_btn}>
+          <div className={s.controlBtn}>
             <UniButton
-              iconPosition="right"
+              onClick={handleDoUnactive}
+              text="Сделать неактивным"
               type="danger"
-              icon={IconDeleteRed}
-              text="Удалить"
-              handler={() => console.log('delete')}
+              iconPosition="right"
+              icon={EyeRed}
+              width={212}
             />
             <UniButton
-              iconPosition="right"
-              width={314}
+              onClick={hideModal}
+              text="Копировать реквизиты"
               type="primary"
-              icon={IconDoneWhite}
-              text="Сохранить"
-              handler={() => console.log('save')}
+              iconPosition="right"
+              icon={IconCopyWhite}
+              width={228}
             />
           </div>
         </div>
@@ -207,7 +195,7 @@ const Transaction = () => {
   );
 };
 
-export default Transaction;
+export default AccountInfo;
 
 const PaymentDetails = ({ data }) => {
   const { payer, receiver, amount, transactionType, paymentType, description } = data;
@@ -216,7 +204,7 @@ const PaymentDetails = ({ data }) => {
 
   const renderFields = (entity) =>
     [
-      entity?.name,
+      entity?.company,
       entity?.inn,
       entity?.kpp,
       entity?.bank,
@@ -248,17 +236,22 @@ const PaymentDetails = ({ data }) => {
     </div>
   );
 
-  const labels = ['Наименование', 'ИНН', 'КПП', 'Банк', 'БИК', 'Корр. счет', 'Расчетный счет'];
+  const labels = [
+    'Компания',
+    'ИНН',
+    'КПП',
+    'ОГРН',
+    'Юр. адрес',
+    'Факт. адрес',
+    'Руководитель',
+    'Банк',
+    'БИК',
+    'Корр. счет',
+    'Расчетный счет',
+  ];
 
   return (
     <div className={s.paymentDetails}>
-      {isSummaryFirst && summaryBlock}
-
-      <div className={s.sectionHeader}>
-        <div className={s.headerTitle}>Плательщик</div>
-        <div className={s.headerTitle}>Получатель</div>
-      </div>
-
       <div className={s.detailsGrid}>
         <div className={s.column}>
           {labels.map((label, index) => (
@@ -268,7 +261,6 @@ const PaymentDetails = ({ data }) => {
           ))}
         </div>
         <div className={classNames(s.column, s.payer)}>{renderFields(payer)}</div>
-        <div className={s.column}>{renderFields(receiver)}</div>
       </div>
 
       {!isSummaryFirst && summaryBlock}

@@ -1,4 +1,6 @@
 .button {
+  max-height: 40px;
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   padding: 10px 20px;
@@ -6,6 +8,14 @@
   align-items: center;
   gap: 6px;
   border-radius: 4px;
+
+  text-align: center;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.056px;
 
   span {
     white-space: nowrap;
@@ -49,5 +59,13 @@
       border-color: #cc0101;
       color: #cc0101;
     }
+  }
+
+  &.button_disabled {
+    background-color: #f0f2f5 !important;
+    color: #98a0af !important;
+    border: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
   }
 }
