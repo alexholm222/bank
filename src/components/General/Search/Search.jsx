@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-
-import s from './Search.module.scss';
-
+//icons
 import { ReactComponent as IconClose } from './icons/iconClose.svg';
 import { ReactComponent as IconDone } from './icons/iconDone.svg';
 import { ReactComponent as IconEnter } from './icons/iconEnter.svg';
-//icons
 import { ReactComponent as IconSearch } from './icons/iconSearch.svg';
 //components
 import LoaderCircle from './LoaderCircle/LoaderCircle';
+//styles
+import s from './Search.module.scss';
 
 const Search = ({ isFetching, searchValue, setSearchQuery }) => {
   const [active, setActive] = useState(false);

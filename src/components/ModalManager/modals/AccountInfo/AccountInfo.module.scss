@@ -1,13 +1,15 @@
 .modal {
   padding: 20px 24px;
-  text-align: right;
+
   font-family: Inter;
   width: 500px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: flex-start;
 
   &_header {
+    width: 100%;
     position: relative;
     display: flex;
     align-items: center;
@@ -151,7 +153,6 @@
 .controlSection {
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
 
   .controlBtn {
     justify-content: flex-end;
@@ -184,4 +185,10 @@
   &:hover {
     color: #0024cb;
   }
+}
+.switchWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }

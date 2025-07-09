@@ -1,5 +1,6 @@
 .button {
-  max-height: 40px;
+  position: relative;
+  height: 40px;
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
@@ -32,7 +33,6 @@
   &.button_primary {
     background-color: #003cff;
     color: white;
-    border: none;
 
     &:hover {
       background-color: #0024cb;
@@ -67,5 +67,29 @@
     border: none !important;
     cursor: not-allowed !important;
     pointer-events: none;
+  }
+
+  .loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+
+    &.loader_visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .icon {
+    transition: opacity 0.3s ease;
+  }
+
+  .text_hidden {
+    display: none;
   }
 }

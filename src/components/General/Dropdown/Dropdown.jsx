@@ -14,6 +14,7 @@ const Dropdown = ({
   onChange = () => {},
   style = {},
   placeholder = 'Выберите категорию',
+  label,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,6 +37,7 @@ const Dropdown = ({
 
   return (
     <div className={classNames(s.wrapper)} ref={wrapperRef}>
+      {label && <span className={s.label}>{label}</span>}
       <div
         className={s.selectBox}
         onClick={() => setIsOpen((prev) => !prev)}

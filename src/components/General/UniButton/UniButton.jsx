@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-
 import s from './UniButton.module.scss';
+import LoaderButton from 'components/General/UniButton/LoaderButton/LoaderButton';
 
 const UniButton = ({
   className = '',
@@ -15,6 +15,8 @@ const UniButton = ({
   children,
   onClick,
   disabled = false,
+  isLoading = false,
+  loaderColor = '#002CFB',
 }) => {
   const buttonStyle = {
     width: width ? `${width}px` : undefined,
@@ -33,17 +35,23 @@ const UniButton = ({
       )}
       style={buttonStyle}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || isLoading}
     >
       {children ? (
         children
       ) : (
         <>
-          {Icon && <Icon className={s.icon} />}
-          <span>{text}</span>
+          <div className={classNames(s.loader, isLoading && s.loader_visible)}>
+            <LoaderButton color={loaderColor} />
+          </div>
+
+          {Icon && !isLoading && <Icon className={s.icon} />}
+
+          <span className={classNames(isLoading && s.text_hidden)}>{text}</span>
         </>
       )}
     </button>
   );
 };
+
 export default UniButton;

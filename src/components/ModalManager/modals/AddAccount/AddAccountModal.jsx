@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+// Components
+import Combobox from 'components/General/Combobox/Combobox';
+import CustomInput from 'components/General/CustomInput/CustomInput';
 import Modal from 'components/General/Modal/Modal';
+import UniButton from 'components/General/UniButton/UniButton';
+// Icons
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { ReactComponent as IconDoneDouble } from 'assets/icons/iconDoneDouble.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+// Styles
 import s from './AddAccountModal.module.scss';
-import UniButton from 'components/General/UniButton/UniButton';
-import CustomInput from 'components/General/CustomInput/CustomInput';
-import Combobox from 'components/General/Combobox/Combobox';
 
 const AddAccountModal = ({ onClose }) => {
   const [bik, setBik] = useState('');

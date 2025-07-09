@@ -1,6 +1,7 @@
 const customStyles = {
   control: (base, state) => ({
     ...base,
+    maxWidth: '100%',
     width: '100%',
     backgroundColor: '#fff',
     borderColor: state.isFocused ? '#002cfb' : '#e0e5f2',
@@ -16,14 +17,13 @@ const customStyles = {
     ...base,
     minHeight: '40px',
     display: 'flex',
+    flexWrap: 'nowrap',
     alignItems: 'center',
+    paddingRight: '32px',
   }),
-  placeholder: (base, state) => ({
+  placeholder: (base) => ({
     ...base,
-    color: '#98a0af',
-    fontSize: '14px',
-    opacity: state.selectProps.isEditing ? 1 : 0,
-    transition: 'opacity 0.2s ease',
+    display: 'none',
   }),
 
   singleValue: (base) => ({
@@ -57,11 +57,6 @@ const customStyles = {
   }),
   indicatorSeparator: () => ({
     display: 'none',
-  }),
-  input: (base, state) => ({
-    ...base,
-    opacity: state.selectProps.isEditing ? 1 : 0,
-    width: state.selectProps.isEditing ? '100%' : 0,
   }),
 };
 

@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import classNames from 'classnames';
-
-import s from './Table.module.scss';
-import TableSceleton from 'components/TableSceleton/TableSceleton';
+// Hooks
 import { useModal } from 'hooks/useModal';
+// Components
 import DownloadButton from 'components/General/DownloadButton/DownloadButton';
-
-import { ReactComponent as IconCopy } from 'assets/icons/iconCopy.svg';
-import { ReactComponent as IconInfo } from 'assets/icons/iconInfo.svg';
+import Tooltip from 'components/General/Tooltip/Tooltip';
+import TableSceleton from 'components/TableSceleton/TableSceleton';
+// Icons
 import { ReactComponent as IconClose } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconCloseRed } from 'assets/icons/iconCloseRed.svg';
-
-import { toast } from 'react-toastify';
+import { ReactComponent as IconCopy } from 'assets/icons/iconCopy.svg';
+import { ReactComponent as IconInfo } from 'assets/icons/iconInfo.svg';
+// Styles
+import s from './Table.module.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import Tooltip from 'components/General/Tooltip/Tooltip';
+
 const mockData = {
   payer: {
     name: 'Рога и копыта ООО',
@@ -41,8 +43,6 @@ const mockData = {
 };
 const Table = ({ type, list, anim, isFetch }) => {
   const { showModal } = useModal();
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const [tooltipPos, setTooltipPos] = useState({ top: -150, left: -150 });
 
   const handlerOpenFlow = () => {
     if (type === 1) {
@@ -63,14 +63,6 @@ const Table = ({ type, list, anim, isFetch }) => {
   //   openFlow();
   //   console.log('Click');
   // };
-  const handleShowTooltip = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setTooltipPos({
-      top: rect.top + window.scrollY - 40 + 50,
-      left: rect.left + rect.width / 2 - 200,
-    });
-    setTooltipOpen(true);
-  };
 
   const handleDeleteTransaction = (id, e) => {
     e.stopPropagation();
@@ -90,7 +82,7 @@ const Table = ({ type, list, anim, isFetch }) => {
           <th style={{ width: '160px' }}>Сумма, ₽</th>
           <th style={{ minWidth: '230px' }}>Плательщик</th>
           <th style={{ minWidth: '230px' }}>Получатель</th>
-          <th style={{ minWidth: '390px' }}>Назначение</th>
+          <th style={{ minWidth: '230px' }}>Назначение</th>
           <th style={{ minWidth: '180px' }}>Вид</th>
           <th style={{ minWidth: '50px' }}></th>
         </tr>
@@ -120,16 +112,12 @@ const Table = ({ type, list, anim, isFetch }) => {
           <th style={{ width: '100px' }}>Добавлен</th>
           <th style={{ width: '140px', position: 'relative' }} className={s.contrAgents}>
             Контрагенты{' '}
-            <div onMouseEnter={handleShowTooltip} onMouseLeave={() => setTooltipOpen(false)}>
+            <Tooltip
+              text="Количество контрагентов, у которых выбран данный счет в качестве основного"
+              maxWidth={400}
+            >
               <IconInfo />
-              <Tooltip
-                open={tooltipOpen}
-                text="Количество контрагентов, у которых выбран данный счет в качестве основного"
-                maxWidth={400}
-                top={tooltipPos.top}
-                left={tooltipPos.left}
-              />
-            </div>
+            </Tooltip>
           </th>
           <th style={{ width: '90px' }}></th>
           <th style={{ width: '40px' }}></th>
@@ -150,7 +138,7 @@ const Table = ({ type, list, anim, isFetch }) => {
           </td>
           <td>{row.payer.name}</td>
           <td>{row.receiver.name}</td>
-          <td>{row.description}</td>
+          <td className={s.shrinkable}>{row.description}</td>
           <td>{row.transactionType}</td>
           <td className={s.deleteCell}>
             <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />

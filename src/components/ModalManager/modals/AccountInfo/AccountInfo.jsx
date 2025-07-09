@@ -1,31 +1,26 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
 
 // Components
-import Button from 'components/General/Button/Button';
-import ButtonSecond from 'components/General/ButtonSecond/ButtonSecond';
-import Combobox from 'components/General/Combobox/Combobox';
-import DataPickerCalendar from 'components/General/DataPickerCalendar/DataPickerCalendar';
-import DateInput from 'components/General/DateInput/DateInput';
-import Dropdown from 'components/General/Dropdown/Dropdown';
 import Modal from 'components/General/Modal/Modal';
-
+import Switch from 'components/General/Switch/Switch';
+import Tooltip from 'components/General/Tooltip/Tooltip';
+import UniButton from 'components/General/UniButton/UniButton';
 // Icons
-import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
-import { ReactComponent as IconDeleteRed } from 'assets/icons/iconDeleteRed.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { ReactComponent as EyeRed } from 'assets/icons/eyeRed.svg';
+import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
 import { ReactComponent as IconCopyWhite } from 'assets/icons/iconCopyWhite.svg';
+import { ReactComponent as IconViewing } from 'assets/icons/iconViewingWhite.svg';
+import { ReactComponent as IconInfo } from 'assets/icons/iconInfo.svg';
 import { ReactComponent as RowBlue } from 'assets/icons/rowBlue.svg';
 
 // Styles
 import s from './AccountInfo.module.scss';
-import UniButton from 'components/General/UniButton/UniButton';
 
 const options = [
   { value: 'passport', label: 'Паспорт' },
@@ -132,19 +127,17 @@ const incomeTransactionTypes = ['Поступление', 'Возврат'];
 
 const AccountInfo = () => {
   const { modalProps, hideModal, showModal } = useModal();
-  const [incomeType, setIncomeType] = useState(incomeTransactionTypes[0]);
-  const [docType, setDoctype] = useState(docTypes[0]);
-  const [selectedDate, setSelectedDate] = useState(dayjs());
-  const [openCalendar, setOpenCalendar] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const { data } = modalProps || {};
-  const number = 123344;
-  const date = '12.12.2022';
+
   const count = 3;
-  const handleDoUnactive = () => {
+  const handleDeactivate = () => {
     hideModal();
     showModal('CHANGE_ACCOUNT_DETAIL');
   };
-
+  const handleActivate = () => {
+    setIsActive(true);
+  };
   return (
     <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
@@ -157,37 +150,60 @@ const AccountInfo = () => {
           </button>
         </div>
 
-        <Link to="/counterparties" className={s.link}>
-          Связанные контрагенты
-          <span className={s.count}>{count}</span>
-          <span className={s.arrow}>
-            <RowBlue />
-          </span>
-        </Link>
+        {isActive && (
+          <Link to="/counterparties" className={s.link} onClick={hideModal}>
+            Связанные контрагенты
+            <span className={s.count}>{count}</span>
+            <span className={s.arrow}>
+              <RowBlue />
+            </span>
+          </Link>
+        )}
 
         <div className={s.body}>
           <PaymentDetails data={data} />
         </div>
-
+        {isActive && (
+          <div className={s.switchWrapper}>
+            <Switch label="Основной счет" />
+            <Tooltip
+              text="Отметка автоматичсеки снимается при назначении нового основного счета"
+              maxWidth={400}
+            >
+              <IconInfo />
+            </Tooltip>
+          </div>
+        )}
         <div className={s.controlSection}>
-          <div className={s.controlBtn}>
+          {!isActive ? (
             <UniButton
-              onClick={handleDoUnactive}
-              text="Сделать неактивным"
-              type="danger"
-              iconPosition="right"
-              icon={EyeRed}
-              width={212}
-            />
-            <UniButton
-              onClick={hideModal}
-              text="Копировать реквизиты"
+              onClick={handleActivate}
+              text="Сделать активным"
               type="primary"
               iconPosition="right"
-              icon={IconCopyWhite}
-              width={228}
+              icon={IconViewing}
+              width={452}
             />
-          </div>
+          ) : (
+            <div className={s.controlBtn}>
+              <UniButton
+                onClick={handleDeactivate}
+                text="Сделать неактивным"
+                type="danger"
+                iconPosition="right"
+                icon={EyeRed}
+                width={212}
+              />
+              <UniButton
+                onClick={hideModal}
+                text="Копировать реквизиты"
+                type="primary"
+                iconPosition="right"
+                icon={IconCopyWhite}
+                width={228}
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className={s.footer}></div>

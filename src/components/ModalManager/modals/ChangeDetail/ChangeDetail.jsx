@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
+//components
 import Modal from 'components/General/Modal/Modal';
-import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-
-import { ReactComponent as IconLogout } from 'assets/icons/iconLogout.svg';
-import s from './ChangeDetail.module.scss';
 import UniButton from 'components/General/UniButton/UniButton';
-import CustomInput from 'components/General/CustomInput/CustomInput';
-import Combobox from 'components/General/Combobox/Combobox';
+//icons
+import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconLogout } from 'assets/icons/iconLogout.svg';
+//styles
+import s from './ChangeDetail.module.scss';
+import Dropdown from 'components/General/Dropdown/Dropdown';
 
 const ChangeDetail = ({ onClose }) => {
   return (
@@ -21,6 +20,11 @@ const ChangeDetail = ({ onClose }) => {
           </div>
           <IconCloseBlack onClick={onClose} className={s.closeBtn} />
         </div>
+        <Dropdown
+          placeholder="Выберите банк"
+          options={['Банк 1', 'Банк 2', 'Банк 3']}
+          label="Заменить реквизиты у закзчиков"
+        />
         <UniButton text="Готово" icon={IconDoneWhite} />
       </div>
     </Modal>

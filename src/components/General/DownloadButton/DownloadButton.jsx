@@ -1,6 +1,8 @@
 import React from 'react';
-import s from './DownloadButton.module.scss';
+
 import { ReactComponent as IconDocument } from 'assets/icons/iconDocument.svg'; // Замени на свой SVG-иконку
+
+import s from './DownloadButton.module.scss';
 
 const DownloadButton = ({ onClick, text = 'Скачать' }) => {
   return (

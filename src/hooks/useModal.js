@@ -16,16 +16,3 @@ export const useModal = () => {
 
   return { activeModal, modalProps, showModal, hideModal };
 };
-
-//перключение внутри модалок
-// const MainAccountModal = ({ onClose }) => {
-//   const { showModal } = useModal();
-
-//   return (
-//     <div className="modal">
-//       <h2>Основной счет</h2>
-//       <button onClick={() => showModal('NON_MAIN_ACCOUNT')}>Далее</button>
-//       <button onClick={onClose}>Закрыть</button>
-//     </div>
-//   );
-// };

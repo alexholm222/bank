@@ -6,13 +6,12 @@ import classNames from 'classnames';
 import { useModal } from 'hooks/useModal';
 
 // Components
-import Button from 'components/General/Button/Button';
-import ButtonSecond from 'components/General/ButtonSecond/ButtonSecond';
 import Combobox from 'components/General/Combobox/Combobox';
 import DataPickerCalendar from 'components/General/DataPickerCalendar/DataPickerCalendar';
 import DateInput from 'components/General/DateInput/DateInput';
 import Dropdown from 'components/General/Dropdown/Dropdown';
 import Modal from 'components/General/Modal/Modal';
+import UniButton from 'components/General/UniButton/UniButton';
 
 // Icons
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
@@ -21,7 +20,6 @@ import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg'
 
 // Styles
 import s from './Transaction.module.scss';
-import UniButton from 'components/General/UniButton/UniButton';
 
 const options = [
   { value: 'passport', label: 'Паспорт' },
@@ -51,7 +49,7 @@ const data1 = [
   },
   {
     value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
+    label: 'Очень длинное название Скилла Инновации dddddddddddddddddddddddddddddООО',
     inn: '4703170282',
     kpp: '780601001',
   },

@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+
+import ModalManager from 'components/ModalManager/ModalManager';
+
 import s from './App.module.scss';
 
 //components
 import Main from './pages/Main/Main';
-import ModalManager from 'components/ModalManager/ModalManager';
 
 const App = () => {
   return (

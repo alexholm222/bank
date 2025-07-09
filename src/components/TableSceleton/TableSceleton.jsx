@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-import s from './TableSceleton.module.scss';
-
 //components
 import Loader from 'components/TableSceleton/Loader/Loader';
+
+import s from './TableSceleton.module.scss';
 
 const TableSceleton = ({ isLoading }) => {
   const [load, setLoad] = useState(isLoading);

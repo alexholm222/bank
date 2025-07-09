@@ -1,24 +1,25 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 //libs
 import { useDropzone } from 'react-dropzone';
-//icons
-import { ReactComponent as FolderIcon } from 'assets/icons/folderIcon.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconUploadBlack } from 'assets/icons/iconUploadBlack.svg';
-import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
-import { ReactComponent as IconDoneGrey } from 'assets/icons/iconDoneGrey.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import { ReactComponent as IconDelete } from 'assets/icons/iconDelete.svg';
-import { ReactComponent as IconCloseRound } from 'assets/icons/iconCloseRound.svg';
-//styles
 import classNames from 'classnames';
-import s from './UploadExtraction.module.scss';
-
+//hooks
 import { useModal } from 'hooks/useModal';
+//components
 import LoaderButton from 'components/General/LoaderButton/LoaderButton';
 import Modal from 'components/General/Modal/Modal';
 import UniButton from 'components/General/UniButton/UniButton';
+
+//icons
+import { ReactComponent as FolderIcon } from 'assets/icons/folderIcon.svg';
+import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { ReactComponent as IconCloseRound } from 'assets/icons/iconCloseRound.svg';
+import { ReactComponent as IconDelete } from 'assets/icons/iconDelete.svg';
+import { ReactComponent as IconDoneGrey } from 'assets/icons/iconDoneGrey.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconUploadBlack } from 'assets/icons/iconUploadBlack.svg';
+//styles
+import s from './UploadExtraction.module.scss';
 
 const UploadExtraction = () => {
   //   const [uploadDocument, { isLoading, isError }] = useUploadDocumentMutation();

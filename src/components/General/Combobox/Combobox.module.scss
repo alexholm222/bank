@@ -1,19 +1,68 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.option {
+  padding: 12px 16px;
+  cursor: pointer;
+
+  &.focused {
+    background-color: #f0f4ff;
+  }
+
+  .label {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .details {
+    color: #6a7b92;
+    font-size: 12px;
+  }
+}
+
+.singleValue {
+  max-width: 100%;
+  // padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+
+  .label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: inline-block;
+  }
+
+  .details {
+    margin-left: 8px;
+    color: #6a7b92;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
 .error {
   height: 16px;
   margin-top: 7px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
-  color: red;
-  font-size: 12px;
   gap: 6px;
-  color: var(--UI-Red, #e10d0d);
 
+  color: var(--UI-Red, #e10d0d);
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: 14px;
+
   .icon {
     width: 16px;
     height: 16px;

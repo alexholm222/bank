@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import classNames from 'classnames';
+// Hooks
+import { useModal } from 'hooks/useModal';
 
-import Button from 'components/General/Button/Button';
+// Components
 import Search from 'components/General/Search/Search';
 import UniButton from 'components/General/UniButton/UniButton';
 import Information from 'components/Information/Information';
 import SectionButtons from 'components/SectionButtons/SectionButtons';
 import Table from 'components/Table/Table';
-
-import Transaction from 'components/ModalManager/modals/Transactions/Transaction';
-
-import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.svg';
+// Icons
 import { ReactComponent as IconPlus } from 'assets/icons/iconPlus.svg';
-
+import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.svg';
+import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
+// Styles
 import s from './Main.module.scss';
-import { useModal } from 'hooks/useModal';
+import Filters from 'components/Filters/Filters';
+import ReusableFilterGroup from 'components/General/ReusableFilterGroup/ReusableFilterGroup';
+import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
 
 const mockData = {
   payer: {
@@ -46,6 +49,22 @@ const sectionButtons = [
   { id: 1, title: 'Транзакции' },
   { id: 2, title: 'Выписки' },
   { id: 3, title: 'Банковские счета' },
+];
+
+const companiesList = [
+  {
+    city: 'Москва',
+    companies: [
+      { id: 1, name: 'Скилла Инновации ООО', inn: '4703170282', kpp: '780601001' },
+      { id: 2, name: 'Шабашкин ИП', inn: '4363464777', ogrnip: '102773964228146' },
+    ],
+  },
+  {
+    city: 'Санкт-Петербург',
+    companies: [
+      { id: 3, name: 'Грузчиков сервис северо-запад ООО', inn: '4363464777', kpp: '780601001' },
+    ],
+  },
 ];
 
 const Main = () => {
@@ -114,7 +133,21 @@ const Main = () => {
           </div>
         </div>
       </header>
-      <Search isFetching={false} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
+      <div className={s.queryPanel}>
+        <Search isFetching={false} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
+        <div className={s.filters}>
+          <Filters />
+          <ReusableFilterGroup
+            icon={IconHome}
+            btnTitle="Компания"
+            modalTitle="Мои компании"
+            options={companiesList}
+            onConfirm={(selected) => console.log('Выбрано:', selected)}
+            onReset={() => console.log('Сброшено')}
+          />
+        </div>
+      </div>
+
       <div className={s.container}>
         <div className={s.container}>
           <InfiniteScroll
@@ -126,7 +159,7 @@ const Main = () => {
           </InfiniteScroll>
         </div>
       </div>
-      <section className={s.transactionSection}></section>
+      <ScrollToTopButton />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+
 import s from './CustomInput.module.scss';
 
 const CustomInput = ({

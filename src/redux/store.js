@@ -3,12 +3,13 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { apiActions } from './apiActions';
 import modalReducer from './modal/modalSlice';
+import filtersSlice from './filters/slice';
 //slice
 /* import filtersSlice from './filters/slice'; */
 
 export const store = configureStore({
   reducer: {
-    /*  filters: filtersSlice, */
+    filters: filtersSlice,
 
     [apiActions.reducerPath]: apiActions.reducer,
     modal: modalReducer,

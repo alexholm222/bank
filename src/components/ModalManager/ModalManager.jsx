@@ -1,7 +1,9 @@
-import ReactDOM from 'react-dom';
-import { useModal } from 'hooks/useModal';
-import { MODALS } from './modals/modalsRegistry';
 import React from 'react';
+import ReactDOM from 'react-dom';
+
+import { useModal } from 'hooks/useModal';
+
+import { MODALS } from './modals/modalsRegistry';
 
 const ModalManager = () => {
   const { activeModal, modalProps, hideModal } = useModal();
