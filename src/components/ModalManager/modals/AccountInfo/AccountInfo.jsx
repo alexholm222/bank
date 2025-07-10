@@ -21,6 +21,7 @@ import { ReactComponent as RowBlue } from 'assets/icons/rowBlue.svg';
 
 // Styles
 import s from './AccountInfo.module.scss';
+import Tippy from '@tippyjs/react';
 
 const options = [
   { value: 'passport', label: 'Паспорт' },
@@ -141,7 +142,7 @@ const AccountInfo = () => {
   return (
     <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
-        <div className={s.modal_header}>
+        <div className={s.modalHeader}>
           <div className={s.title}>
             <h3>Банковский счет</h3>
           </div>
@@ -166,12 +167,15 @@ const AccountInfo = () => {
         {isActive && (
           <div className={s.switchWrapper}>
             <Switch label="Основной счет" />
-            <Tooltip
+            {/* <Tooltip
               text="Отметка автоматичсеки снимается при назначении нового основного счета"
               maxWidth={400}
             >
               <IconInfo />
-            </Tooltip>
+            </Tooltip> */}
+            <Tippy content="Отметка автоматичсеки снимается при назначении нового основного счета">
+              <IconInfo />
+            </Tippy>
           </div>
         )}
         <div className={s.controlSection}>

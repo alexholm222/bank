@@ -1,43 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
-//styles
 import classNames from 'classnames';
-
 import s from './Modal.module.scss';
 
-const Modal = ({ isOpen, onClose, children }) => {
-  const [animate, setAnimate] = useState(false);
+const Modal = ({ children, onClose, closing }) => {
   const modalRef = useRef(null);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    if (isOpen) setTimeout(() => setAnimate(true), 10);
-    else setAnimate(false);
-  }, [isOpen]);
+    setTimeout(() => setAnimate(true), 10);
+  }, []);
 
   useEffect(() => {
-    const handleClose = () => {
-      setAnimate(false);
-      setTimeout(() => {
-        onClose();
-      }, 200);
-    };
     const handleClickOutside = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
-        handleClose();
+        onClose();
       }
     };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+  }, [onClose]);
 
   return (
-    <div className={classNames(s.root, animate && s.anim)}>
-      <div className={classNames(s.modal, animate && s.anim)} ref={modalRef}>
+    <div className={classNames(s.root, (animate || closing) && s.anim)}>
+      <div className={classNames(s.modal, animate && !closing && s.anim)} ref={modalRef}>
         {children}
       </div>
     </div>

@@ -16,55 +16,23 @@ import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.
 import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
 // Styles
 import s from './Main.module.scss';
-import Filters from 'components/Filters/Filters';
-import ReusableFilterGroup from 'components/General/ReusableFilterGroup/ReusableFilterGroup';
-import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
 
-const mockData = {
-  payer: {
-    name: 'Рога и копыта ООО',
-    inn: '123456789',
-    kpp: '',
-    bank: 'Модуль банк АО',
-    bik: '123456789',
-    correspondentAccount: '40702810680060657001',
-    accountNumber: '40702810680060657001',
-  },
-  receiver: {
-    name: 'Скилла Инновации ООО',
-    inn: '123456789',
-    kpp: '123456789',
-    bank: 'Модуль банк АО',
-    bik: '123456789',
-    correspondentAccount: '40702810680060657001',
-    accountNumber: '40702810680060657001',
-  },
-  amount: '12 345.60',
-  transactionType: 'Входящая',
-  paymentType: '-',
-  description:
-    'Поступил платеж от компании ООО “Агро 34” по счету лдотлоолиолимммммммммммммммммммммммммммммммммммммммммммммм',
-};
+import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
+import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
+import CheckBox from 'components/General/CheckBox/CheckBox';
+import ReceiverFilter from 'components/Filters/ReceiverFilter/ReceiverFilter';
+import { companies, mockData, mockReceivers } from 'mock/mockData';
+import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
+import ClearFiltersBtn from 'components/Filters/COMPONENTS/ClearAllBtn/ClearFiltersBtn';
+import { useSelector } from 'react-redux';
+import { isAnyFilterActive } from '../../redux/filters/selectors';
+import PayerFilter from 'components/Filters/PayerFilter/PayerFilter';
+import DateFilter from 'components/Filters/DateFilter/DateFilter';
+
 const sectionButtons = [
   { id: 1, title: 'Транзакции' },
   { id: 2, title: 'Выписки' },
   { id: 3, title: 'Банковские счета' },
-];
-
-const companiesList = [
-  {
-    city: 'Москва',
-    companies: [
-      { id: 1, name: 'Скилла Инновации ООО', inn: '4703170282', kpp: '780601001' },
-      { id: 2, name: 'Шабашкин ИП', inn: '4363464777', ogrnip: '102773964228146' },
-    ],
-  },
-  {
-    city: 'Санкт-Петербург',
-    companies: [
-      { id: 3, name: 'Грузчиков сервис северо-запад ООО', inn: '4363464777', kpp: '780601001' },
-    ],
-  },
 ];
 
 const Main = () => {
@@ -92,7 +60,7 @@ const Main = () => {
   const [activeSection, setActiveSection] = useState(1);
   const [modalData, setModalData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const hasFilters = useSelector(isAnyFilterActive);
   const showAddAccountBtn = activeSection === 3;
 
   const { showModal } = useModal();
@@ -108,6 +76,7 @@ const Main = () => {
     console.log('Click');
     showModal('ADD_ACCOUNT');
   };
+  console.log(mockReceivers);
 
   return (
     <div className={s.root}>
@@ -136,15 +105,12 @@ const Main = () => {
       <div className={s.queryPanel}>
         <Search isFetching={false} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
         <div className={s.filters}>
-          <Filters />
-          <ReusableFilterGroup
-            icon={IconHome}
-            btnTitle="Компания"
-            modalTitle="Мои компании"
-            options={companiesList}
-            onConfirm={(selected) => console.log('Выбрано:', selected)}
-            onReset={() => console.log('Сброшено')}
-          />
+          {hasFilters && <ClearFiltersBtn animation={hasFilters} />}
+          <CompanyFilter data={companies} />
+          <ReceiverFilter data={mockReceivers} />
+          <TypeFilter />
+          <PayerFilter data={mockReceivers} />
+          <DateFilter />
         </div>
       </div>
 

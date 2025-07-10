@@ -7,7 +7,7 @@ import { useModal } from 'hooks/useModal';
 
 // Components
 import Combobox from 'components/General/Combobox/Combobox';
-import DataPickerCalendar from 'components/General/DataPickerCalendar/DataPickerCalendar';
+import DatePickerCalendar from 'components/General/DatePickerCalendar/DatePickerCalendar';
 import DateInput from 'components/General/DateInput/DateInput';
 import Dropdown from 'components/General/Dropdown/Dropdown';
 import Modal from 'components/General/Modal/Modal';
@@ -137,7 +137,7 @@ const Transaction = () => {
   return (
     <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
-        <div className={s.modal_header}>
+        <div className={s.modalHeader}>
           <div className={s.title}>
             <h3>{`Транзакция ${number} от ${date}`}</h3>
           </div>
@@ -154,7 +154,7 @@ const Transaction = () => {
           <div className={s.control}>
             <DateInput selectedDate={selectedDate} setOpenCalendar={setOpenCalendar} />
             {openCalendar && (
-              <DataPickerCalendar
+              <DatePickerCalendar
                 value={selectedDate}
                 setValue={setSelectedDate}
                 setOpenCalendar={setOpenCalendar}

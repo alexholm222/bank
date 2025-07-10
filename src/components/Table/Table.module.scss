@@ -1,5 +1,5 @@
 .root {
-  // table-layout: fixed;
+  // table-layout: fixed; // если нужна фиксированная ширина
   padding: 0 28px 20px 28px;
   width: 100%;
   max-width: 100%;
@@ -11,6 +11,7 @@
 
   .dataRow:hover {
     background-color: #eaf0fa;
+
     .deleteWrapper {
       opacity: 1;
       pointer-events: auto;
@@ -20,24 +21,23 @@
   th,
   td {
     height: 50px;
+    padding: 0 20px 0 0;
+    line-height: 50px;
     white-space: nowrap;
     text-align: start;
     border-bottom: 1px solid #eff4fb;
-    padding: 16px 20px 16px 0;
+    padding: 12px 20px 12px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
-    font-style: normal;
     font-weight: 400;
     line-height: 18px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
     p {
       font-weight: 400;
       overflow: hidden;
       text-overflow: ellipsis;
+
       span {
         color: #71869d;
       }
@@ -46,8 +46,6 @@
 
   th {
     color: #71869d;
-    font-weight: 400;
-    line-height: 18px;
   }
 
   td {
@@ -71,17 +69,18 @@
     width: 150px;
   }
 }
+
 .tag {
   display: inline-block;
-  padding: 6px 16px;
+  padding: 4px 10px;
   border-radius: 8px;
   background-color: #e0f7f0;
   color: #28a879;
   font-family: Inter;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 18px;
+
   &_red {
     background-color: #fee9ef;
     color: #cc0101;
@@ -117,6 +116,7 @@
   justify-content: space-between;
   gap: 10px;
 }
+
 .grayText {
   color: #71869d !important;
 }
@@ -128,16 +128,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 4px;
   background-color: #eff4fb;
   width: 40px;
   height: 40px;
   cursor: pointer;
 }
+
 .deleteCell {
   padding: 0 !important;
 }
+
 .deleteIconButton {
   position: relative;
   display: flex;
@@ -152,17 +153,20 @@
     .deleteIcon {
       display: none;
     }
+
     .deleteIconRed {
       display: block;
     }
   }
 }
+
 .contrAgents {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
 }
+
 .shrinkable {
   max-width: 1px;
   overflow: hidden;

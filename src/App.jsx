@@ -17,9 +17,11 @@ const App = () => {
 
       {/* Модальный менеджер (работает во всём приложении) */}
       <ModalManager />
-      <ToastContainer position="bottom-right" autoClose={1000} />
+      {/* Toast container (работает во всём приложении) */}
+      <ToastContainer position="top-center" hideProgressBar closeOnClick pauseOnHover limit={3} />
     </div>
   );
 };
 
 export default App;
+//Filters (модалка) → Redux (filters) → Main → RTK Query → API → Таблица
