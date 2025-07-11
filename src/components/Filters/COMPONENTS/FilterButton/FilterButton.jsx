@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { ReactComponent as IconClose } from './icons/iconClose.svg';
 import { ReactComponent as IconDone } from './icons/iconDone.svg';
 import LoaderCircle from 'components/General/LoaderCircle/LoaderCircle';
+import { useEffect, useState } from 'react';
 
 const FilterButton = ({
   title,
@@ -15,11 +16,15 @@ const FilterButton = ({
   handleOpen,
   buttonRef,
 }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <div
       ref={buttonRef}
       onClick={handleOpen}
-      className={classNames(s.filter, count > 0 && s.filter_active)}
+      className={classNames(s.filter, mounted && count > 0 && s.filter_active)}
     >
       <div className={s.icon}>
         <Icon className={(load || done) && s.hidden} />
@@ -27,13 +32,13 @@ const FilterButton = ({
           <LoaderCircle />
         </div>
 
-        <div className={classNames(s.loader, done && s.loader_vis)}>
+        <div className={classNames(s.loader, mounted && done && s.loader_vis)}>
           <IconDone />
         </div>
       </div>
 
-      <p className={classNames(s.title, count > 0 && s.title_active)}>{title}</p>
-      <div className={classNames(s.block, count > 0 && s.block_active)}>
+      <p className={classNames(s.title, mounted && count > 0 && s.title_active)}>{title}</p>
+      <div className={classNames(s.block, mounted && count > 0 && s.block_active)}>
         <div className={s.count}>{count}</div>
         <IconClose onClick={(e) => handleReset(e)} className={s.close} />
       </div>
@@ -41,3 +46,30 @@ const FilterButton = ({
   );
 };
 export default FilterButton;
+
+export const FilterButtonDate = ({
+  title,
+  Icon,
+  load = false,
+  isSelected,
+  handleReset,
+  handleOpen,
+  buttonRef,
+}) => {
+  return (
+    <div
+      ref={buttonRef}
+      onClick={handleOpen}
+      className={classNames(s.filter, isSelected && s.filter_active)}
+    >
+      <div className={s.icon}>
+        <Icon />
+      </div>
+
+      <p className={classNames(s.title, isSelected && s.title_active)}>{title}</p>
+      <div className={classNames(s.block, isSelected && s.block_activeDate)}>
+        <IconClose onClick={(e) => handleReset(e)} className={s.close} />
+      </div>
+    </div>
+  );
+};

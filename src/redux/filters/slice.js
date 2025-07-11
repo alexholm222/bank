@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  transactionTypeFilter: 'all',
-  transactionViewFilter: 'all',
+  transactionTypeFilter: '',
+  transactionViewFilter: '',
+  selectedStatus: 'all',
   selectedCompanies: [],
   selectedReceivers: [],
   selectedPayers: [],
+  selectedActivity: 'active',
 };
 
 const filtersSlice = createSlice({
@@ -27,6 +29,12 @@ const filtersSlice = createSlice({
     setSelectedPayers(state, action) {
       state.selectedPayers = action.payload;
     },
+    setSelectedStatus(state, action) {
+      state.selectedStatus = action.payload;
+    },
+    setSelectedActivity(state, action) {
+      state.selectedActivity = action.payload;
+    },
   },
 });
 
@@ -36,6 +44,8 @@ export const {
   setSelectedCompanies,
   setSelectedReceivers,
   setSelectedPayers,
+  setSelectedStatus,
+  setSelectedActivity,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

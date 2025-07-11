@@ -160,16 +160,15 @@
   }
 }
 
-.contrAgents {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
 .shrinkable {
   max-width: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.agents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }

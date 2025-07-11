@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import classNames from 'classnames';
+
 // Hooks
 import { useModal } from 'hooks/useModal';
 
@@ -13,21 +13,10 @@ import Table from 'components/Table/Table';
 // Icons
 import { ReactComponent as IconPlus } from 'assets/icons/iconPlus.svg';
 import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.svg';
-import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
 // Styles
 import s from './Main.module.scss';
-
-import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
-import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
-import CheckBox from 'components/General/CheckBox/CheckBox';
-import ReceiverFilter from 'components/Filters/ReceiverFilter/ReceiverFilter';
-import { companies, mockData, mockReceivers } from 'mock/mockData';
-import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
-import ClearFiltersBtn from 'components/Filters/COMPONENTS/ClearAllBtn/ClearFiltersBtn';
-import { useSelector } from 'react-redux';
-import { isAnyFilterActive } from '../../redux/filters/selectors';
-import PayerFilter from 'components/Filters/PayerFilter/PayerFilter';
-import DateFilter from 'components/Filters/DateFilter/DateFilter';
+import { mockData } from 'mock/mockData';
+import FiltersContainer from 'components/Filters/FiltersContainer';
 
 const sectionButtons = [
   { id: 1, title: 'Транзакции' },
@@ -60,26 +49,22 @@ const Main = () => {
   const [activeSection, setActiveSection] = useState(1);
   const [modalData, setModalData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const hasFilters = useSelector(isAnyFilterActive);
+
   const showAddAccountBtn = activeSection === 3;
+  const containerRef = useRef();
 
   const { showModal } = useModal();
-  const filteredData = [mockData].filter((item) =>
-    item.payer.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
   const handleUppload = () => {
-    console.log('Click');
     showModal('UPLOAD_EXTRACTION');
   };
 
   const handleAddAccount = () => {
-    console.log('Click');
     showModal('ADD_ACCOUNT');
   };
-  console.log(mockReceivers);
 
   return (
-    <div className={s.root}>
+    <div className={s.root} ref={containerRef}>
       <header className={s.header}>
         <Information onClick={() => {}} open={true} />
         <div className={s.block}>
@@ -104,28 +89,18 @@ const Main = () => {
       </header>
       <div className={s.queryPanel}>
         <Search isFetching={false} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
-        <div className={s.filters}>
-          {hasFilters && <ClearFiltersBtn animation={hasFilters} />}
-          <CompanyFilter data={companies} />
-          <ReceiverFilter data={mockReceivers} />
-          <TypeFilter />
-          <PayerFilter data={mockReceivers} />
-          <DateFilter />
-        </div>
+        <FiltersContainer type={activeSection} />
       </div>
 
       <div className={s.container}>
-        <div className={s.container}>
-          <InfiniteScroll
-            dataLength={1}
-            next={() => console.log('Загружена следующая страница')} // вставить loadNextPage из хука
-            hasMore={true}
-          >
-            <Table isFetch={isLoading} type={activeSection} list={[mockData]} />
-          </InfiniteScroll>
-        </div>
+        {/* <InfiniteScroll
+          dataLength={1}
+          next={() => console.log('Загружена следующая страница')} // вставить loadNextPage из хука
+          hasMore={true}
+        ></InfiniteScroll> */}
+
+        <Table isFetch={false} type={activeSection} list={mockData} />
       </div>
-      <ScrollToTopButton />
     </div>
   );
 };

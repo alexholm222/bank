@@ -107,7 +107,7 @@ const TableRow = ({ row, type }) => {
         <td>{row.payer.accountNumber}</td>
         <td>{row.payer.name}</td>
         <td>01.07.2025</td>
-        <td>123</td>
+        <td className={s.agents}>123</td>
         <td>
           <TagLabel alert={false} inactive={true} />
         </td>

@@ -11,7 +11,10 @@ import {
   getTwoLastWeek,
   getWeek,
 } from 'components/Filters/DateFilter/DateMenu/utils/date';
-import { setDateStart, setDateEnd } from '../../../../redux/filters/dateRangeSlice';
+import {
+  setDateStartPicker as setDateStart,
+  setDateEndPicker as setDateEnd,
+} from '../../../../redux/filters/dateRangeSlice';
 import styles from './DateMenu.module.scss';
 
 export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
@@ -19,7 +22,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerAll = () => {
     setLoadFilter(true);
-    setDone(false);
+    // setDone(false);
 
     dispatch(setDateStart(''));
     dispatch(setDateEnd(''));
@@ -28,7 +31,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerThreeDays = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getThreeDay()));
     dispatch(setDateEnd(getNextDay()));
     setIsOpen(false);
@@ -36,7 +39,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerWeek = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getWeek()));
     dispatch(setDateEnd(getCurrentDay()));
     setIsOpen(false);
@@ -44,7 +47,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerLastWeek = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getLastWeek('start')));
     dispatch(setDateEnd(getLastWeek('end')));
     setIsOpen(false);
@@ -52,7 +55,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerTwoLastWeek = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getTwoLastWeek()));
     dispatch(setDateEnd(getCurrentDay()));
     setIsOpen(false);
@@ -60,7 +63,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerLastMonth = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getLastMonth('start')));
     dispatch(setDateEnd(getLastMonth('end')));
     setIsOpen(false);
@@ -68,7 +71,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
 
   const handlerBeforeLastMonth = () => {
     setLoadFilter(true);
-    setDone(true);
+    // setDone(true);
     dispatch(setDateStart(getBeforeLastMonth('start')));
     dispatch(setDateEnd(getBeforeLastMonth('end')));
     setIsOpen(false);
@@ -106,7 +109,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
         <DatePickerСhoose
           setOpenDateFilter={setIsOpen}
           setLoadFilter={setLoadFilter}
-          setDone={setDone}
+          // setDone={setDone}
         />
       </div>
     </div>

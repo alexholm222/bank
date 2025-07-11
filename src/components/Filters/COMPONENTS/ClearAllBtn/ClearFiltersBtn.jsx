@@ -7,27 +7,35 @@ import {
   setTransactionTypeFilter,
   setTransactionViewFilter,
   setSelectedPayers,
+  setSelectedStatus,
 } from '../../../../redux/filters/slice';
 import classNames from 'classnames';
-import { setDateEnd, setDateStart } from '../../../../redux/filters/dateRangeSlice';
+import { setDateEndPicker, setDateStartPicker } from '../../../../redux/filters/dateRangeSlice';
+import { useCallback } from 'react';
 
-const ClearFiltersBtn = ({ text = 'Сбросить всё', animation }) => {
+const ClearFiltersBtn = ({ text = 'Сбросить всё', animation = false }) => {
   const dispatch = useDispatch();
-  const handleClearAll = () => {
-    dispatch(setTransactionTypeFilter('all'));
-    dispatch(setTransactionViewFilter('all'));
+
+  const handleClearAll = useCallback(() => {
+    dispatch(setTransactionTypeFilter(''));
+    dispatch(setTransactionViewFilter(''));
     dispatch(setSelectedCompanies([]));
     dispatch(setSelectedReceivers([]));
     dispatch(setSelectedPayers([]));
-    dispatch(setDateStart(''));
-    dispatch(setDateEnd(''));
-  };
+    dispatch(setDateEndPicker(null));
+    dispatch(setDateStartPicker(null));
+    dispatch(setSelectedStatus('all'));
+  }, [dispatch]);
+
   return (
-    <button className={classNames(s.root, animation && s.root_vis)} onClick={handleClearAll}>
+    <button
+      className={classNames(s.root, animation && s.root_vis)}
+      onClick={handleClearAll}
+      type="button"
+    >
       <span>{text}</span>
       <IconCloseBlue className={s.icon} />
     </button>
   );
 };
-
 export default ClearFiltersBtn;

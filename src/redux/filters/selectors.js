@@ -1,11 +1,12 @@
 export const isAnyFilterActive = (state) => {
-  const { dateStart, dateEnd } = state.dateRange;
+  const { dateStartPicker, dateEndPicker } = state.dateRange;
   const {
     transactionTypeFilter,
     transactionViewFilter,
     selectedCompanies,
     selectedReceivers,
     selectedPayers,
+    selectedStatus,
   } = state.filters;
   return (
     transactionTypeFilter !== 'all' ||
@@ -13,7 +14,7 @@ export const isAnyFilterActive = (state) => {
     selectedCompanies.length > 0 ||
     selectedReceivers.length > 0 ||
     selectedPayers.length > 0 ||
-    dateStart ||
-    dateEnd
+    (dateStartPicker && dateEndPicker) ||
+    selectedStatus !== 'all'
   );
 };

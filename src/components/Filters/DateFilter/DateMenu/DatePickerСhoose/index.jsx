@@ -2,29 +2,21 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import ru from 'date-fns/locale/ru';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setDateEnd,
-  setDateEndPicker,
-  setDateStart,
-  setDateStartPicker,
-} from '../../../../../redux/filters/dateRangeSlice';
-import { getDatePicker } from '../utils/date';
+import { setDateEndPicker, setDateStartPicker } from '../../../../../redux/filters/dateRangeSlice';
 import './DatePickerСhoose.scss';
 
-export const DatePickerСhoose = ({ setOpenDateFilter, setLoadFilter, setDone }) => {
+export const DatePickerСhoose = ({ setOpenDateFilter, setLoadFilter }) => {
   const dispatch = useDispatch();
+  const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
 
-  const { dateStartPicker, dateEndPicker, dateEnd } = useSelector((state) => state.dateRange);
   const onChange = (dates) => {
     const [start, end] = dates;
-    dispatch(setDateEndPicker(end));
     dispatch(setDateStartPicker(start));
+    dispatch(setDateEndPicker(end));
+
     if (end) {
-      getDatePicker(end) !== dateEnd && setLoadFilter(true);
-      dispatch(setDateStart(getDatePicker(start)));
-      dispatch(setDateEnd(getDatePicker(end)));
+      setLoadFilter(true);
       setOpenDateFilter(false);
-      setDone(true);
     }
   };
 

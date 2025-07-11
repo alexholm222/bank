@@ -1,6 +1,11 @@
 @import './vendors/normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+#root_bank {
+  height: 100vh;
+  overflow-y: auto;
+}
+
 .tippy-box {
   padding: 4px 8px;
   border-radius: 4px;

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 
 // icons
-import { ReactComponent as IconFilterSettingts } from 'assets/icons/iconFilterSettings.svg';
+import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 
@@ -10,48 +10,40 @@ import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButto
 import UniButton from 'components/General/UniButton/UniButton';
 import RadioButtons from 'components/General/RadioButtons/RadioButtons';
 // styles
-import s from './TypeFilters.module.scss';
+import s from './ActivitiFilter.module.scss';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTransactionTypeFilter, setTransactionViewFilter } from '../../../redux/filters/slice';
+import { setSelectedActivity } from '../../../redux/filters/slice';
 
-const transactionTypeList = [
-  { id: 'income', name: 'Поступления' },
-  { id: 'expense', name: 'Списания' },
+const accountsActivityList = [
+  { id: 'active', name: 'Активные' },
+  { id: 'unactive', name: 'Не активные' },
+  { id: 'all', name: 'Все' },
 ];
 
-const transactionViewList = [
-  { id: 'payment_order', name: 'Платежные поручения' },
-  { id: 'bank_order', name: 'Банковский ордер' },
-];
-
-const TypeFilter = () => {
-  const selectedTypes = useSelector((state) => state.filters.transactionTypeFilter);
-  const selectedViews = useSelector((state) => state.filters.transactionViewFilter);
-
+const ActivityFilter = () => {
+  const selectedActivity = useSelector((state) => state.filters.selectedActivity);
+  console.log(selectedActivity);
   const [openModal, setOpenModal] = useState(false);
-  const [transactionType, setTransactionType] = useState('');
-  const [transactionView, setTransactionView] = useState('');
+  const [accountsActivity, setAccountsActivity] = useState(selectedActivity);
 
   const dispatch = useDispatch();
   const modalRef = useRef();
   const buttonRef = useRef();
 
   const handleOpen = () => {
-    setTransactionType(selectedTypes);
-    setTransactionView(selectedViews);
+    setAccountsActivity(selectedActivity);
     setOpenModal((prev) => !prev);
   };
 
   const handleConfirm = () => {
-    dispatch(setTransactionTypeFilter(transactionType));
-    dispatch(setTransactionViewFilter(transactionView));
+    dispatch(setSelectedActivity(accountsActivity));
     setOpenModal(false);
   };
+
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter(''));
-    dispatch(setTransactionViewFilter(''));
+    dispatch(setSelectedActivity('active'));
     setOpenModal(false);
   };
 
@@ -72,33 +64,23 @@ const TypeFilter = () => {
   return (
     <div className={s.root}>
       <FilterButton
-        title="Транзакции"
-        Icon={IconFilterSettingts}
-        count={(selectedTypes !== '') + (selectedViews !== '')}
+        title="Активные"
+        Icon={IconDocSuccess}
+        count={selectedActivity !== 'active' ? 1 : 0}
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
       />
 
       <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
-        <div className={s.block}>
-          <div className={s.blockTitle}>Транзакции</div>
-          <RadioButtons
-            list={transactionTypeList}
-            active={transactionType}
-            setActive={setTransactionType}
-          />
-        </div>
-
-        <div className={s.block}>
-          <div className={s.blockTitle}>Вид Транзакции</div>
-          <RadioButtons
-            list={transactionViewList}
-            active={transactionView}
-            setActive={setTransactionView}
-          />
-        </div>
-
+        {/* <div className={s.block}>
+          <div className={s.blockTitle}>Статус</div>
+        </div>{' '} */}
+        <RadioButtons
+          list={accountsActivityList}
+          active={accountsActivity}
+          setActive={setAccountsActivity}
+        />
         <div className={s.buttons}>
           <UniButton
             onClick={handleReset}
@@ -106,6 +88,7 @@ const TypeFilter = () => {
             icon={IconCloseBlue}
             isLoading={false}
             type="outline"
+            width={108}
           />
 
           <UniButton
@@ -113,7 +96,7 @@ const TypeFilter = () => {
             text="Применить"
             icon={IconDoneWhite}
             isLoading={false}
-            width={218}
+            width={140}
           />
         </div>
       </div>
@@ -121,4 +104,4 @@ const TypeFilter = () => {
   );
 };
 
-export default TypeFilter;
+export default ActivityFilter;

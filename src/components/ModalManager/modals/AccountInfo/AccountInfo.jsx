@@ -151,66 +151,58 @@ const AccountInfo = () => {
           </button>
         </div>
 
-        {isActive && (
-          <Link to="/counterparties" className={s.link} onClick={hideModal}>
-            Связанные контрагенты
-            <span className={s.count}>{count}</span>
-            <span className={s.arrow}>
-              <RowBlue />
-            </span>
-          </Link>
-        )}
+        <Link
+          to="/counterparties"
+          className={classNames(s.link, { [s.link_vis]: isActive })}
+          onClick={hideModal}
+        >
+          Связанные контрагенты
+          <span className={s.count}>{count}</span>
+          <span className={s.arrow}>
+            <RowBlue />
+          </span>
+        </Link>
 
         <div className={s.body}>
           <PaymentDetails data={data} />
         </div>
-        {isActive && (
-          <div className={s.switchWrapper}>
-            <Switch label="Основной счет" />
-            {/* <Tooltip
-              text="Отметка автоматичсеки снимается при назначении нового основного счета"
-              maxWidth={400}
-            >
-              <IconInfo />
-            </Tooltip> */}
-            <Tippy content="Отметка автоматичсеки снимается при назначении нового основного счета">
-              <IconInfo />
-            </Tippy>
-          </div>
-        )}
+
+        <div className={classNames(s.switchWrapper, { [s.switchWrapper_vis]: isActive })}>
+          <Switch label="Основной счет" />
+          <Tippy content="Отметка автоматичсеки снимается при назначении нового основного счета">
+            <IconInfo />
+          </Tippy>
+        </div>
         <div className={s.controlSection}>
-          {!isActive ? (
+          <UniButton
+            onClick={handleActivate}
+            text="Сделать активным"
+            type="primary"
+            iconPosition="right"
+            icon={IconViewing}
+            width={452}
+            className={classNames(s.activateBtn, { [s.activateBtn_vis]: !isActive })}
+          />
+          <div className={classNames(s.controlBtn, { [s.switchWrapper_vis]: isActive })}>
             <UniButton
-              onClick={handleActivate}
-              text="Сделать активным"
+              onClick={handleDeactivate}
+              text="Сделать неактивным"
+              type="danger"
+              iconPosition="right"
+              icon={EyeRed}
+              width={212}
+            />
+            <UniButton
+              onClick={hideModal}
+              text="Копировать реквизиты"
               type="primary"
               iconPosition="right"
-              icon={IconViewing}
-              width={452}
+              icon={IconCopyWhite}
+              width={228}
             />
-          ) : (
-            <div className={s.controlBtn}>
-              <UniButton
-                onClick={handleDeactivate}
-                text="Сделать неактивным"
-                type="danger"
-                iconPosition="right"
-                icon={EyeRed}
-                width={212}
-              />
-              <UniButton
-                onClick={hideModal}
-                text="Копировать реквизиты"
-                type="primary"
-                iconPosition="right"
-                icon={IconCopyWhite}
-                width={228}
-              />
-            </div>
-          )}
+          </div>
         </div>
       </div>
-      <div className={s.footer}></div>
     </Modal>
   );
 };

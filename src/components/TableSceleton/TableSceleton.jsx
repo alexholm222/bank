@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
-//components
+// Components
 import Loader from 'components/TableSceleton/Loader/Loader';
 
 import s from './TableSceleton.module.scss';
@@ -25,28 +25,28 @@ const TableSceleton = ({ isLoading }) => {
         <tr>
           <th>
             <Loader height={14} width={60} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={50} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={80} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={150} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={60} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={160} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={200} />
-          </th>{' '}
+          </th>
           <th>
             <Loader height={14} width={130} />
-          </th>{' '}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -58,35 +58,33 @@ const TableSceleton = ({ isLoading }) => {
   );
 };
 
-const Row = () => {
-  return (
-    <tr className={s.row}>
-      <td>
-        <Loader height={14} width={60} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={50} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={80} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={150} />
-      </td>{' '}
-      <td>
-        <Loader height={20} width={60} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={160} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={200} />
-      </td>{' '}
-      <td>
-        <Loader height={14} width={130} />
-      </td>{' '}
-    </tr>
-  );
-};
+const Row = () => (
+  <tr className={s.row}>
+    <td>
+      <Loader height={14} width={60} />
+    </td>
+    <td>
+      <Loader height={14} width={50} />
+    </td>
+    <td>
+      <Loader height={14} width={80} />
+    </td>
+    <td>
+      <Loader height={14} width={150} />
+    </td>
+    <td>
+      <Loader height={14} width={60} />
+    </td>
+    <td>
+      <Loader height={14} width={160} />
+    </td>
+    <td>
+      <Loader height={14} width={200} />
+    </td>
+    <td>
+      <Loader height={14} width={130} />
+    </td>
+  </tr>
+);
 
 export default TableSceleton;

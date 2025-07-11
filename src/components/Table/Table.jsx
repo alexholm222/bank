@@ -13,43 +13,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import TableRow from './TableRow';
 import TableHeader from './TableHeader';
 
-const mockData = {
-  payer: {
-    name: 'Рога и копыта ООО',
-    inn: '123456789',
-    kpp: '',
-    bank: 'Модуль банк АО',
-    bik: '123456789',
-    correspondentAccount: '40702810680060657001',
-    accountNumber: '40702810680060657001',
-  },
-  receiver: {
-    name: 'Скилла Инновации ООО',
-    inn: '123456789',
-    kpp: '123456789',
-    bank: 'Модуль банк АО',
-    bik: '123456789',
-    correspondentAccount: '40702810680060657001',
-    accountNumber: '40702810680060657001',
-  },
-  amount: '12 345.60',
-  transactionType: 'Входящая',
-  paymentType: '-',
-  description:
-    'Поступил платеж от компании ООО “Агро 34” по счету лдотлоолиолимммммммммммммммммммммммммммммммммммммммммммммм',
-};
-const Table = ({ type, list, anim, isFetch }) => {
+const Table = ({ type, anim, isFetch, list: items }) => {
   const { showModal } = useModal();
 
   const handlerOpenFlow = () => {
     if (type === 1) {
-      showModal('TRANSACTION', { data: mockData });
+      showModal('TRANSACTION', { data: items });
     }
     if (type === 2) {
-      showModal('EXTRACTION', { data: mockData });
+      showModal('EXTRACTION', { data: items });
     }
     if (type === 3) {
-      showModal('ACCOUNT_INFO', { data: mockData });
+      showModal('ACCOUNT_INFO', { data: items });
     }
   };
 
@@ -61,7 +36,7 @@ const Table = ({ type, list, anim, isFetch }) => {
     <table className={classNames(s.root, anim && s.root_anim, isFetch && s.root_fetch)}>
       <thead>{TableHeader({ type })}</thead>
       <tbody>
-        {list.map((row, index) => (
+        {items.map((row, index) => (
           <tr key={index} className={s.dataRow} onClick={handlerOpenFlow}>
             {TableRow({ row, type })}
           </tr>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // Components
 import Combobox from 'components/General/Combobox/Combobox';
 import CustomInput from 'components/General/CustomInput/CustomInput';
@@ -22,8 +22,6 @@ const AddAccountModal = ({ onClose }) => {
   const [errorCorrAccount, setErrorCorrAccount] = useState('');
   const [errorAccount, setErrorAccount] = useState('');
 
-  const [success, setSuccess] = useState(false);
-
   const bikData = [
     { bik: '123456789', bankName: 'Сбербанк АО', corrAccount: '30101810445250000411' },
     { bik: '987654321', bankName: 'ВТБ Банк ПАО', corrAccount: '30101810100000000787' },
@@ -34,6 +32,7 @@ const AddAccountModal = ({ onClose }) => {
     if (found) {
       setBankName(found.bankName);
       setCorrAccount(found.corrAccount);
+      setErrorBik('');
     } else {
       setBankName('');
       setCorrAccount('');
@@ -41,43 +40,53 @@ const AddAccountModal = ({ onClose }) => {
     }
   };
 
-  useEffect(() => {
-    let bikError = '';
-    let corrError = '';
-    let accError = '';
-
-    if (bik && bik.length !== 9) {
-      bikError = 'БИК должен содержать 9 символов';
+  const validateBik = () => {
+    if (bik.length !== 9) {
+      setErrorBik('БИК должен содержать 9 символов');
+    } else {
+      setErrorBik('');
     }
+  };
 
-    if (corrAccount && corrAccount.length !== 20) {
-      corrError = 'Корр. счет должен содержать 20 символов';
-    } else if (corrAccount && bik && corrAccount.length === 20 && bik.length === 9) {
-      if (!corrAccount.startsWith('30101')) {
-        corrError = 'Корр. счет должен начинаться с 30101';
+  const validateCorrAccount = () => {
+    if (corrAccount.length !== 20) {
+      setErrorCorrAccount('Корр. счет должен содержать 20 символов');
+    } else if (bik.length === 9 && corrAccount.startsWith('30101')) {
+      const bikEnd = bik.slice(-3);
+      const corrEnd = corrAccount.slice(-3);
+      if (bikEnd !== corrEnd) {
+        setErrorCorrAccount('Три последние цифры БИК и корр. счета должны совпадать');
       } else {
-        const bikEnd = bik.slice(-3);
-        const corrEnd = corrAccount.slice(-3);
-        if (bikEnd !== corrEnd) {
-          corrError = 'Три последние цифры БИК и корр. счета должны совпадать';
-        }
+        setErrorCorrAccount('');
       }
+    } else {
+      setErrorCorrAccount('Корр. счет должен начинаться с 30101');
     }
+  };
 
-    if (account && account.length !== 20) {
-      accError = 'Расчетный счет должен содержать 20 символов';
+  const validateAccount = () => {
+    if (account.length !== 20) {
+      setErrorAccount('Расчетный счет должен содержать 20 символов');
+    } else {
+      setErrorAccount('');
     }
+  };
 
-    setErrorBik(bikError);
-    setErrorCorrAccount(corrError);
-    setErrorAccount(accError);
-
-    setSuccess(!bikError && !corrError && !accError && bik && corrAccount && account);
-  }, [bik, corrAccount, account]);
+  const isSuccess =
+    !errorBik &&
+    !errorCorrAccount &&
+    !errorAccount &&
+    bik.length === 9 &&
+    corrAccount.length === 20 &&
+    account.length === 20;
 
   const handleSubmit = () => {
-    if (success) {
+    if (isSuccess) {
       alert('Счёт успешно добавлен');
+    } else {
+      validateBik();
+      validateCorrAccount();
+      validateAccount();
     }
   };
 
@@ -93,6 +102,7 @@ const AddAccountModal = ({ onClose }) => {
         <CustomInput
           value={bik}
           onChange={(e) => setBik(e.target.value)}
+          onBlur={validateBik}
           label="БИК"
           error={errorBik}
         />
@@ -110,12 +120,14 @@ const AddAccountModal = ({ onClose }) => {
           label="Корреспондентский счет"
           value={corrAccount}
           onChange={(e) => setCorrAccount(e.target.value)}
+          onBlur={validateCorrAccount}
           error={errorCorrAccount}
         />
         <CustomInput
           label="Расчетный счет"
           value={account}
           onChange={(e) => setAccount(e.target.value)}
+          onBlur={validateAccount}
           error={errorAccount}
         />
         <div className={s.buttons}>
@@ -129,9 +141,9 @@ const AddAccountModal = ({ onClose }) => {
           />
           <UniButton
             onClick={handleSubmit}
-            text={success ? 'Готово' : 'Добавить'}
+            text={isSuccess ? 'Готово' : 'Добавить'}
             width={174}
-            icon={success ? IconDoneDouble : IconDoneWhite}
+            icon={isSuccess ? IconDoneDouble : IconDoneWhite}
             iconPosition="right"
           />
         </div>

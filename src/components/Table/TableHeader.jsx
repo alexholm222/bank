@@ -41,7 +41,7 @@ const TableHeader = ({ type }) => {
         <th style={{ width: '210px' }}>Расчетный счет</th>
         <th style={{ minWidth: '200px' }}>Компания</th>
         <th style={{ width: '100px' }}>Добавлен</th>
-        <th style={{ width: '140px', position: 'relative' }} className={s.contrAgents}>
+        <th style={{ minWidth: '140px' }} className={s.agents}>
           Контрагенты{' '}
           <Tippy
             content="Количество контрагентов, у которых выбран данный счет в качестве основного"

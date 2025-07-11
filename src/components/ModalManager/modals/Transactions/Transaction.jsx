@@ -183,6 +183,7 @@ const Transaction = () => {
 
           <div className={s.control_btn}>
             <UniButton
+              width={120}
               iconPosition="right"
               type="danger"
               icon={IconDeleteRed}
