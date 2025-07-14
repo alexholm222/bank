@@ -1,5 +1,6 @@
-import s from './RadioButtons.module.scss';
 import classNames from 'classnames';
+
+import s from './RadioButtons.module.scss';
 
 const RadioButtons = ({ list, active, setActive }) => {
   return (

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
+import Tippy from '@tippyjs/react';
 // Hooks
 import { useModal } from 'hooks/useModal';
 
@@ -11,17 +12,17 @@ import Modal from 'components/General/Modal/Modal';
 import Switch from 'components/General/Switch/Switch';
 import Tooltip from 'components/General/Tooltip/Tooltip';
 import UniButton from 'components/General/UniButton/UniButton';
+
 // Icons
 import { ReactComponent as EyeRed } from 'assets/icons/eyeRed.svg';
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
 import { ReactComponent as IconCopyWhite } from 'assets/icons/iconCopyWhite.svg';
-import { ReactComponent as IconViewing } from 'assets/icons/iconViewingWhite.svg';
 import { ReactComponent as IconInfo } from 'assets/icons/iconInfo.svg';
+import { ReactComponent as IconViewing } from 'assets/icons/iconViewingWhite.svg';
 import { ReactComponent as RowBlue } from 'assets/icons/rowBlue.svg';
 
 // Styles
 import s from './AccountInfo.module.scss';
-import Tippy from '@tippyjs/react';
 
 const options = [
   { value: 'passport', label: 'Паспорт' },

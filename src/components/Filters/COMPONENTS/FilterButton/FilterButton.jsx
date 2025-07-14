@@ -1,10 +1,13 @@
-import s from './FilterButton.module.scss';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames';
+
+import LoaderCircle from 'components/General/LoaderCircle/LoaderCircle';
+
+import s from './FilterButton.module.scss';
+
 //icons
 import { ReactComponent as IconClose } from './icons/iconClose.svg';
 import { ReactComponent as IconDone } from './icons/iconDone.svg';
-import LoaderCircle from 'components/General/LoaderCircle/LoaderCircle';
-import { useEffect, useState } from 'react';
 
 const FilterButton = ({
   title,

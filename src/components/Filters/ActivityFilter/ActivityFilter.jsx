@@ -1,18 +1,21 @@
-import { useRef, useState, useEffect } from 'react';
+import { useEffect,useRef, useState } from 'react';
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
-// icons
+// Components
+import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
+import RadioButtons from 'components/General/RadioButtons/RadioButtons';
+import UniButton from 'components/General/UniButton/UniButton';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+// Icons
 import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 
-// components
-import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
-import UniButton from 'components/General/UniButton/UniButton';
-import RadioButtons from 'components/General/RadioButtons/RadioButtons';
-// styles
+// Styles
 import s from './ActivitiFilter.module.scss';
-import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { setSelectedActivity } from '../../../redux/filters/slice';
 
 const accountsActivityList = [
@@ -22,33 +25,32 @@ const accountsActivityList = [
 ];
 
 const ActivityFilter = () => {
-  const selectedActivity = useSelector((state) => state.filters.selectedActivity);
-  console.log(selectedActivity);
-  const [openModal, setOpenModal] = useState(false);
-  const [accountsActivity, setAccountsActivity] = useState(selectedActivity);
-
   const dispatch = useDispatch();
-  const modalRef = useRef();
-  const buttonRef = useRef();
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const selectedActivity = useSelector((state) => state.filters.selectedActivity);
+  const [openModal, setOpenModal] = useState(false);
+  const [tempActivity, setTempActivity] = useState(selectedActivity);
 
   const handleOpen = () => {
-    setAccountsActivity(selectedActivity);
+    setTempActivity(selectedActivity);
     setOpenModal((prev) => !prev);
   };
 
   const handleConfirm = () => {
-    dispatch(setSelectedActivity(accountsActivity));
+    dispatch(setSelectedActivity(tempActivity));
     setOpenModal(false);
   };
 
   const handleReset = (e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     dispatch(setSelectedActivity('active'));
     setOpenModal(false);
   };
 
   useEffect(() => {
-    const clickOutside = (e) => {
+    const handleClickOutside = (e) => {
       if (
         modalRef.current &&
         !modalRef.current.contains(e.target) &&
@@ -57,8 +59,8 @@ const ActivityFilter = () => {
         setOpenModal(false);
       }
     };
-    document.body.addEventListener('mousedown', clickOutside);
-    return () => document.body.removeEventListener('mousedown', clickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -67,37 +69,27 @@ const ActivityFilter = () => {
         title="Активные"
         Icon={IconDocSuccess}
         count={selectedActivity !== 'active' ? 1 : 0}
-        handleReset={handleReset}
         handleOpen={handleOpen}
+        handleReset={handleReset}
         buttonRef={buttonRef}
       />
 
-      <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
-        {/* <div className={s.block}>
-          <div className={s.blockTitle}>Статус</div>
-        </div>{' '} */}
+      <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: openModal })}>
         <RadioButtons
           list={accountsActivityList}
-          active={accountsActivity}
-          setActive={setAccountsActivity}
+          active={tempActivity}
+          setActive={setTempActivity}
         />
+
         <div className={s.buttons}>
           <UniButton
             onClick={handleReset}
             text="Сбросить"
             icon={IconCloseBlue}
-            isLoading={false}
             type="outline"
             width={108}
           />
-
-          <UniButton
-            onClick={handleConfirm}
-            text="Применить"
-            icon={IconDoneWhite}
-            isLoading={false}
-            width={140}
-          />
+          <UniButton onClick={handleConfirm} text="Применить" icon={IconDoneWhite} width={140} />
         </div>
       </div>
     </div>

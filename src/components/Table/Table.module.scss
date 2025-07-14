@@ -1,5 +1,5 @@
 .root {
-  // table-layout: fixed; // если нужна фиксированная ширина
+  table-layout: auto; // если нужна фиксированная ширина
   padding: 0 28px 20px 28px;
   width: 100%;
   max-width: 100%;
@@ -21,12 +21,12 @@
   th,
   td {
     height: 50px;
-    padding: 0 20px 0 0;
+    // padding: 0 20px 0 0;
     line-height: 50px;
     white-space: nowrap;
     text-align: start;
     border-bottom: 1px solid #eff4fb;
-    padding: 12px 20px 12px 0;
+    padding: 12px 20px 12px 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -171,4 +171,11 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+}
+.amountCell {
+  text-align: 'right';
+  margin-right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }

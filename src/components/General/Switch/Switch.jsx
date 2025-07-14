@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 // Icons
 import { ReactComponent as IconClose } from 'assets/icons/iconClose.svg';
+
 // Styles
 import s from './Switch.module.scss';
 

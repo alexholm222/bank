@@ -3,20 +3,22 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
+import { mockData } from 'mock/mockData';
 
+import FiltersContainer from 'components/Filters/FiltersContainer';
 // Components
 import Search from 'components/General/Search/Search';
 import UniButton from 'components/General/UniButton/UniButton';
 import Information from 'components/Information/Information';
 import SectionButtons from 'components/SectionButtons/SectionButtons';
 import Table from 'components/Table/Table';
+
 // Icons
 import { ReactComponent as IconPlus } from 'assets/icons/iconPlus.svg';
 import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.svg';
+
 // Styles
 import s from './Main.module.scss';
-import { mockData } from 'mock/mockData';
-import FiltersContainer from 'components/Filters/FiltersContainer';
 
 const sectionButtons = [
   { id: 1, title: 'Транзакции' },

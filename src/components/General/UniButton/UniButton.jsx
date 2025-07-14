@@ -1,13 +1,13 @@
-import React from 'react';
 import classNames from 'classnames';
-import s from './UniButton.module.scss';
 import LoaderButton from 'components/General/UniButton/LoaderButton/LoaderButton';
+
+import s from './UniButton.module.scss';
 
 const UniButton = ({
   className = '',
   style = {},
-  type = 'primary', // primary, outline, danger
-  iconPosition = 'left', // left, right
+  type = 'primary', // primary | outline | danger
+  iconPosition = 'left', // left | right
   icon: Icon,
   text,
   width,
@@ -19,10 +19,12 @@ const UniButton = ({
   loaderColor = '#002CFB',
 }) => {
   const buttonStyle = {
-    width: width ? `${width}px` : undefined,
-    height: height ? `${height}px` : undefined,
+    ...(width && { width: `${width}px` }),
+    ...(height && { height: `${height}px` }),
     ...style,
   };
+
+  const isDisabled = disabled || isLoading;
 
   return (
     <button
@@ -30,24 +32,27 @@ const UniButton = ({
         s.button,
         s[`button_${type}`],
         s[`icon_${iconPosition}`],
-        disabled && s.button_disabled,
+        { [s.button_disabled]: isDisabled },
         className
       )}
       style={buttonStyle}
       onClick={onClick}
-      disabled={disabled || isLoading}
+      disabled={isDisabled}
     >
       {children ? (
         children
       ) : (
         <>
-          <div className={classNames(s.loader, isLoading && s.loader_visible)}>
+          {/* Loader */}
+          <div className={classNames(s.loader, { [s.loader_visible]: isLoading })}>
             <LoaderButton color={loaderColor} />
           </div>
 
+          {/* Icon */}
           {Icon && !isLoading && <Icon className={s.icon} />}
 
-          <span className={classNames(isLoading && s.text_hidden)}>{text}</span>
+          {/* Text */}
+          <span className={classNames({ [s.text_hidden]: isLoading })}>{text}</span>
         </>
       )}
     </button>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
+
 import { ReactComponent as IconChevronUp } from 'assets/icons/iconChevronUp.svg';
+
 import s from './ScrollToTopBtn.module.scss';
 
 const ScrollToTopButton = ({ scrollContainerRef }) => {

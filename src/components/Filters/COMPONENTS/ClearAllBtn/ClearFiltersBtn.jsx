@@ -1,17 +1,20 @@
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import s from './ClearFiltersBtn.module.scss';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+
+import s from './ClearFiltersBtn.module.scss';
+
+import { setDateEndPicker, setDateStartPicker } from '../../../../redux/filters/dateRangeSlice';
 import {
   setSelectedCompanies,
+  setSelectedPayers,
   setSelectedReceivers,
+  setSelectedStatus,
   setTransactionTypeFilter,
   setTransactionViewFilter,
-  setSelectedPayers,
-  setSelectedStatus,
 } from '../../../../redux/filters/slice';
-import classNames from 'classnames';
-import { setDateEndPicker, setDateStartPicker } from '../../../../redux/filters/dateRangeSlice';
-import { useCallback } from 'react';
 
 const ClearFiltersBtn = ({ text = 'Сбросить всё', animation = false }) => {
   const dispatch = useDispatch();

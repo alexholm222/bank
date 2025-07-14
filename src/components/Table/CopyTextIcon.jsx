@@ -1,17 +1,18 @@
 import { toast } from 'react-toastify';
 
+import CustomToast from 'components/General/CustomToast/CustomToast';
+
 // Icons
 import { ReactComponent as IconCopy } from 'assets/icons/iconCopy.svg';
 
 // Styles
 import s from './Table.module.scss';
-import CustomToast from 'components/General/CustomToast/CustomToast';
 const CopyTextIcon = ({ textToCopy }) => {
   const handleCopy = async (e) => {
     e.stopPropagation();
     await navigator.clipboard.writeText(textToCopy);
     toast(
-      ({ closeToast }) => <CustomToast message="Скоировано в буфер" closeToast={closeToast} />,
+      ({ closeToast }) => <CustomToast message="Скопировано в буфер" closeToast={closeToast} />,
       {
         className: s.root,
         bodyClassName: s.body,

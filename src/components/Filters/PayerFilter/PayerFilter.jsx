@@ -1,56 +1,64 @@
-import s from './PayerFilter.module.scss';
-import classNames from 'classnames';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as IconWallet } from 'assets/icons/iconWallet.svg';
+import classNames from 'classnames';
+
+// Redux
 import { setSelectedPayers } from '../../../redux/filters/slice';
-import PayersList from 'components/Filters/PayerFilter/ReceiverList/PayersList';
+
+// Components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
+import PayersList from 'components/Filters/PayerFilter/PayersList/PayersList';
+
+// Icons
+import { ReactComponent as IconWallet } from 'assets/icons/iconWallet.svg';
+
+// Styles
+import s from './PayerFilter.module.scss';
 
 const PayerFilter = ({ data }) => {
+  const dispatch = useDispatch();
   const filterPayers = useSelector((state) => state.filters.selectedPayers);
 
-  const [selectedPayers, setSelectedPayersLocal] = useState(filterPayers);
-  const [openModal, setOpenModal] = useState(false);
+  const [localSelected, setLocalSelected] = useState(filterPayers);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const dispatch = useDispatch();
-  const modalRef = useRef();
-  const buttonRef = useRef();
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
 
-  const handleOpen = () => {
-    setOpenModal((prev) => !prev);
-  };
+  const handleToggleModal = () => setIsOpen((prev) => !prev);
 
   const handleConfirm = () => {
-    dispatch(setSelectedPayers(selectedPayers));
-    setOpenModal(false);
+    dispatch(setSelectedPayers(localSelected));
+    setIsOpen(false);
   };
 
   const handleReset = (e) => {
-    e.stopPropagation();
-    setSelectedPayersLocal([]);
+    e?.stopPropagation();
+    setLocalSelected([]);
     dispatch(setSelectedPayers([]));
   };
 
-  const handlePayersChange = (newSelected) => {
-    setSelectedPayersLocal(newSelected);
+  const handleChange = (updated) => {
+    setLocalSelected(updated);
   };
+
   useEffect(() => {
-    setSelectedPayersLocal(filterPayers);
+    setLocalSelected(filterPayers);
   }, [filterPayers]);
 
   useEffect(() => {
-    const clickOutside = (e) => {
+    const handleClickOutside = (e) => {
       if (
         modalRef.current &&
         !modalRef.current.contains(e.target) &&
         !buttonRef.current.contains(e.target)
       ) {
-        setOpenModal(false);
+        setIsOpen(false);
       }
     };
-    document.body.addEventListener('mousedown', clickOutside);
-    return () => document.body.removeEventListener('mousedown', clickOutside);
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
@@ -60,15 +68,15 @@ const PayerFilter = ({ data }) => {
         Icon={IconWallet}
         count={filterPayers.length}
         handleReset={handleReset}
-        handleOpen={handleOpen}
+        handleOpen={handleToggleModal}
         buttonRef={buttonRef}
       />
 
-      <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
+      <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: isOpen })}>
         <PayersList
           items={data}
-          selected={selectedPayers}
-          onChange={handlePayersChange}
+          selected={localSelected}
+          onChange={handleChange}
           onConfirm={handleConfirm}
           onReset={handleReset}
         />

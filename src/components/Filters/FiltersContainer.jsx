@@ -1,15 +1,18 @@
 import { useSelector } from 'react-redux';
-import { isAnyFilterActive } from '../../redux/filters/selectors';
-import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
-import ReceiverFilter from 'components/Filters/ReceiverFilter/ReceiverFilter';
+
 import { companies, mockReceivers } from 'mock/mockData';
-import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
+
+import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
 import ClearFiltersBtn from 'components/Filters/COMPONENTS/ClearAllBtn/ClearFiltersBtn';
-import PayerFilter from 'components/Filters/PayerFilter/PayerFilter';
 import DateFilter from 'components/Filters/DateFilter/DateFilter';
+import PayerFilter from 'components/Filters/PayerFilter/PayerFilter';
+import ReceiverFilter from 'components/Filters/ReceiverFilter/ReceiverFilter';
 import StatusFilter from 'components/Filters/StatusFilter/StatusFilter';
+import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
 
 import s from './FiltersContainer.module.scss';
+
+import { isAnyFilterActive } from '../../redux/filters/selectors';
 import ActivityFilter from './ActivityFilter/ActivityFilter';
 
 const FiltersContainer = ({ type }) => {
@@ -23,7 +26,11 @@ const FiltersContainer = ({ type }) => {
       <DateFilter key="date" />,
     ],
     2: [<CompanyFilter key="company" data={companies} />, <StatusFilter key="status" />],
-    3: [<CompanyFilter key="company" data={companies} />, <ActivityFilter key="activity" />],
+    3: [
+      <CompanyFilter key="company" data={companies} />,
+      <ActivityFilter key="activity" />,
+      <DateFilter key="date" />,
+    ],
   };
 
   return (

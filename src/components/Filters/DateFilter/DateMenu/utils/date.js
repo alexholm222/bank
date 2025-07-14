@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import 'moment/locale/ru';
 
 const insertZeroNum = (count) => {
@@ -89,8 +90,6 @@ export const getLastMonth = (value) => {
   }
 };
 
-
-
 export const getBeforeLastMonth = (value) => {
   if (value === 'start') {
     const dateStart = moment().subtract(2, 'month').startOf('month').format();
@@ -110,12 +109,7 @@ export const getBeforeLastMonth = (value) => {
   }
 };
 
-
-export const getTitleDateDuration = (
-  dateStart,
-  dateEnd,
-  viewFullMonth = false
-) => {
+export const getTitleDateDuration = (dateStart, dateEnd, viewFullMonth = false) => {
   const currentYear = new Date().getFullYear();
   const startYear = new Date(`${dateStart}`).getFullYear();
   const endYear = new Date(`${dateEnd}`).getFullYear();
@@ -131,9 +125,9 @@ export const getTitleDateDuration = (
     .endOf('month')
     .format('D');
 
-    if(!dateStart && !dateEnd) {
-      return 'Период'
-    }
+  if (!dateStart && !dateEnd) {
+    return 'Период';
+  }
 
   if (
     startYear === endYear &&

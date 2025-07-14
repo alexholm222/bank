@@ -1,16 +1,19 @@
-import s from './GroupSelect.module.scss';
+import { useEffect, useRef,useState } from 'react';
 import classNames from 'classnames';
-import { useEffect, useState, useRef } from 'react';
-//icons
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
-//components
-
-import CheckBoxList from 'components/Filters/COMPONENTS/CheckBoxList/CheckBoxList';
 
 //utils
 import { handleSearchGroup } from 'utils/SearchGroups';
+
+//components
+import CheckBoxList from 'components/Filters/COMPONENTS/CheckBoxList/CheckBoxList';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+//icons
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
+
+import s from './GroupSelect.module.scss';
+
 import UniButton from '../../../General/UniButton/UniButton';
 
 const GroupSelect = ({

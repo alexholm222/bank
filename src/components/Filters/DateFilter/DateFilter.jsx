@@ -1,58 +1,63 @@
-import s from './DateFilter.module.scss';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { ReactComponent as IconCalendar } from 'assets/icons/iconCalendar.svg';
-import { setDateStartPicker, setDateEndPicker } from '../../../redux/filters/dateRangeSlice';
-import FilterButton, {
-  FilterButtonDate,
-} from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { setDateEndPicker, setDateStartPicker } from '../../../redux/filters/dateRangeSlice';
+
+// Components
+import { FilterButtonDate } from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 import { DateMenu } from './DateMenu/DateMenu';
 import { getTitleDateDuration } from './DateMenu/utils/date';
+import { ReactComponent as IconCalendar } from 'assets/icons/iconCalendar.svg';
+
+// Styles
+import s from './DateFilter.module.scss';
 
 const DateFilter = () => {
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
-
-  const isSelected = dateStartPicker && dateEndPicker;
-  const [load, setLoad] = useState(false);
-  const [openCalendar, setOpenCalendar] = useState(false);
   const dispatch = useDispatch();
-  const dateRef = useRef();
+  const ref = useRef(null);
 
-  const handleResetFilter = (e) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const isSelected = Boolean(dateStartPicker && dateEndPicker);
+  const title = isSelected ? getTitleDateDuration(dateStartPicker, dateEndPicker) : 'Период';
+
+  const handleOpen = () => setIsOpen(true);
+
+  const handleReset = (e) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(setDateStartPicker(null));
     dispatch(setDateEndPicker(null));
   };
 
-  const handleOpenCalendar = () => {
-    setOpenCalendar(true);
-  };
-
   useEffect(() => {
-    const clickOutside = (e) => {
-      if (dateRef.current && !e.composedPath().includes(dateRef.current)) {
-        setOpenCalendar(false);
+    const handleClickOutside = (e) => {
+      if (ref.current && !e.composedPath().includes(ref.current)) {
+        setIsOpen(false);
       }
     };
-    document.body.addEventListener('click', clickOutside);
-    return () => document.body.removeEventListener('click', clickOutside);
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   return (
     <div className={s.root}>
-      <div ref={dateRef} onClick={handleOpenCalendar} className={classNames(s.filter)}>
+      <div ref={ref} onClick={handleOpen} className={classNames(s.filter)}>
         <FilterButtonDate
-          title={isSelected ? getTitleDateDuration(dateStartPicker, dateEndPicker) : 'Период'}
+          title={title}
           Icon={IconCalendar}
           isSelected={isSelected}
-          handleReset={handleResetFilter}
-          handleOpen={handleOpenCalendar}
-          buttonRef={dateRef}
+          handleReset={handleReset}
+          handleOpen={handleOpen}
+          buttonRef={ref}
         />
       </div>
-      <DateMenu isOpen={openCalendar} setIsOpen={setOpenCalendar} setLoadFilter={setLoad} />
+
+      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };

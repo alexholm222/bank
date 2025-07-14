@@ -1,9 +1,7 @@
-import s from './LoaderCircle.module.scss'
+import s from './LoaderCircle.module.scss';
 
 const LoaderCircle = () => {
-    return (
-        <div className={s.loader}></div>
-    )
+  return <div className={s.loader}></div>;
 };
 
 export default LoaderCircle;

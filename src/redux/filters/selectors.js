@@ -9,8 +9,8 @@ export const isAnyFilterActive = (state) => {
     selectedStatus,
   } = state.filters;
   return (
-    transactionTypeFilter !== 'all' ||
-    transactionViewFilter !== 'all' ||
+    transactionTypeFilter !== '' ||
+    transactionViewFilter !== '' ||
     selectedCompanies.length > 0 ||
     selectedReceivers.length > 0 ||
     selectedPayers.length > 0 ||

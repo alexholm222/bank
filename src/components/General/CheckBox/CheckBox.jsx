@@ -1,4 +1,5 @@
 import s from './CheckBox.module.scss';
+
 import { ReactComponent as IconCheck } from './icons/iconCheck.svg';
 
 const CheckBox = ({ active }) => {

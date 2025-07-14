@@ -1,10 +1,13 @@
-import s from './ReceiverList.module.scss';
-import { useState, useEffect } from 'react';
-import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import UniButton from 'components/General/UniButton/UniButton';
-import CheckBox from 'components/General/CheckBox/CheckBox';
+import { useEffect,useState } from 'react';
+
 import FilterSearch from 'components/Filters/COMPONENTS/FilterSearch/FilterSearch';
+import CheckBox from 'components/General/CheckBox/CheckBox';
+import UniButton from 'components/General/UniButton/UniButton';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
+
+import s from './ReceiverList.module.scss';
 
 const ReceiverList = ({ items, selectedReceivers, onChange, onConfirm, onReset }) => {
   const receivers = Array.isArray(items) ? items : [];

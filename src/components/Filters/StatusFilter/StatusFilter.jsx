@@ -1,18 +1,20 @@
-import { useRef, useState, useEffect } from 'react';
-
-// icons
-import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { useEffect,useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
-import UniButton from 'components/General/UniButton/UniButton';
 import RadioButtons from 'components/General/RadioButtons/RadioButtons';
+import UniButton from 'components/General/UniButton/UniButton';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+// icons
+import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+
 // styles
 import s from './StatusFilter.module.scss';
-import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { setSelectedStatus } from '../../../redux/filters/slice';
 
 const extractionsStatuses = [

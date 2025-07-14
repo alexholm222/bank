@@ -8,18 +8,18 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  border-radius: 4px;
-  background-color: #fff;
   padding: 0 12px;
+  background-color: #fff;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.15s;
-
-  &_active {
-    color: #002cfb;
-  }
+  transition: background-color 0.15s;
 
   &:hover {
     background-color: #f8fafd;
+  }
+
+  &_active {
+    color: #002cfb;
   }
 }
 
@@ -31,13 +31,8 @@
 }
 
 .icon {
-  position: relative;
   display: flex;
   align-items: center;
-}
-
-.hidden {
-  opacity: 0;
 }
 
 .block {
@@ -46,7 +41,7 @@
   gap: 4px;
   width: 0;
   overflow: hidden;
-  transition: all 0.25s ease-in-out;
+  transition: width 0.25s ease-in-out;
 
   &_active {
     width: 32px;
@@ -55,26 +50,6 @@
   svg {
     width: 12px;
     height: 12px;
-  }
-}
-
-.loader {
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.15s ease-in-out;
-
-  &_vis {
-    opacity: 1;
-    visibility: visible;
   }
 }
 
@@ -94,6 +69,25 @@
   color: #002cfb;
 }
 
+.loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-in-out;
+
+  &_vis {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .close {
   margin-bottom: -1px;
 
@@ -109,14 +103,14 @@
   right: 0;
   top: 44px;
   z-index: 14;
-  transition: all 0.2s ease-in-out;
   transform: scale(0.7);
   opacity: 0;
   visibility: hidden;
+  transition: all 0.2s ease-in-out;
 
   &_open {
-    visibility: visible;
     transform: scale(1);
     opacity: 1;
+    visibility: visible;
   }
 }

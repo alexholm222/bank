@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 //libs
 import { useDropzone } from 'react-dropzone';
 import classNames from 'classnames';
+
 //hooks
 import { useModal } from 'hooks/useModal';
+
 //components
 import LoaderButton from 'components/General/LoaderButton/LoaderButton';
 import Modal from 'components/General/Modal/Modal';
@@ -18,6 +20,7 @@ import { ReactComponent as IconDelete } from 'assets/icons/iconDelete.svg';
 import { ReactComponent as IconDoneGrey } from 'assets/icons/iconDoneGrey.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { ReactComponent as IconUploadBlack } from 'assets/icons/iconUploadBlack.svg';
+
 //styles
 import s from './UploadExtraction.module.scss';
 

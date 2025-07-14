@@ -1,11 +1,14 @@
-import s from './PayersList.module.scss';
-import { useState, useEffect } from 'react';
-import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
-import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import UniButton from 'components/General/UniButton/UniButton';
-import CheckBox from 'components/General/CheckBox/CheckBox';
+import { useEffect,useState } from 'react';
+
 import FilterSearch from 'components/Filters/COMPONENTS/FilterSearch/FilterSearch';
+import CheckBox from 'components/General/CheckBox/CheckBox';
+import UniButton from 'components/General/UniButton/UniButton';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
+
+import s from './PayersList.module.scss';
 
 const PayersList = ({ items: payers, selected, onChange, onConfirm, onReset }) => {
   const [filteredReceivers, setFilteredReceivers] = useState(payers);
@@ -24,7 +27,7 @@ const PayersList = ({ items: payers, selected, onChange, onConfirm, onReset }) =
     <div className={s.root}>
       <div className={s.container}>
         <div className={s.header}>
-          <p>Заказчик</p>
+          <p>Плательщик</p>
         </div>
 
         <FilterSearch receivers={payers} onFilter={setFilteredReceivers} />

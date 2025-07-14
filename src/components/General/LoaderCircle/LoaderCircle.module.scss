@@ -4,10 +4,8 @@
   padding: 3px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #002CFB;
-  --_m:
-    conic-gradient(#0000 2%, #000),
-    linear-gradient(#000 0 0) content-box;
+  background: #002cfb;
+  --_m: conic-gradient(#0000 2%, #000), linear-gradient(#000 0 0) content-box;
   -webkit-mask: var(--_m);
   mask: var(--_m);
   -webkit-mask-composite: source-out;
@@ -17,6 +15,6 @@
 
 @keyframes l3 {
   to {
-    transform: rotate(1turn)
+    transform: rotate(1turn);
   }
 }

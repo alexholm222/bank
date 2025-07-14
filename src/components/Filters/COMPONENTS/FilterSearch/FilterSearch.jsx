@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
+
 import { ReactComponent as IconCloseGrey } from 'assets/icons/iconCloseGrey.svg';
+import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
+
 import s from './FilterSearch.module.scss';
 
 const handleSearchReceivers = (query, receivers) => {

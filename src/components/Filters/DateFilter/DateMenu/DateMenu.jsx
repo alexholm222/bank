@@ -1,6 +1,7 @@
-import classNames from 'classnames';
-import { DatePickerСhoose } from 'components/Filters/DateFilter/DateMenu/DatePickerСhoose/index';
 import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
+
+import { DatePickerСhoose } from 'components/Filters/DateFilter/DateMenu/DatePickerСhoose/index';
 import {
   getBeforeLastMonth,
   getCurrentDay,
@@ -11,11 +12,13 @@ import {
   getTwoLastWeek,
   getWeek,
 } from 'components/Filters/DateFilter/DateMenu/utils/date';
-import {
-  setDateStartPicker as setDateStart,
-  setDateEndPicker as setDateEnd,
-} from '../../../../redux/filters/dateRangeSlice';
+
 import styles from './DateMenu.module.scss';
+
+import {
+  setDateEndPicker as setDateEnd,
+  setDateStartPicker as setDateStart,
+} from '../../../../redux/filters/dateRangeSlice';
 
 export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
   const dispatch = useDispatch();

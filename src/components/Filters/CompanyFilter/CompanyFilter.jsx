@@ -1,160 +1,117 @@
-import s from './CompanyFilter.module.scss';
-import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { useEffect, useState } from 'react';
+
+// redux
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
+import { setSelectedCompanies } from '../../../redux/filters/slice';
 
 // components
 import CheckBox from 'components/General/CheckBox/CheckBox';
-
-import { setSelectedCompanies } from '../../../redux/filters/slice';
 import UniButton from 'components/General/UniButton/UniButton';
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 
-const Item = ({ data, activeCompany, setActiveCompany }) => {
-  const [active, setActive] = useState(false);
+// icons
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
 
-  useEffect(() => {
-    const result = activeCompany?.find((el) => el == data.id);
-    setActive(!!result);
-  }, [activeCompany, data.id]);
+// styles
+import classNames from 'classnames';
+import s from './CompanyFilter.module.scss';
 
-  const handleCheck = (e) => {
-    const id = Number(e.currentTarget.id);
-    if (!active) {
-      setActiveCompany((prevState) => [...prevState, id]);
-    } else {
-      setActiveCompany((prevState) => prevState.filter((el) => el !== id));
-    }
-  };
-
-  return (
-    <div onClick={handleCheck} id={data.id} className={s.item}>
-      <div className={s.check}>
-        <CheckBox active={active} />
-      </div>
-
-      <div className={s.block}>
-        <p>{data.name}</p>
-        <span>
-          ИНН: {data.inn} {data.kpp !== '' && `КПП: ${data.kpp}`}
-        </span>
-      </div>
+const CompanyItem = ({ data, selected, toggleSelection }) => (
+  <div onClick={() => toggleSelection(data.id)} className={s.item}>
+    <div className={s.check}>
+      <CheckBox active={selected} />
     </div>
-  );
-};
+    <div className={s.block}>
+      <p>{data.name}</p>
+      <span>
+        ИНН: {data.inn} {data.kpp && `КПП: ${data.kpp}`}
+      </span>
+    </div>
+  </div>
+);
 
 export const CompanyFilter = ({ data }) => {
-  const filterCompanys = useSelector((state) => state.filters.selectedCompanies);
-  const [activeCompany, setActiveCompany] = useState(filterCompanys || []);
-  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const isFetchingOrders = false;
+  const selected = useSelector((state) => state.filters.selectedCompanies);
+  const [open, setOpen] = useState(false);
+  const [localSelected, setLocalSelected] = useState([]);
 
-  const cites = data?.partnerships
-    ?.reduce((accumulator, current) => {
-      if (accumulator.findIndex((object) => object.city === current.city) === -1) {
-        accumulator.push(current);
-      }
-      return accumulator;
-    }, [])
-    .map((el) => el.city);
+  const partnerships = data?.partnerships || [];
 
   useEffect(() => {
-    setActiveCompany(filterCompanys || []);
-  }, [filterCompanys]);
+    setLocalSelected(selected || []);
+  }, [selected]);
+
+  const toggleSelection = (id) => {
+    const numericId = Number(id);
+    setLocalSelected((prev) =>
+      prev.includes(numericId) ? prev.filter((item) => item !== numericId) : [...prev, numericId]
+    );
+  };
 
   const handleConfirm = () => {
-    dispatch(setSelectedCompanies(activeCompany));
+    dispatch(setSelectedCompanies(localSelected));
     setOpen(false);
   };
 
   const handleReset = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setActiveCompany([]);
+    e?.preventDefault();
+    e?.stopPropagation();
+    setLocalSelected([]);
     dispatch(setSelectedCompanies([]));
   };
 
-  const handleOpenModal = () => {
-    setOpen((prev) => !prev);
-  };
+  const uniqueCities = [...new Set(partnerships.map((item) => item.city).filter(Boolean))];
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  if (partnerships.length <= 1) return null;
 
   return (
-    <>
-      {data?.partnerships?.length > 1 ? (
-        <div
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleConfirm();
-          }}
-          className={s.container}
-        >
-          <div
-            onMouseDown={handleClose}
-            className={classNames(s.overlay, open && s.overlay_anim)}
-          ></div>
+    <div onKeyDown={(e) => e.key === 'Enter' && handleConfirm()} className={s.container}>
+      <div
+        onMouseDown={() => setOpen(false)}
+        className={classNames(s.overlay, open && s.overlay_anim)}
+      />
 
-          <FilterButton
-            title="Компания"
-            Icon={IconHome}
-            load={false}
-            done={false}
-            count={(filterCompanys ?? []).length}
-            handleReset={handleReset}
-            handleOpen={handleOpenModal}
-          />
+      <FilterButton
+        title="Компания"
+        Icon={IconHome}
+        count={selected.length}
+        handleReset={handleReset}
+        handleOpen={() => setOpen((prev) => !prev)}
+      />
 
-          <div className={classNames(s.modal, open && s.modal_open)}>
-            <div className={s.list} key="all">
-              <div className={s.headerTitle}>Мои компании</div>
-            </div>
-
-            <div className={s.listContainer}>
-              {cites?.map((city) => {
-                const items = data.partnerships.filter((item) => item.city === city);
-                return (
-                  <div className={s.list} key={city}>
-                    <span>{city}</span>
-                    {items.map((el) => (
-                      <Item
-                        key={el.id}
-                        data={el}
-                        setActiveCompany={setActiveCompany}
-                        activeCompany={activeCompany}
-                      />
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className={s.buttons}>
-              <UniButton
-                onClick={handleReset}
-                text="Сбросить"
-                icon={IconCloseBlue}
-                isLoading={false}
-                type="outline"
-              />
-
-              <UniButton
-                onClick={handleConfirm}
-                text="Применить"
-                icon={IconDoneWhite}
-                isLoading={false}
-                width={268}
-              />
-            </div>
-          </div>
+      <div className={classNames(s.modal, { [s.modal_open]: open })}>
+        <div className={s.list}>
+          <div className={s.headerTitle}>Мои компании</div>
         </div>
-      ) : null}
-    </>
+
+        <div className={s.listContainer}>
+          {uniqueCities.map((city) => {
+            const items = partnerships.filter((item) => item.city === city);
+            return (
+              <div key={city} className={s.list}>
+                <span>{city}</span>
+                {items.map((el) => (
+                  <CompanyItem
+                    key={el.id}
+                    data={el}
+                    selected={localSelected.includes(el.id)}
+                    toggleSelection={toggleSelection}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className={s.buttons}>
+          <UniButton onClick={handleReset} text="Сбросить" icon={IconCloseBlue} type="outline" />
+          <UniButton onClick={handleConfirm} text="Применить" icon={IconDoneWhite} width={268} />
+        </div>
+      </div>
+    </div>
   );
 };
 

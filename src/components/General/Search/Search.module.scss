@@ -16,6 +16,10 @@
     border: none;
     width: 100%;
     caret-color: #002cfb;
+
+    &::placeholder {
+      color: #71869d;
+    }
   }
 
   &_active {

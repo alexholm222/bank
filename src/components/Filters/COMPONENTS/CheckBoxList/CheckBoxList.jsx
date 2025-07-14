@@ -1,7 +1,9 @@
-import s from './CheckBoxList.module.scss';
 import classNames from 'classnames';
+
 //components
 import CheckBox from 'components/General/CheckBox/CheckBox';
+
+import s from './CheckBoxList.module.scss';
 
 const CheckBoxList = ({ list, active, setActive, column }) => {
   const handleActive = (e) => {

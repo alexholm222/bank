@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import dateRangeReducer from './filters/dateRangeSlice';
+
 import { apiActions } from './apiActions';
-import modalReducer from './modal/modalSlice';
+import dateRangeReducer from './filters/dateRangeSlice';
 import filtersSlice from './filters/slice';
+import modalReducer from './modal/modalSlice';
 //slice
 /* import filtersSlice from './filters/slice'; */
 

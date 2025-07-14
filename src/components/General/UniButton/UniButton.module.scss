@@ -1,19 +1,18 @@
 .button {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
   height: 40px;
+  border-radius: 4px;
   box-sizing: border-box;
   cursor: pointer;
-  display: flex;
-  padding: 10px 20px;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  border-radius: 4px;
-
   text-align: center;
-  font-family: Inter;
+
+  font-family: Inter, sans-serif;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: 0.056px;
@@ -32,7 +31,7 @@
 
   &.button_primary {
     background-color: #003cff;
-    color: white;
+    color: #fff;
 
     &:hover {
       background-color: #0024cb;
@@ -45,8 +44,8 @@
     border: 1px solid #003cff;
 
     &:hover {
-      border-color: #0024cb;
       color: #0024cb;
+      border-color: #0024cb;
     }
   }
 
@@ -56,8 +55,8 @@
     border: 2px solid #ff1f1f;
 
     &:hover {
-      border-color: #cc0101;
       color: #cc0101;
+      border-color: #cc0101;
     }
   }
 

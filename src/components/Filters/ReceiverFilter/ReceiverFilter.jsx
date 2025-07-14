@@ -1,74 +1,84 @@
-import s from './ReceiverFilter.module.scss';
-import classNames from 'classnames';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as IсonDocBag } from 'assets/icons/iconDocBag.svg';
-import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
-import ReceiverList from 'components/Filters/ReceiverFilter/ReceiverList/ReceiverList';
+import classNames from 'classnames';
+
+// Redux
 import { setSelectedReceivers } from '../../../redux/filters/slice';
 
+// Components
+import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
+import ReceiverList from 'components/Filters/ReceiverFilter/ReceiverList/ReceiverList';
+
+// Icons
+import { ReactComponent as IconDocBag } from 'assets/icons/iconDocBag.svg';
+
+// Styles
+import s from './ReceiverFilter.module.scss';
+
 const ReceiverFilter = ({ data }) => {
-  const filterReceivers = useSelector((state) => state.filters.selectedReceivers);
-
-  const [selectedReceivers, setSelectedReceiversLocal] = useState(filterReceivers);
-  const [openModal, setOpenModal] = useState(false);
-
   const dispatch = useDispatch();
-  const modalRef = useRef();
-  const buttonRef = useRef();
+  const selectedFromStore = useSelector((state) => state.filters.selectedReceivers);
 
-  const handleOpen = (e) => {
-    setOpenModal((prev) => !prev);
+  const [localSelected, setLocalSelected] = useState(selectedFromStore);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const handleToggleModal = () => {
+    setIsOpen((prev) => !prev);
   };
 
   const handleConfirm = () => {
-    dispatch(setSelectedReceivers(selectedReceivers));
-    setOpenModal(false);
+    dispatch(setSelectedReceivers(localSelected));
+    setIsOpen(false);
   };
 
   const handleReset = (e) => {
-    e.stopPropagation();
-    setSelectedReceiversLocal([]);
+    e?.stopPropagation();
+    setLocalSelected([]);
     dispatch(setSelectedReceivers([]));
   };
 
-  const handleReceiverChange = (newSelected) => {
-    setSelectedReceiversLocal(newSelected);
+  const handleChange = (newSelected) => {
+    setLocalSelected(newSelected);
   };
-  useEffect(() => {
-    setSelectedReceiversLocal(filterReceivers);
-  }, [filterReceivers]);
 
   useEffect(() => {
-    const clickOutside = (e) => {
+    setLocalSelected(selectedFromStore);
+  }, [selectedFromStore]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
       if (
         modalRef.current &&
         !modalRef.current.contains(e.target) &&
         !buttonRef.current.contains(e.target)
       ) {
-        setOpenModal(false);
+        setIsOpen(false);
       }
     };
-    document.body.addEventListener('mousedown', clickOutside);
-    return () => document.body.removeEventListener('mousedown', clickOutside);
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
     <div className={s.root}>
       <FilterButton
         title="Заказчик"
-        Icon={IсonDocBag}
-        count={filterReceivers.length}
+        Icon={IconDocBag}
+        count={selectedFromStore.length}
         handleReset={handleReset}
-        handleOpen={handleOpen}
+        handleOpen={handleToggleModal}
         buttonRef={buttonRef}
       />
 
-      <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
+      <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: isOpen })}>
         <ReceiverList
           items={data}
-          selectedReceivers={selectedReceivers}
-          onChange={handleReceiverChange}
+          selectedReceivers={localSelected}
+          onChange={handleChange}
           onConfirm={handleConfirm}
           onReset={handleReset}
         />

@@ -1225,4 +1225,4 @@ const companies = {
   ],
 };
 
-export { mockData, companies, mockReceivers };
+export { companies, mockData, mockReceivers };

@@ -1,8 +1,11 @@
 import DatePicker, { registerLocale } from 'react-datepicker';
-import ru from 'date-fns/locale/ru';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from 'react-redux';
+
+import ru from 'date-fns/locale/ru';
+
 import { setDateEndPicker, setDateStartPicker } from '../../../../../redux/filters/dateRangeSlice';
+
+import 'react-datepicker/dist/react-datepicker.css';
 import './DatePickerСhoose.scss';
 
 export const DatePickerСhoose = ({ setOpenDateFilter, setLoadFilter }) => {

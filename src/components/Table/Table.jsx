@@ -1,17 +1,19 @@
 import React from 'react';
-
 import classNames from 'classnames';
+
 // Hooks
 import { useModal } from 'hooks/useModal';
 
 import TableSceleton from 'components/TableSceleton/TableSceleton';
-// Icons
 
+// Icons
 // Styles
 import s from './Table.module.scss';
-import 'react-toastify/dist/ReactToastify.css';
-import TableRow from './TableRow';
+
 import TableHeader from './TableHeader';
+import TableRow from './TableRow';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const Table = ({ type, anim, isFetch, list: items }) => {
   const { showModal } = useModal();
@@ -34,11 +36,14 @@ const Table = ({ type, anim, isFetch, list: items }) => {
 
   return (
     <table className={classNames(s.root, anim && s.root_anim, isFetch && s.root_fetch)}>
-      <thead>{TableHeader({ type })}</thead>
+      <thead>
+        <TableHeader type={type} />
+      </thead>
+
       <tbody>
         {items.map((row, index) => (
           <tr key={index} className={s.dataRow} onClick={handlerOpenFlow}>
-            {TableRow({ row, type })}
+            <TableRow row={row} type={type} />
           </tr>
         ))}
       </tbody>

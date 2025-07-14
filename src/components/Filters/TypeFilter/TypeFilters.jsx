@@ -1,18 +1,21 @@
-import { useRef, useState, useEffect } from 'react';
-
-// icons
-import { ReactComponent as IconFilterSettingts } from 'assets/icons/iconFilterSettings.svg';
-import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { useEffect,useRef, useState } from 'react';
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import classNames from 'classnames';
 
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
+import CheckBox from 'components/General/CheckBox/CheckBox';
 import UniButton from 'components/General/UniButton/UniButton';
-import RadioButtons from 'components/General/RadioButtons/RadioButtons';
+
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
+import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+// icons
+import { ReactComponent as IconFilterSettingts } from 'assets/icons/iconFilterSettings.svg';
+
 // styles
 import s from './TypeFilters.module.scss';
-import classNames from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { setTransactionTypeFilter, setTransactionViewFilter } from '../../../redux/filters/slice';
 
 const transactionTypeList = [
@@ -26,12 +29,12 @@ const transactionViewList = [
 ];
 
 const TypeFilter = () => {
-  const selectedTypes = useSelector((state) => state.filters.transactionTypeFilter);
-  const selectedViews = useSelector((state) => state.filters.transactionViewFilter);
+  const selectedTypes = useSelector((state) => state.filters.transactionTypeFilter) || [];
+  const selectedViews = useSelector((state) => state.filters.transactionViewFilter) || [];
 
   const [openModal, setOpenModal] = useState(false);
-  const [transactionType, setTransactionType] = useState('');
-  const [transactionView, setTransactionView] = useState('');
+  const [transactionType, setTransactionType] = useState([]);
+  const [transactionView, setTransactionView] = useState([]);
 
   const dispatch = useDispatch();
   const modalRef = useRef();
@@ -43,15 +46,20 @@ const TypeFilter = () => {
     setOpenModal((prev) => !prev);
   };
 
+  const handleToggle = (id, list, setList) => {
+    setList((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
+  };
+
   const handleConfirm = () => {
     dispatch(setTransactionTypeFilter(transactionType));
     dispatch(setTransactionViewFilter(transactionView));
     setOpenModal(false);
   };
+
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter(''));
-    dispatch(setTransactionViewFilter(''));
+    dispatch(setTransactionTypeFilter([]));
+    dispatch(setTransactionViewFilter([]));
     setOpenModal(false);
   };
 
@@ -74,7 +82,7 @@ const TypeFilter = () => {
       <FilterButton
         title="Транзакции"
         Icon={IconFilterSettingts}
-        count={(selectedTypes !== '') + (selectedViews !== '')}
+        count={selectedTypes.length + selectedViews.length}
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
@@ -82,21 +90,31 @@ const TypeFilter = () => {
 
       <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
         <div className={s.block}>
-          <div className={s.blockTitle}>Транзакции</div>
-          <RadioButtons
-            list={transactionTypeList}
-            active={transactionType}
-            setActive={setTransactionType}
-          />
+          <div className={s.blockTitle}>Тип транзакции</div>
+          {transactionTypeList.map((item) => (
+            <div
+              key={item.id}
+              className={s.item}
+              onClick={() => handleToggle(item.id, transactionType, setTransactionType)}
+            >
+              <CheckBox active={transactionType.includes(item.id)} />
+              <span className={s.checkboxLabel}>{item.name}</span>
+            </div>
+          ))}
         </div>
 
         <div className={s.block}>
-          <div className={s.blockTitle}>Вид Транзакции</div>
-          <RadioButtons
-            list={transactionViewList}
-            active={transactionView}
-            setActive={setTransactionView}
-          />
+          <div className={s.blockTitle}>Вид транзакции</div>
+          {transactionViewList.map((item) => (
+            <div
+              key={item.id}
+              className={s.item}
+              onClick={() => handleToggle(item.id, transactionView, setTransactionView)}
+            >
+              <CheckBox active={transactionView.includes(item.id)} />
+              <span className={s.checkboxLabel}>{item.name}</span>
+            </div>
+          ))}
         </div>
 
         <div className={s.buttons}>
@@ -107,7 +125,6 @@ const TypeFilter = () => {
             isLoading={false}
             type="outline"
           />
-
           <UniButton
             onClick={handleConfirm}
             text="Применить"

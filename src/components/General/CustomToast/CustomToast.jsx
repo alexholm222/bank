@@ -1,6 +1,8 @@
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast,ToastContainer } from 'react-toastify';
+
 import s from './CustomToast.module.scss';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const CustomToast = ({ closeToast, message }) => {
   return (
