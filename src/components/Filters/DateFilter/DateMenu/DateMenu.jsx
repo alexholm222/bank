@@ -20,7 +20,7 @@ import {
   setDateStartPicker as setDateStart,
 } from '../../../../redux/filters/dateRangeSlice';
 
-export const DateMenu = ({ isOpen, setIsOpen, setLoadFilter, setDone }) => {
+export const DateMenu = ({ isOpen, setIsOpen, setDone, setLoadFilter }) => {
   const dispatch = useDispatch();
 
   const handlerAll = () => {

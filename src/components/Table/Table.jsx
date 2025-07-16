@@ -1,32 +1,31 @@
 import React from 'react';
 import classNames from 'classnames';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
 
+// Components
 import TableSceleton from 'components/TableSceleton/TableSceleton';
-
-// Icons
-// Styles
-import s from './Table.module.scss';
-
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 
-import 'react-toastify/dist/ReactToastify.css';
+// Styles
+import s from './Table.module.scss';
 
-const Table = ({ type, anim, isFetch, list: items }) => {
+const Table = ({ type, anim, isFetch, list = [] }) => {
   const { showModal } = useModal();
 
-  const handlerOpenFlow = () => {
+  const handlerOpenFlow = (row) => {
+    console.log('row:', row);
     if (type === 1) {
-      showModal('TRANSACTION', { data: items });
+      showModal('TRANSACTION', { data: row });
     }
     if (type === 2) {
-      showModal('EXTRACTION', { data: items });
+      showModal('EXTRACTION', { data: row });
     }
     if (type === 3) {
-      showModal('ACCOUNT_INFO', { data: items });
+      showModal('ACCOUNT_INFO', { data: row });
     }
   };
 
@@ -41,8 +40,12 @@ const Table = ({ type, anim, isFetch, list: items }) => {
       </thead>
 
       <tbody>
-        {items.map((row, index) => (
-          <tr key={index} className={s.dataRow} onClick={handlerOpenFlow}>
+        {list.map((row) => (
+          <tr
+            key={row.id}
+            className={classNames(s.dataRow, type === 2 && s.noPointer)}
+            onClick={() => handlerOpenFlow(row)}
+          >
             <TableRow row={row} type={type} />
           </tr>
         ))}

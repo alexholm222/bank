@@ -36,6 +36,7 @@ const PayerFilter = ({ data }) => {
     e?.stopPropagation();
     setLocalSelected([]);
     dispatch(setSelectedPayers([]));
+    setIsOpen(false);
   };
 
   const handleChange = (updated) => {

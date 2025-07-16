@@ -1,51 +1,52 @@
-import { useEffect,useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
-import RadioButtons from 'components/General/RadioButtons/RadioButtons';
 import UniButton from 'components/General/UniButton/UniButton';
+import CheckBox from 'components/General/CheckBox/CheckBox';
 
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
-// icons
 import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 
-// styles
 import s from './StatusFilter.module.scss';
 
 import { setSelectedStatus } from '../../../redux/filters/slice';
 
 const extractionsStatuses = [
-  { id: 'all', name: 'Все' },
   { id: 'recognized', name: 'Распознана' },
   { id: 'unrecognized', name: 'Не распознана' },
 ];
 
 const StatusFilter = () => {
-  const selectedStatus = useSelector((state) => state.filters.selectedStatus);
+  const selectedStatus = useSelector((state) => state.filters.selectedStatus || []);
+  const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
-  const [extractionStatus, setExtractionStatus] = useState(selectedStatus);
+  const [tempStatuses, setTempStatuses] = useState(selectedStatus);
 
-  const dispatch = useDispatch();
-  const modalRef = useRef();
-  const buttonRef = useRef();
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const handleOpen = () => {
-    setExtractionStatus(selectedStatus);
+    setTempStatuses(selectedStatus);
     setOpenModal((prev) => !prev);
   };
 
+  const handleToggle = (id) => {
+    setTempStatuses((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
+  };
+
   const handleConfirm = () => {
-    dispatch(setSelectedStatus(extractionStatus));
+    dispatch(setSelectedStatus(tempStatuses));
     setOpenModal(false);
   };
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setSelectedStatus('all'));
+    dispatch(setSelectedStatus([]));
     setOpenModal(false);
   };
 
@@ -68,7 +69,7 @@ const StatusFilter = () => {
       <FilterButton
         title="Статус"
         Icon={IconDocSuccess}
-        count={selectedStatus !== 'all' ? 1 : 0}
+        count={selectedStatus.length}
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
@@ -77,11 +78,13 @@ const StatusFilter = () => {
       <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>
         <div className={s.block}>
           <div className={s.blockTitle}>Статус</div>
-          <RadioButtons
-            list={extractionsStatuses}
-            active={extractionStatus}
-            setActive={setExtractionStatus}
-          />
+
+          {extractionsStatuses.map((item) => (
+            <div key={item.id} className={s.item} onClick={() => handleToggle(item.id)}>
+              <CheckBox active={tempStatuses.includes(item.id)} />
+              <span className={s.checkboxLabel}>{item.name}</span>
+            </div>
+          ))}
         </div>
 
         <div className={s.buttons}>

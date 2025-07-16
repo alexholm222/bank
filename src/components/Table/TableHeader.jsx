@@ -10,16 +10,14 @@ const TableHeader = ({ type }) => {
   if (type === 1) {
     return (
       <tr>
-        <th style={{ width: '80px' }}>Дата</th>
-        <th style={{ width: '80px' }}>Номер</th>
-        <th style={{ minWidth: '160px' }} className={s.amountCell}>
-          Сумма, ₽
-        </th>
-        <th style={{ minWidth: '230px' }}>Плательщик</th>
-        <th style={{ minWidth: '230px' }}>Получатель</th>
+        <th style={{ width: '115px' }}>Дата</th>
+        <th style={{ width: '100px' }}>Номер</th>
+        <th style={{ width: '250px', paddingRight: '40px', textAlign: 'right' }}>Сумма, ₽</th>
+        <th style={{ minWidth: '200px' }}>Плательщик</th>
+        <th style={{ minWidth: '150px' }}>Получатель</th>
         <th style={{ minWidth: '300px' }}>Назначение</th>
-        <th style={{ minWidth: '100px' }}>Вид</th>
-        <th style={{ minWidth: '80px' }}></th>
+        <th style={{ width: '210px' }}>Вид</th>
+        <th style={{ width: '80px' }}></th>
       </tr>
     );
   }
@@ -27,10 +25,10 @@ const TableHeader = ({ type }) => {
     return (
       <tr>
         <th style={{ width: '160px' }}>Поступил</th>
-        <th style={{ minWidth: '350px' }}>Компания</th>
+        <th style={{ minWidth: '300px' }}>Компания</th>
         <th style={{ minWidth: '100px' }}>Счет</th>
         <th style={{ minWidth: '200px' }}>Файл</th>
-        <th style={{ minWidth: '250px' }}>Кто загрузил</th>
+        <th style={{ minWidth: '200px' }}>Кто загрузил</th>
         <th style={{ minWidth: '200px' }}></th>
         <th style={{ width: '180px' }}></th>
       </tr>
@@ -55,7 +53,7 @@ const TableHeader = ({ type }) => {
           </Tippy>
         </th>
         <th style={{ minWidth: '90px' }}></th>
-        <th style={{ minWidth: '40px' }}></th>
+        <th style={{ width: '40px' }}></th>
       </tr>
     );
   }

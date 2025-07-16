@@ -1,26 +1,29 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-
-import { apiActions } from './apiActions';
+import tableDataReducer from '../redux/tableData/tableDataSlice';
+import { tableDataApiActions } from './services/tableDataApiActions';
 import dateRangeReducer from './filters/dateRangeSlice';
 import filtersSlice from './filters/slice';
 import modalReducer from './modal/modalSlice';
-//slice
-/* import filtersSlice from './filters/slice'; */
+import { filtersApiActions } from './services/filtersApiActions';
 
 export const store = configureStore({
   reducer: {
+    tableData: tableDataReducer,
     filters: filtersSlice,
     dateRange: dateRangeReducer,
     modal: modalReducer,
-    [apiActions.reducerPath]: apiActions.reducer,
+    [tableDataApiActions.reducerPath]: tableDataApiActions.reducer,
+    [filtersApiActions.reducerPath]: filtersApiActions.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,
-    }).concat(apiActions.middleware),
+    })
+      .concat(tableDataApiActions.middleware)
+      .concat(filtersApiActions.middleware),
 });
 
 setupListeners(store.dispatch);

@@ -15,7 +15,8 @@ import { ReactComponent as IconCalendar } from 'assets/icons/iconCalendar.svg';
 import s from './DateFilter.module.scss';
 
 const DateFilter = () => {
-  const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
+  const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange || {});
+  const [loadFilter, setLoadFilter] = useState(false);
   const dispatch = useDispatch();
   const ref = useRef(null);
 
@@ -57,7 +58,7 @@ const DateFilter = () => {
         />
       </div>
 
-      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} />
+      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} setLoadFilter={setLoadFilter} />
     </div>
   );
 };

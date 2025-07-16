@@ -19,7 +19,7 @@ const FiltersContainer = ({ type }) => {
   const hasFilters = useSelector(isAnyFilterActive);
   const filtersMap = {
     1: [
-      <CompanyFilter key="company" data={companies} />,
+      <CompanyFilter key="company" />,
       <ReceiverFilter key="receiver" data={mockReceivers} />,
       <PayerFilter key="payer" data={mockReceivers} />,
       <TypeFilter key="type" />,

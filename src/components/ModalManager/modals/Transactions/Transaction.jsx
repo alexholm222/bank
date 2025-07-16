@@ -124,15 +124,14 @@ const docTypes = ['Оказание услуг', 'Транспортный'];
 const incomeTransactionTypes = ['Поступление', 'Возврат'];
 // const outcomeTransactionTypes = ['Платеж', 'Возврат'];
 
-const Transaction = () => {
+const Transaction = ({ data }) => {
+  console.log(data);
   const { modalProps, hideModal } = useModal();
   const [incomeType, setIncomeType] = useState(incomeTransactionTypes[0]);
   const [docType, setDoctype] = useState(docTypes[0]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
-  const { data } = modalProps || {};
-  const number = 123344;
-  const date = '12.12.2022';
+  const { company, date, goal, id, kind, number, partnership, requires_action, sum, type } = data;
 
   return (
     <Modal isOpen={true} onClose={hideModal}>

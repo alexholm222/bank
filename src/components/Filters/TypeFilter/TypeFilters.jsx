@@ -1,22 +1,21 @@
-import { useEffect,useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
+import { setTransactionTypeFilter, setTransactionViewFilter } from '../../../redux/filters/slice';
 
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 import CheckBox from 'components/General/CheckBox/CheckBox';
 import UniButton from 'components/General/UniButton/UniButton';
 
+// icons
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
-// icons
 import { ReactComponent as IconFilterSettingts } from 'assets/icons/iconFilterSettings.svg';
 
 // styles
 import s from './TypeFilters.module.scss';
-
-import { setTransactionTypeFilter, setTransactionViewFilter } from '../../../redux/filters/slice';
+import classNames from 'classnames';
 
 const transactionTypeList = [
   { id: 'income', name: 'Поступления' },
@@ -58,8 +57,8 @@ const TypeFilter = () => {
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter([]));
-    dispatch(setTransactionViewFilter([]));
+    dispatch(setTransactionTypeFilter(null));
+    dispatch(setTransactionViewFilter(null));
     setOpenModal(false);
   };
 

@@ -1,15 +1,14 @@
-import { useEffect,useRef, useState } from 'react';
-// redux
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 // Components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
-import RadioButtons from 'components/General/RadioButtons/RadioButtons';
 import UniButton from 'components/General/UniButton/UniButton';
+import CheckBox from 'components/General/CheckBox/CheckBox';
 
-import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 // Icons
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconDocSuccess } from 'assets/icons/iconDocSuccess.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 
@@ -21,7 +20,6 @@ import { setSelectedActivity } from '../../../redux/filters/slice';
 const accountsActivityList = [
   { id: 'active', name: 'Активные' },
   { id: 'unactive', name: 'Не активные' },
-  { id: 'all', name: 'Все' },
 ];
 
 const ActivityFilter = () => {
@@ -29,12 +27,12 @@ const ActivityFilter = () => {
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const selectedActivity = useSelector((state) => state.filters.selectedActivity);
+  const selectedActivity = useSelector((state) => state.filters.selectedActivity || []);
   const [openModal, setOpenModal] = useState(false);
-  const [tempActivity, setTempActivity] = useState(selectedActivity);
+  const [tempActivity, setTempActivity] = useState(selectedActivity || []);
 
   const handleOpen = () => {
-    setTempActivity(selectedActivity);
+    setTempActivity(selectedActivity || []);
     setOpenModal((prev) => !prev);
   };
 
@@ -45,8 +43,14 @@ const ActivityFilter = () => {
 
   const handleReset = (e) => {
     e?.stopPropagation();
-    dispatch(setSelectedActivity('active'));
+    dispatch(setSelectedActivity([]));
     setOpenModal(false);
+  };
+
+  const toggleActivity = (id) => {
+    setTempActivity((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
   };
 
   useEffect(() => {
@@ -68,18 +72,19 @@ const ActivityFilter = () => {
       <FilterButton
         title="Активные"
         Icon={IconDocSuccess}
-        count={selectedActivity !== 'active' ? 1 : 0}
+        count={selectedActivity.length}
         handleOpen={handleOpen}
         handleReset={handleReset}
         buttonRef={buttonRef}
       />
 
       <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: openModal })}>
-        <RadioButtons
-          list={accountsActivityList}
-          active={tempActivity}
-          setActive={setTempActivity}
-        />
+        {accountsActivityList.map((item) => (
+          <div key={item.id} className={s.item} onClick={() => toggleActivity(item.id)}>
+            <CheckBox active={tempActivity.includes(item.id)} />
+            <span className={s.checkboxLabel}>{item.name}</span>
+          </div>
+        ))}
 
         <div className={s.buttons}>
           <UniButton

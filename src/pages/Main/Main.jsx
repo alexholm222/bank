@@ -1,17 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+
+//redux
+import { useGetTableDataInfiniteQuery } from '../../redux/services/tableDataApiActions';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTabData } from '../../redux/tableData/tableDataSlice';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
-import { mockData } from 'mock/mockData';
 
-import FiltersContainer from 'components/Filters/FiltersContainer';
 // Components
 import Search from 'components/General/Search/Search';
 import UniButton from 'components/General/UniButton/UniButton';
 import Information from 'components/Information/Information';
 import SectionButtons from 'components/SectionButtons/SectionButtons';
 import Table from 'components/Table/Table';
+import FiltersContainer from 'components/Filters/FiltersContainer';
 
 // Icons
 import { ReactComponent as IconPlus } from 'assets/icons/iconPlus.svg';
@@ -20,50 +24,69 @@ import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.
 // Styles
 import s from './Main.module.scss';
 
-const sectionButtons = [
+const TABS = [
   { id: 1, title: 'Транзакции' },
   { id: 2, title: 'Выписки' },
   { id: 3, title: 'Банковские счета' },
 ];
 
 const Main = () => {
-  // const {
-  //   transactions,
-  //   extractions,
-  //   accounts,
-  //   searchResult,
-  //   fetchTransactions,
-  //   fetchExtractions,
-  //   fetchAccounts,
-  //   fetchSearch,
-  //   noFound,
-  //   loadNextPage,
-  // } = useInfiniteWorkers({
-  //   paramsTransactions,
-  //   paramsExtractions,
-  //   paramsAccounts,
-  //   paramsSearch,
-  //   tableType,
-  //   searchValue,
-  // });
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeSection, setActiveSection] = useState(1);
-  const [modalData, setModalData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState(1);
+  const queryArgs = useMemo(
+    () => ({
+      tab: activeTab,
+      filters: {
+        'filter[date_start]': '',
+        'filter[date_end]': '',
+        'filter[search]': searchQuery,
+        'filter[partnership_ids]': '',
+        'filter[company_ids]': '',
+        'filter[kind]': '',
+        'filter[type]': '',
+        'filter[requires_action]': '',
+      },
+    }),
+    [searchQuery, activeTab]
+  );
 
-  const showAddAccountBtn = activeSection === 3;
+  const dispatch = useDispatch();
+  const { data, isFetching, isLoading, fetchNextPage, hasNextPage, error } =
+    useGetTableDataInfiniteQuery(queryArgs, {
+      refetchOnMountOrArgChange: true,
+    });
+  const transactions = useSelector((state) => state.tableData.transactions);
+  const extractions = useSelector((state) => state.tableData.extractions);
+  const accounts = useSelector((state) => state.tableData.accounts);
+
+  console.log(extractions);
+  console.log(accounts);
+  const allRows = useMemo(() => {
+    switch (activeTab) {
+      case 1:
+        return transactions;
+      case 2:
+        return extractions;
+      case 3:
+        return accounts;
+      default:
+        return [];
+    }
+  }, [activeTab, transactions, extractions, accounts]);
+
+  const showAddAccountBtn = activeTab === 3;
   const containerRef = useRef();
-
   const { showModal } = useModal();
 
-  const handleUppload = () => {
-    showModal('UPLOAD_EXTRACTION');
-  };
+  useEffect(() => {
+    if (data?.pages) {
+      const allRows = data.pages.flatMap((page) => page.data);
+      dispatch(setTabData({ tab: activeTab, data: allRows }));
+    }
+  }, [data, activeTab, dispatch]);
 
-  const handleAddAccount = () => {
-    showModal('ADD_ACCOUNT');
-  };
+  const handleUpload = () => showModal('UPLOAD_EXTRACTION');
+  const handleAddAccount = () => showModal('ADD_ACCOUNT');
 
   return (
     <div className={s.root} ref={containerRef}>
@@ -72,36 +95,35 @@ const Main = () => {
         <div className={s.block}>
           <SectionButtons
             load={isLoading}
-            list={sectionButtons}
-            active={activeSection}
-            setActive={setActiveSection}
+            list={TABS}
+            active={activeTab}
+            setActive={setActiveTab}
           />
           <div className={s.buttons}>
             {showAddAccountBtn ? (
-              <UniButton onClick={handleAddAccount} text={'Добавить счет'} icon={IconPlus} />
+              <UniButton onClick={handleAddAccount} text="Добавить счет" icon={IconPlus} />
             ) : (
-              <UniButton
-                onClick={handleUppload}
-                text={'Загрузить выписку'}
-                icon={IconUploadWhite}
-              />
+              <UniButton onClick={handleUpload} text="Загрузить выписку" icon={IconUploadWhite} />
             )}
           </div>
         </div>
       </header>
+
       <div className={s.queryPanel}>
-        <Search isFetching={false} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
-        <FiltersContainer type={activeSection} />
+        <Search isFetching={isFetching} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
+
+        <FiltersContainer type={activeTab} />
       </div>
 
       <div className={s.container}>
-        {/* <InfiniteScroll
-          dataLength={1}
-          next={() => console.log('Загружена следующая страница')} // вставить loadNextPage из хука
-          hasMore={true}
-        ></InfiniteScroll> */}
-
-        <Table isFetch={false} type={activeSection} list={mockData} />
+        <InfiniteScroll
+          dataLength={allRows.length}
+          next={fetchNextPage}
+          hasMore={hasNextPage}
+          scrollableTarget="scrollableDiv"
+        >
+          <Table type={activeTab} list={allRows} isFetch={isLoading} />
+        </InfiniteScroll>
       </div>
     </div>
   );

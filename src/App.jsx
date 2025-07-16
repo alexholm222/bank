@@ -12,7 +12,7 @@ const App = () => {
   const scrollRef = useRef(null);
 
   return (
-    <div className={s.root} ref={scrollRef}>
+    <div className={s.root} ref={scrollRef} id="scrollableDiv">
       {/* Основные маршруты */}
       <Routes>
         <Route path="/" element={<Main />} />

@@ -38,6 +38,7 @@ const ReceiverFilter = ({ data }) => {
     e?.stopPropagation();
     setLocalSelected([]);
     dispatch(setSelectedReceivers([]));
+    setIsOpen(false);
   };
 
   const handleChange = (newSelected) => {

@@ -1,5 +1,6 @@
 .root {
-  table-layout: auto; // если нужна фиксированная ширина
+  table-layout: fixed;
+  width: 100%;
   padding: 0 28px 20px 28px;
   width: 100%;
   max-width: 100%;
@@ -9,6 +10,12 @@
   opacity: 1;
   color: var(--Text-Primary, #121922);
 
+  .dataRow {
+    cursor: pointer;
+  }
+  .noPointer {
+    cursor: default;
+  }
   .dataRow:hover {
     background-color: #eaf0fa;
 
@@ -136,7 +143,7 @@
 }
 
 .deleteCell {
-  padding: 0 !important;
+  padding: 0 0 0 8px !important;
 }
 
 .deleteIconButton {
@@ -144,6 +151,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   .deleteIconRed {
     display: none;
@@ -172,10 +180,13 @@
   justify-content: center;
   gap: 4px;
 }
-.amountCell {
-  text-align: 'right';
-  margin-right: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+// .amountCell {
+//   text-align: right;
+//   margin-right: 40px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-end;
+// }
+.copyCell {
+  text-align: right;
 }

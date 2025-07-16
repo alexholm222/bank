@@ -8,6 +8,7 @@ import { ReactComponent as IconClose } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconCloseRed } from 'assets/icons/iconCloseRed.svg';
 //styles
 import s from './Table.module.scss';
+import formatSum from 'utils/formatSum';
 
 const AmountCell = ({ amount }) => {
   const isNegative = amount.startsWith('-');
@@ -52,16 +53,16 @@ const TableRow = ({ row, type }) => {
 
   const renderType1Row = () => (
     <>
-      <td>01.07.20</td>
-      <td>123456</td>
-      <td className={s.amountCell}>
-        <AmountCell amount={'12233.2'} />
+      <td>{row?.date}</td>
+      <td>{row?.number}</td>
+      <td style={{ paddingRight: '40px', textAlign: 'right' }}>
+        <AmountCell amount={formatSum(row?.type, row?.sum)} />
       </td>
-      <td>{row?.payer?.name}</td>
-      <td>{row?.receiver?.name}</td>
-      <td className={s.shrinkable}>{row?.description}</td>
-      <td>{row?.transactionType}</td>
-      <td className={s.deleteCell}>
+      <td>{row?.company}</td>
+      <td>{row?.partnership}</td>
+      <td className={s.shrinkable}>{row?.goal}</td>
+      <td>{row?.kind}</td>
+      <td className={classNames(s.deleteCell, s.rightFlex)}>
         <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
       </td>
     </>
@@ -98,7 +99,7 @@ const TableRow = ({ row, type }) => {
         <td>
           <TagLabel alert={false} inactive={true} />
         </td>
-        <td>
+        <td className={s.copyCell}>
           <CopyTextIcon
             textToCopy={
               `Банк: ${p.bank}\n` +

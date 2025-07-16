@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedCompanies } from '../../../redux/filters/slice';
+import { useGetCompaniesQuery } from '../../../redux/services/filtersApiActions';
 
 // components
 import CheckBox from 'components/General/CheckBox/CheckBox';
@@ -32,7 +33,9 @@ const CompanyItem = ({ data, selected, toggleSelection }) => (
   </div>
 );
 
-export const CompanyFilter = ({ data }) => {
+export const CompanyFilter = () => {
+  const { data, isLoading, error } = useGetCompaniesQuery();
+
   const dispatch = useDispatch();
   const selected = useSelector((state) => state.filters.selectedCompanies);
   const [open, setOpen] = useState(false);
@@ -42,7 +45,7 @@ export const CompanyFilter = ({ data }) => {
 
   useEffect(() => {
     setLocalSelected(selected || []);
-  }, [selected]);
+  }, [selected, data]);
 
   const toggleSelection = (id) => {
     const numericId = Number(id);
@@ -61,11 +64,26 @@ export const CompanyFilter = ({ data }) => {
     e?.stopPropagation();
     setLocalSelected([]);
     dispatch(setSelectedCompanies([]));
+    setOpen(false);
   };
+
+  const partnershipCityMap = Object.fromEntries(
+    data?.partnership_details?.map(({ partnership_id, city }) => [partnership_id, city]) || []
+  );
+
+  const companiesByCity = {};
+
+  data?.companies?.forEach((company) => {
+    const city = partnershipCityMap[company.id];
+    if (city) {
+      if (!companiesByCity[city]) companiesByCity[city] = [];
+      companiesByCity[city].push(company);
+    }
+  });
 
   const uniqueCities = [...new Set(partnerships.map((item) => item.city).filter(Boolean))];
 
-  if (partnerships.length <= 1) return null;
+  // if (partnerships.length <= 1) return null;
 
   return (
     <div onKeyDown={(e) => e.key === 'Enter' && handleConfirm()} className={s.container}>
@@ -88,22 +106,19 @@ export const CompanyFilter = ({ data }) => {
         </div>
 
         <div className={s.listContainer}>
-          {uniqueCities.map((city) => {
-            const items = partnerships.filter((item) => item.city === city);
-            return (
-              <div key={city} className={s.list}>
-                <span>{city}</span>
-                {items.map((el) => (
-                  <CompanyItem
-                    key={el.id}
-                    data={el}
-                    selected={localSelected.includes(el.id)}
-                    toggleSelection={toggleSelection}
-                  />
-                ))}
-              </div>
-            );
-          })}
+          {Object.entries(companiesByCity).map(([city, companies]) => (
+            <div key={city} className={s.list}>
+              <span>{city}</span>
+              {companies.map((company) => (
+                <CompanyItem
+                  key={company.id}
+                  data={company}
+                  selected={localSelected.includes(company.id)}
+                  toggleSelection={toggleSelection}
+                />
+              ))}
+            </div>
+          ))}
         </div>
 
         <div className={s.buttons}>

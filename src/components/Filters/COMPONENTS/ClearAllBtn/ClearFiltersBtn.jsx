@@ -8,6 +8,7 @@ import s from './ClearFiltersBtn.module.scss';
 
 import { setDateEndPicker, setDateStartPicker } from '../../../../redux/filters/dateRangeSlice';
 import {
+  setSelectedActivity,
   setSelectedCompanies,
   setSelectedPayers,
   setSelectedReceivers,
@@ -20,14 +21,15 @@ const ClearFiltersBtn = ({ text = 'Сбросить всё', animation = false }
   const dispatch = useDispatch();
 
   const handleClearAll = useCallback(() => {
-    dispatch(setTransactionTypeFilter(''));
-    dispatch(setTransactionViewFilter(''));
+    dispatch(setTransactionTypeFilter(null));
+    dispatch(setTransactionViewFilter(null));
     dispatch(setSelectedCompanies([]));
     dispatch(setSelectedReceivers([]));
     dispatch(setSelectedPayers([]));
     dispatch(setDateEndPicker(null));
     dispatch(setDateStartPicker(null));
-    dispatch(setSelectedStatus('all'));
+    dispatch(setSelectedStatus(null));
+    dispatch(setSelectedActivity(null));
   }, [dispatch]);
 
   return (

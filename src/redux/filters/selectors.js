@@ -7,14 +7,17 @@ export const isAnyFilterActive = (state) => {
     selectedReceivers,
     selectedPayers,
     selectedStatus,
+    selectedActivity,
   } = state.filters;
+
   return (
-    transactionTypeFilter !== '' ||
-    transactionViewFilter !== '' ||
+    transactionTypeFilter !== null ||
+    transactionViewFilter !== null ||
     selectedCompanies.length > 0 ||
     selectedReceivers.length > 0 ||
     selectedPayers.length > 0 ||
     (dateStartPicker && dateEndPicker) ||
-    selectedStatus !== 'all'
+    selectedStatus !== null ||
+    selectedActivity !== null
   );
 };
