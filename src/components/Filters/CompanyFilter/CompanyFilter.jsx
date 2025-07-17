@@ -83,7 +83,7 @@ export const CompanyFilter = () => {
 
   const uniqueCities = [...new Set(partnerships.map((item) => item.city).filter(Boolean))];
 
-  // if (partnerships.length <= 1) return null;
+  if (partnerships.length <= 1) return null;
 
   return (
     <div onKeyDown={(e) => e.key === 'Enter' && handleConfirm()} className={s.container}>

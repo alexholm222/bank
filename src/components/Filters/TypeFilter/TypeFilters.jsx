@@ -19,7 +19,7 @@ import classNames from 'classnames';
 
 const transactionTypeList = [
   { id: 'income', name: 'Поступления' },
-  { id: 'expense', name: 'Списания' },
+  { id: 'outcome', name: 'Списания' },
 ];
 
 const transactionViewList = [
@@ -57,8 +57,8 @@ const TypeFilter = () => {
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter(null));
-    dispatch(setTransactionViewFilter(null));
+    dispatch(setTransactionTypeFilter([]));
+    dispatch(setTransactionViewFilter([]));
     setOpenModal(false);
   };
 

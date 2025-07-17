@@ -18,7 +18,7 @@ const Search = ({ isFetching, searchValue, setSearchQuery }) => {
   const [load, setLoad] = useState(false);
   const [done, setDone] = useState(false);
   const [enterState, setEnterState] = useState(false);
-  const [query, setQuery] = useState(localStorage.getItem('searcValueWorker') || '');
+  const [query, setQuery] = useState('');
   const inputRef = useRef();
   const buttonRef = useRef();
 
@@ -36,21 +36,15 @@ const Search = ({ isFetching, searchValue, setSearchQuery }) => {
     searchValue.length === 0 && handleReset();
   }, [searchValue]);
 
-  const handleFocus = () => {
-    setActive(true);
-  };
-
-  const handleBlur = () => {
-    setActive(false);
-  };
+  const handleFocus = () => setActive(true);
+  const handleBlur = () => setActive(false);
 
   const handleQuery = (e) => {
     const value = e.currentTarget.value;
     setQuery(value);
     setDone(false);
     setEnterState(true);
-    value.length === 0 && setSearchQuery('');
-    value.length === 0 && localStorage.setItem('searcValueWorker', '');
+    if (value.length === 0) setSearchQuery('');
   };
 
   const handleReset = () => {
@@ -59,19 +53,16 @@ const Search = ({ isFetching, searchValue, setSearchQuery }) => {
     setLoad(false);
     setDone(false);
     setEnterState(true);
-    localStorage.setItem('searcValueWorker', '');
   };
 
   const handleOnFocus = () => {
-    query.length === 0 && inputRef.current.focus();
+    if (query.length === 0) inputRef.current.focus();
   };
 
   const handleSearch = () => {
     if (query.length > 0) {
       setEnterState(false);
       setSearchQuery(query);
-      localStorage.setItem('searcValueWorker', query);
-      return;
     }
   };
 
@@ -79,9 +70,7 @@ const Search = ({ isFetching, searchValue, setSearchQuery }) => {
     if (e.key === 'Enter') {
       handleSearch();
       inputRef.current.blur();
-      return;
     }
-
     if (e.key === 'Escape') {
       handleReset();
       inputRef.current.focus();
@@ -117,9 +106,9 @@ const Search = ({ isFetching, searchValue, setSearchQuery }) => {
         onChange={handleQuery}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        value={query || ''}
+        value={query}
         placeholder="Искать..."
-      ></input>
+      />
 
       <IconClose
         onClick={handleReset}

@@ -10,7 +10,7 @@ const TableHeader = ({ type }) => {
   if (type === 1) {
     return (
       <tr>
-        <th style={{ width: '115px' }}>Дата</th>
+        <th style={{ width: '120px' }}>Дата</th>
         <th style={{ width: '100px' }}>Номер</th>
         <th style={{ width: '250px', paddingRight: '40px', textAlign: 'right' }}>Сумма, ₽</th>
         <th style={{ minWidth: '200px' }}>Плательщик</th>

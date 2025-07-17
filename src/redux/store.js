@@ -1,28 +1,32 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import tableDataReducer from '../redux/tableData/tableDataSlice';
-import { tableDataApiActions } from './services/tableDataApiActions';
-import dateRangeReducer from './filters/dateRangeSlice';
+
 import filtersSlice from './filters/slice';
+import dateRangeReducer from './filters/dateRangeSlice';
 import modalReducer from './modal/modalSlice';
+import tableDataReducer from './tableData/tableDataSlice';
+
+import { transactionsApi } from './services/transactionsApi';
+import { extractionsApi } from './services/extractionsApi';
 import { filtersApiActions } from './services/filtersApiActions';
 
 export const store = configureStore({
   reducer: {
-    tableData: tableDataReducer,
     filters: filtersSlice,
     dateRange: dateRangeReducer,
     modal: modalReducer,
-    [tableDataApiActions.reducerPath]: tableDataApiActions.reducer,
+    tableData: tableDataReducer,
+    [transactionsApi.reducerPath]: transactionsApi.reducer,
+    [extractionsApi.reducerPath]: extractionsApi.reducer,
     [filtersApiActions.reducerPath]: filtersApiActions.reducer,
   },
-
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       immutableCheck: false,
       serializableCheck: false,
     })
-      .concat(tableDataApiActions.middleware)
+      .concat(transactionsApi.middleware)
+      .concat(extractionsApi.middleware)
       .concat(filtersApiActions.middleware),
 });
 
