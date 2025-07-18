@@ -46,7 +46,7 @@ const ActivityFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }
 
   const handleReset = (e) => {
     e?.stopPropagation();
-    dispatch(setSelectedActivity([]));
+    dispatch(setSelectedActivity(null));
     setOpenModal(false);
     clearActiveFilter();
   };

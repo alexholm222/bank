@@ -31,11 +31,12 @@ const MainHeader = ({
   const handleShowUnknown = () => {
     setIsShowunknown(true);
     setIsUnknownTransaction(true);
+    setActiveTab('transactions');
   };
 
   return (
     <header className={s.header}>
-      <Information onClick={() => setIsUnknownTransaction(true)} open={true} />
+      <Information onClick={handleShowUnknown} open={true} />
       <div className={s.block}>
         <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
         <div className={s.buttons}>
