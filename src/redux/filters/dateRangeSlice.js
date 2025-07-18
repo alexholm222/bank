@@ -13,9 +13,13 @@ const dateRangeSlice = createSlice({
     setDateEndPicker: (state, action) => {
       state.dateEndPicker = action.payload;
     },
+    resetAllDates: (state) => {
+      state.dateStartPicker = null;
+      state.dateEndPicker = null;
+    },
   },
 });
 
-export const { setDateStartPicker, setDateEndPicker } = dateRangeSlice.actions;
+export const { setDateStartPicker, setDateEndPicker, resetAllDates } = dateRangeSlice.actions;
 
 export default dateRangeSlice.reducer;

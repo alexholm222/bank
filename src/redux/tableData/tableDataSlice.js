@@ -13,9 +13,9 @@ const tableDataSlice = createSlice({
   reducers: {
     setTabData: (state, action) => {
       const { tab, data } = action.payload;
-      if (tab === 1) state.transactions = data;
-      if (tab === 2) state.extractions = data;
-      if (tab === 3) state.accounts = data;
+      if (tab === 'transactions') state.transactions = data;
+      if (tab === 'extractions') state.extractions = data;
+      if (tab === 'accounts') state.accounts = data;
     },
   },
 });

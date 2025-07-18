@@ -27,22 +27,32 @@ const transactionViewList = [
   { id: 'bank_order', name: 'Банковский ордер' },
 ];
 
-const TypeFilter = () => {
+const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const selectedTypes = useSelector((state) => state.filters.transactionTypeFilter) || [];
   const selectedViews = useSelector((state) => state.filters.transactionViewFilter) || [];
 
   const [openModal, setOpenModal] = useState(false);
   const [transactionType, setTransactionType] = useState([]);
   const [transactionView, setTransactionView] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
 
   const dispatch = useDispatch();
   const modalRef = useRef();
   const buttonRef = useRef();
 
+  useEffect(() => {
+    setLoad(isFetching);
+
+    const hasActiveFilters = selectedTypes.length > 0 || selectedViews.length > 0;
+    setDone(!isFetching && hasActiveFilters);
+  }, [isFetching, selectedTypes, selectedViews]);
+
   const handleOpen = () => {
     setTransactionType(selectedTypes);
     setTransactionView(selectedViews);
-    setOpenModal((prev) => !prev);
+    setOpenModal(true);
+    setActiveFilter(name);
   };
 
   const handleToggle = (id, list, setList) => {
@@ -50,6 +60,7 @@ const TypeFilter = () => {
   };
 
   const handleConfirm = () => {
+    setActiveFilter(name);
     dispatch(setTransactionTypeFilter(transactionType));
     dispatch(setTransactionViewFilter(transactionView));
     setOpenModal(false);
@@ -57,9 +68,11 @@ const TypeFilter = () => {
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter([]));
-    dispatch(setTransactionViewFilter([]));
+    dispatch(setTransactionTypeFilter(null));
+    dispatch(setTransactionViewFilter(null));
     setOpenModal(false);
+    setDone(false);
+    clearActiveFilter();
   };
 
   useEffect(() => {
@@ -85,6 +98,8 @@ const TypeFilter = () => {
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
+        done={done}
+        load={load}
       />
 
       <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>

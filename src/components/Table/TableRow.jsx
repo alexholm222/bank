@@ -1,15 +1,100 @@
 import classNames from 'classnames';
-//components
+
+// utils
+import formatShortYear from 'utils/formatShortYear';
+import formatSum from 'utils/formatSum';
+
+// components
 import CopyTextIcon from './CopyTextIcon';
 import DownloadButton from 'components/General/DownloadButton/DownloadButton';
 
-//icons
+// icons
 import { ReactComponent as IconClose } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconCloseRed } from 'assets/icons/iconCloseRed.svg';
-//styles
-import s from './Table.module.scss';
-import formatSum from 'utils/formatSum';
+import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 
+// styles
+import s from './Table.module.scss';
+
+const TableRow = ({ row, type }) => {
+  const handleDeleteTransaction = (id, e) => {
+    e.stopPropagation();
+    console.log('Удалить транзакцию с id:', id);
+  };
+
+  const handleDownloadExtraction = () => {
+    console.log('Скачать выписку');
+  };
+
+  const renderTransactionRow = () => (
+    <div className={classNames(s.gridRow, s.transactions)}>
+      <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+      <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
+      <div className={classNames(s.gridCell, s.right, s.amount)}>
+        <AmountCell amount={formatSum(row?.type, row?.sum)} />
+      </div>
+      <div className={s.gridCell}>{row.requires_action !== 1 ? row?.company : <WarningCell />}</div>
+      <div className={s.gridCell}>{row?.partnership}</div>
+      <div className={classNames(s.gridCell, s.shrinkable)}>{row?.goal}</div>
+      <div className={s.gridCell}>{row?.kind}</div>
+      <div className={classNames(s.gridCell, s.right)}>
+        <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
+      </div>
+    </div>
+  );
+
+  const renderExtractionRow = () => (
+    <div className={classNames(s.gridRow, s.extractions)}>
+      <div className={s.gridCell}>02.07.20 10:00</div>
+      <div className={s.gridCell}>{row?.payer?.name}</div>
+      <div className={s.gridCell}>115678</div>
+      <div className={s.gridCell}>
+        <DownloadButton onClick={handleDownloadExtraction} />
+      </div>
+      <div className={s.gridCell}>Менеджер Иванов</div>
+      <div className={classNames(s.gridCell, s.gray)}>Бухгалтер</div>
+      <div className={s.gridCell}>
+        <TagLabel alert={false} inactive={false} />
+      </div>
+    </div>
+  );
+
+  const renderAccountRow = () => {
+    const p = row?.payer || {};
+    return (
+      <div className={classNames(s.gridRow, s.accounts)}>
+        <div className={s.gridCell}>{p.bank}</div>
+        <div className={s.gridCell}>{p.bik}</div>
+        <div className={s.gridCell}>{p.correspondentAccount}</div>
+        <div className={s.gridCell}>{p.accountNumber}</div>
+        <div className={s.gridCell}>{p.name}</div>
+        <div className={s.gridCell}>01.07.2025</div>
+        <div className={(s.gridCell, s.agents)}>123</div>
+        <div className={s.gridCell}>
+          <TagLabel alert={false} inactive={true} />
+        </div>
+        <div className={classNames(s.gridCell, s.copyCell)}>
+          <CopyTextIcon
+            textToCopy={
+              `Банк: ${p.bank}\n` +
+              `БИК: ${p.bik}\n` +
+              `Корр. счет: ${p.correspondentAccount}\n` +
+              `Расчетный счет: ${p.accountNumber}\n` +
+              `Компания: ${p.name}`
+            }
+          />
+        </div>
+      </div>
+    );
+  };
+
+  if (type === 'transactions') return renderTransactionRow();
+  if (type === 'extractions') return renderExtractionRow();
+  if (type === 'accounts') return renderAccountRow();
+  return null;
+};
+
+export default TableRow;
 const AmountCell = ({ amount }) => {
   const isNegative = amount.startsWith('-');
   const cleaned = amount.replace('+', '').replace('-', '');
@@ -41,83 +126,9 @@ const DeleteTransaction = ({ onClick, id }) => (
   </div>
 );
 
-const TableRow = ({ row, type }) => {
-  const handleDeleteTransaction = (id, e) => {
-    e.stopPropagation();
-    console.log('Удалить транзакцию с id:', id);
-  };
-
-  const handleDownloadExtraction = () => {
-    console.log('Скачать выписку');
-  };
-
-  const renderType1Row = () => (
-    <>
-      <td>{row?.date}</td>
-      <td>{row?.number}</td>
-      <td style={{ paddingRight: '40px', textAlign: 'right' }}>
-        <AmountCell amount={formatSum(row?.type, row?.sum)} />
-      </td>
-      <td>{row?.company}</td>
-      <td>{row?.partnership}</td>
-      <td className={s.shrinkable}>{row?.goal}</td>
-      <td>{row?.kind}</td>
-      <td className={classNames(s.deleteCell, s.rightFlex)}>
-        <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
-      </td>
-    </>
-  );
-
-  const renderType2Row = () => (
-    <>
-      <td>02.07.20 10:00</td>
-      <td>{row?.payer?.name}</td>
-      <td>115678</td>
-      <td>
-        <DownloadButton onClick={handleDownloadExtraction} />
-      </td>
-      <td>Менеджер Иванов</td>
-      <td className={s.grayText}>Бухгалтер</td>
-      <td>
-        <TagLabel alert={false} inactive={false} />
-      </td>
-    </>
-  );
-
-  const renderType3Row = () => {
-    const p = row?.payer || {};
-
-    return (
-      <>
-        <td>{p.bank}</td>
-        <td>{p.bik}</td>
-        <td>{p.correspondentAccount}</td>
-        <td>{p.accountNumber}</td>
-        <td>{p.name}</td>
-        <td>01.07.2025</td>
-        <td className={s.agents}>123</td>
-        <td>
-          <TagLabel alert={false} inactive={true} />
-        </td>
-        <td className={s.copyCell}>
-          <CopyTextIcon
-            textToCopy={
-              `Банк: ${p.bank}\n` +
-              `БИК: ${p.bik}\n` +
-              `Корр. счет: ${p.correspondentAccount}\n` +
-              `Расчетный счет: ${p.accountNumber}\n` +
-              `Компания: ${p.name}`
-            }
-          />
-        </td>
-      </>
-    );
-  };
-
-  if (type === 1) return renderType1Row();
-  if (type === 2) return renderType2Row();
-  if (type === 3) return renderType3Row();
-  return null;
-};
-
-export default TableRow;
+const WarningCell = () => (
+  <span className={s.warningCell}>
+    <IconWarning />
+    <span>Не распознан</span>
+  </span>
+);

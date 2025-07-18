@@ -15,17 +15,22 @@ import { ReactComponent as IconWallet } from 'assets/icons/iconWallet.svg';
 // Styles
 import s from './PayerFilter.module.scss';
 
-const PayerFilter = ({ data }) => {
+const PayerFilter = ({ data, isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const dispatch = useDispatch();
-  const filterPayers = useSelector((state) => state.filters.selectedPayers);
+  const selectedPayers = useSelector((state) => state.filters.selectedPayers);
 
-  const [localSelected, setLocalSelected] = useState(filterPayers);
+  const [localSelected, setLocalSelected] = useState(selectedPayers);
   const [isOpen, setIsOpen] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
 
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const handleToggleModal = () => setIsOpen((prev) => !prev);
+  const handleOpen = () => {
+    setActiveFilter(name);
+    setIsOpen(true);
+  };
 
   const handleConfirm = () => {
     dispatch(setSelectedPayers(localSelected));
@@ -37,6 +42,7 @@ const PayerFilter = ({ data }) => {
     setLocalSelected([]);
     dispatch(setSelectedPayers([]));
     setIsOpen(false);
+    clearActiveFilter();
   };
 
   const handleChange = (updated) => {
@@ -44,8 +50,14 @@ const PayerFilter = ({ data }) => {
   };
 
   useEffect(() => {
-    setLocalSelected(filterPayers);
-  }, [filterPayers]);
+    setLoad(isFetching);
+
+    const hasSelected = selectedPayers?.length > 0;
+    setDone(!isFetching && hasSelected);
+  }, [isFetching, selectedPayers]);
+  useEffect(() => {
+    setLocalSelected(selectedPayers);
+  }, [selectedPayers]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -67,10 +79,12 @@ const PayerFilter = ({ data }) => {
       <FilterButton
         title="Плательщик"
         Icon={IconWallet}
-        count={filterPayers.length}
+        count={selectedPayers.length}
         handleReset={handleReset}
-        handleOpen={handleToggleModal}
+        handleOpen={handleOpen}
         buttonRef={buttonRef}
+        load={load}
+        done={done}
       />
 
       <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: isOpen })}>

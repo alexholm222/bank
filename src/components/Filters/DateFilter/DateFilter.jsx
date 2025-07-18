@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 // Redux
@@ -14,25 +14,35 @@ import { ReactComponent as IconCalendar } from 'assets/icons/iconCalendar.svg';
 // Styles
 import s from './DateFilter.module.scss';
 
-const DateFilter = () => {
+const DateFilter = ({ isFetching, activeFilter, setActiveFilter, clearActiveFilter, name }) => {
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange || {});
-  const [loadFilter, setLoadFilter] = useState(false);
   const dispatch = useDispatch();
   const ref = useRef(null);
-
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const isSelected = Boolean(dateStartPicker && dateEndPicker);
   const title = isSelected ? getTitleDateDuration(dateStartPicker, dateEndPicker) : 'Период';
 
-  const handleOpen = () => setIsOpen(true);
+  const handleOpen = () => {
+    setActiveFilter(name);
+    setIsOpen(true);
+  };
 
   const handleReset = (e) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(setDateStartPicker(null));
     dispatch(setDateEndPicker(null));
+    setDone(false);
+    clearActiveFilter();
   };
+
+  useEffect(() => {
+    setLoad(isFetching);
+    setDone(!isFetching && !!dateStartPicker && !!dateEndPicker);
+  }, [isFetching, dateStartPicker, dateEndPicker]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -55,10 +65,12 @@ const DateFilter = () => {
           handleReset={handleReset}
           handleOpen={handleOpen}
           buttonRef={ref}
+          load={load}
+          done={done}
         />
       </div>
 
-      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} setLoadFilter={setLoadFilter} />
+      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} setLoadFilter={setLoad} />
     </div>
   );
 };

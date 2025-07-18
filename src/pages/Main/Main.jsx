@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 //utils
-import formatDate from 'utils/formatDate';
-import arrayToString from 'utils/arrayToString';
+import getTransactionsParams from '../../utils/queryParams/getTransactionsParams';
 
 //redux
 import { useGetTransactionsInfiniteQuery } from '../../redux/services/transactionsApi';
@@ -21,9 +20,18 @@ import MainHeader from './MainHeader';
 
 // Styles
 import s from './Main.module.scss';
+import { mockData } from 'mock/mockData';
 
 const Main = () => {
+  const dispatch = useDispatch();
+  const { showModal } = useModal();
+  const containerRef = useRef();
+
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isUnknownTransaction, setIsUnknownTransaction] = useState(false);
+  const transactions = useSelector((state) => state.tableData.transactions);
+  const [activeTab, setActiveTab] = useState('transactions');
   const {
     transactionTypeFilter,
     transactionViewFilter,
@@ -33,58 +41,48 @@ const Main = () => {
     selectedPayers,
     selectedActivity,
   } = useSelector((state) => state.filters);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState(1);
 
-  const transactionsParams = useMemo(() => {
-    return {
-      'filter[search]': searchQuery,
-      'filter[date_start]': formatDate(dateStartPicker),
-      'filter[date_end]': formatDate(dateEndPicker),
-      'filter[partnership_ids]': '',
-      'filter[company_ids]': '',
-      'filter[kind]': arrayToString(transactionViewFilter) || '',
-      'filter[type]': arrayToString(transactionTypeFilter) || '',
-      'filter[requires_action]': '',
-    };
-  }, [searchQuery, dateStartPicker, dateEndPicker, transactionTypeFilter, transactionViewFilter]);
+  const transactionsParams = getTransactionsParams(
+    searchQuery,
+    dateStartPicker,
+    dateEndPicker,
+    transactionTypeFilter,
+    transactionViewFilter,
+    isUnknownTransaction
+  );
 
-  const dispatch = useDispatch();
   const {
     data: transactionsList,
-    isFetching,
+    isFetching: isFetchingTransactions,
     fetchNextPage,
     hasNextPage,
     isLoading,
   } = useGetTransactionsInfiniteQuery(transactionsParams);
-  const transactions = useSelector((state) => state.tableData.transactions);
+
+  const showAddAccountBtn = activeTab === 'accounts';
 
   const allRows = useMemo(() => {
     switch (activeTab) {
-      case 1:
+      case 'transactions':
         return transactions;
-      // case 2:
-      //   return extractions;
-      // case 3:
-      //   return accounts;
+      case 'extractions':
+        return mockData;
+      case 'accounts':
+        return mockData;
       default:
         return [];
     }
   }, [activeTab, transactions]);
 
+  const handleUpload = () => showModal('UPLOAD_EXTRACTION');
+  const handleAddAccount = () => showModal('ADD_ACCOUNT');
+
   useEffect(() => {
     if (transactionsList?.pages?.length) {
       const allItems = transactionsList.pages.flatMap((page) => page.data);
-      dispatch(setTabData({ tab: 1, data: allItems }));
+      dispatch(setTabData({ tab: activeTab, data: allItems }));
     }
-  }, [transactionsList, dispatch]);
-
-  const showAddAccountBtn = activeTab === 3;
-  const containerRef = useRef();
-  const { showModal } = useModal();
-
-  const handleUpload = () => showModal('UPLOAD_EXTRACTION');
-  const handleAddAccount = () => showModal('ADD_ACCOUNT');
+  }, [transactionsList, dispatch, activeTab]);
 
   return (
     <div className={s.root} ref={containerRef}>
@@ -95,12 +93,18 @@ const Main = () => {
         handleAddAccount={handleAddAccount}
         handleUpload={handleUpload}
         isLoading={isLoading}
+        isUnknownTransaction={isUnknownTransaction}
+        setIsUnknownTransaction={setIsUnknownTransaction}
       />
 
       <div className={s.queryPanel}>
-        <Search isFetching={isFetching} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
+        <Search
+          isFetching={isFetchingTransactions}
+          searchValue={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
 
-        <FiltersContainer type={activeTab} />
+        <FiltersContainer type={activeTab} isFetching={isFetchingTransactions} />
       </div>
 
       <div className={s.container}>
@@ -110,7 +114,7 @@ const Main = () => {
           hasMore={hasNextPage}
           scrollableTarget="scrollableDiv"
         >
-          <Table type={activeTab} list={allRows} isFetch={isLoading} />
+          <Table type={activeTab} list={allRows} isFetching={isLoading} />
         </InfiniteScroll>
       </div>
     </div>

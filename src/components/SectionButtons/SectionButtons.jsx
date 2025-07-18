@@ -17,7 +17,7 @@ const SectionButtons = ({ list, active, setActive, load }) => {
   }, [load]);
 
   const handleActive = (e) => {
-    const id = Number(e.currentTarget.id);
+    const id = e.currentTarget.id;
     setActive(id);
   };
 
@@ -36,8 +36,8 @@ const SectionButtons = ({ list, active, setActive, load }) => {
             <div
               className={classNames(
                 s.overlay,
-                el.id === 1 && active !== 3 && s.overlay_left,
-                el.id === 2 && active === 3 && s.overlay_left,
+                el.id === 'transactions' && active !== 'accounts' && s.overlay_left,
+                el.id === 'extractions' && active === 'accounts' && s.overlay_left,
                 el.id === active && s.overlay_hidden
               )}
             ></div>

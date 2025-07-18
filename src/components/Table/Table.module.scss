@@ -9,73 +9,59 @@
   border-spacing: 0;
   opacity: 1;
   color: var(--Text-Primary, #121922);
-
-  .dataRow {
-    cursor: pointer;
-  }
-  .noPointer {
-    cursor: default;
-  }
-  .dataRow:hover {
-    background-color: #eaf0fa;
-
-    .deleteWrapper {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-
-  th,
-  td {
-    height: 50px;
-    // padding: 0 20px 0 0;
-    line-height: 50px;
-    white-space: nowrap;
-    text-align: start;
-    border-bottom: 1px solid #eff4fb;
-    padding: 12px 20px 12px 20px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px;
-
-    p {
-      font-weight: 400;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      span {
-        color: #71869d;
-      }
-    }
-  }
-
-  th {
-    color: #71869d;
-  }
-
-  td {
-    color: #121922;
-  }
-
-  &_anim {
-    opacity: 1;
-  }
-
-  &_fetch td {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  .wide {
-    width: 100%;
-  }
-
-  .narrow {
-    width: 150px;
-  }
 }
+
+//   th,
+//   td {
+//     height: 50px;
+//     // padding: 0 20px 0 0;
+//     line-height: 50px;
+//     white-space: nowrap;
+//     text-align: start;
+//     border-bottom: 1px solid #eff4fb;
+//     padding: 12px 20px 12px 20px;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     font-size: 14px;
+//     font-weight: 400;
+//     line-height: 18px;
+
+//     p {
+//       font-weight: 400;
+//       overflow: hidden;
+//       text-overflow: ellipsis;
+
+//       span {
+//         color: #71869d;
+//       }
+//     }
+//   }
+
+//   th {
+//     color: #71869d;
+//   }
+
+//   td {
+//     color: #121922;
+//   }
+
+//   &_anim {
+//     opacity: 1;
+//   }
+
+//   &_fetch td {
+//     opacity: 0.6;
+//     pointer-events: none;
+//   }
+
+//   .wide {
+//     width: 100%;
+//   }
+
+//   .narrow {
+//     width: 150px;
+//   }
+// }
 
 .tag {
   display: inline-block;
@@ -99,34 +85,34 @@
   }
 }
 
-.wrapper {
-  position: relative;
-  display: inline-block;
-}
+// .wrapper {
+//   position: relative;
+//   display: inline-block;
+// }
 
-.iconButton {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
+// .iconButton {
+//   background: none;
+//   border: none;
+//   padding: 0;
+//   cursor: pointer;
+// }
 
-.icon {
-  width: 24px;
-  height: 24px;
-  fill: #0047ff;
-}
+// .icon {
+//   width: 24px;
+//   height: 24px;
+//   fill: #0047ff;
+// }
 
-.accountOthers {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
+// .accountOthers {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   gap: 10px;
+// }
 
-.grayText {
-  color: #71869d !important;
-}
+// .grayText {
+//   color: #71869d !important;
+// }
 
 .deleteWrapper {
   opacity: 0;
@@ -142,9 +128,9 @@
   cursor: pointer;
 }
 
-.deleteCell {
-  padding: 0 0 0 8px !important;
-}
+// .deleteCell {
+//   padding: 0 0 0 8px !important;
+// }
 
 .deleteIconButton {
   position: relative;
@@ -168,12 +154,12 @@
   }
 }
 
-.shrinkable {
-  max-width: 1px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+// .shrinkable {
+//   max-width: 1px;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   white-space: nowrap;
+// }
 .agents {
   display: flex;
   align-items: center;
@@ -187,6 +173,106 @@
 //   align-items: center;
 //   justify-content: flex-end;
 // }
-.copyCell {
-  text-align: right;
+// .copyCell {
+//   text-align: right;
+// }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+.gridRow {
+  display: grid;
+  align-items: center;
+  padding: 0 20px;
+  height: 50px;
+  border-bottom: 1px solid #eff4fb;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #121922;
+
+  &.transactions {
+    grid-template-columns: minmax(100px, 100px) // Дата
+      minmax(100px, 100px) // Номер
+      minmax(250px, 250px) // Сумма
+      minmax(200px, 1fr) // Плательщик
+      minmax(150px, 1fr) // Получатель
+      minmax(250px, 2fr) // Назначение
+      minmax(210px, 210px) // Вид
+      minmax(80px, 80px); // Кнопка удалить
+
+    cursor: pointer;
+    &:hover {
+      background-color: #eaf0fa;
+      .deleteWrapper {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &.extractions {
+    grid-template-columns: minmax(160px, 160px) // Поступил
+      minmax(300px, 2fr) // Компания
+      minmax(100px, 100px) // Счет
+      minmax(200px, 2fr) // Файл
+      minmax(200px, 1fr) // Кто загрузил
+      minmax(200px, 1fr) // Должность
+      minmax(180px, 180px); // Распознана/Не распознана
+
+    cursor: default;
+  }
+
+  &.accounts {
+    grid-template-columns: minmax(200px, 200px) // Банк
+      minmax(120px, 120px) // БИК
+      minmax(210px, 210px) // Корр. счет
+      minmax(210px, 210px) // Расчетный счет
+      minmax(200px, 1fr) // Компания
+      minmax(120px, 120px) // Добавлен
+      minmax(120px, 120px) // Контрагенты
+      minmax(150px, 150px) // Статус бейдж
+      minmax(50px, 50px); // Копировать
+
+    cursor: pointer;
+    &:hover {
+      background-color: #eaf0fa;
+    }
+  }
+}
+
+.gridCell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 16px 20px 16px;
+
+  &.right {
+    text-align: right;
+  }
+
+  &.center {
+    text-align: center;
+  }
+
+  &.gray {
+    color: #71869d;
+  }
+  &.amount {
+    padding-right: 40px;
+  }
+}
+
+.gridHeader {
+  @extend .gridRow;
+  font-weight: 500;
+  color: #71869d;
+  > div {
+    padding: 16px 20px 16px;
+  }
+}
+
+.warningCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #e10d0d;
 }

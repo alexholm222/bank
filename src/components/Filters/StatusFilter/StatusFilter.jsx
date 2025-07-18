@@ -20,19 +20,22 @@ const extractionsStatuses = [
   { id: 'unrecognized', name: 'Не распознана' },
 ];
 
-const StatusFilter = () => {
+const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const selectedStatus = useSelector((state) => state.filters.selectedStatus || []);
   const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
   const [tempStatuses, setTempStatuses] = useState(selectedStatus);
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
 
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
   const handleOpen = () => {
     setTempStatuses(selectedStatus);
-    setOpenModal((prev) => !prev);
+    setOpenModal(true);
+    setActiveFilter(name);
   };
 
   const handleToggle = (id) => {
@@ -48,7 +51,15 @@ const StatusFilter = () => {
     e.stopPropagation();
     dispatch(setSelectedStatus([]));
     setOpenModal(false);
+    clearActiveFilter();
   };
+
+  useEffect(() => {
+    setLoad(isFetching);
+
+    const hasSelected = selectedStatus?.length > 0;
+    setDone(!isFetching && hasSelected);
+  }, [isFetching, selectedStatus]);
 
   useEffect(() => {
     const clickOutside = (e) => {
@@ -73,6 +84,8 @@ const StatusFilter = () => {
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
+        load={load}
+        done={done}
       />
 
       <div ref={modalRef} className={classNames(s.modal, openModal && s.modal_open)}>

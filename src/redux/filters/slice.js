@@ -35,6 +35,7 @@ const filtersSlice = createSlice({
     setSelectedActivity(state, action) {
       state.selectedActivity = action.payload;
     },
+    resetAllFilters: () => initialState,
   },
 });
 
@@ -46,6 +47,7 @@ export const {
   setSelectedPayers,
   setSelectedStatus,
   setSelectedActivity,
+  resetAllFilters,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

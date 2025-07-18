@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,19 +33,29 @@ const CompanyItem = ({ data, selected, toggleSelection }) => (
   </div>
 );
 
-export const CompanyFilter = () => {
+export const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const { data, isLoading, error } = useGetCompaniesQuery();
 
   const dispatch = useDispatch();
-  const selected = useSelector((state) => state.filters.selectedCompanies);
+  const selectedCompanies = useSelector((state) => state.filters.selectedCompanies);
   const [open, setOpen] = useState(false);
   const [localSelected, setLocalSelected] = useState([]);
+  const modalRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
 
   const partnerships = data?.partnerships || [];
 
   useEffect(() => {
-    setLocalSelected(selected || []);
-  }, [selected, data]);
+    setLocalSelected(selectedCompanies || []);
+  }, [selectedCompanies, data]);
+
+  useEffect(() => {
+    setLoad(isFetching);
+    setDone(!isFetching && selectedCompanies?.length > 0);
+  }, [isFetching, selectedCompanies]);
 
   const toggleSelection = (id) => {
     const numericId = Number(id);
@@ -56,7 +66,12 @@ export const CompanyFilter = () => {
 
   const handleConfirm = () => {
     dispatch(setSelectedCompanies(localSelected));
+    setActiveFilter();
     setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen((prev) => !prev);
+    setActiveFilter(name);
   };
 
   const handleReset = (e) => {
@@ -64,8 +79,24 @@ export const CompanyFilter = () => {
     e?.stopPropagation();
     setLocalSelected([]);
     dispatch(setSelectedCompanies([]));
+    setDone(false);
     setOpen(false);
+    clearActiveFilter();
   };
+
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(e.target) &&
+        !buttonRef.current.contains(e.target)
+      ) {
+        setOpen(false);
+      }
+    };
+    document.body.addEventListener('mousedown', clickOutside);
+    return () => document.body.removeEventListener('mousedown', clickOutside);
+  }, []);
 
   const partnershipCityMap = Object.fromEntries(
     data?.partnership_details?.map(({ partnership_id, city }) => [partnership_id, city]) || []
@@ -83,24 +114,22 @@ export const CompanyFilter = () => {
 
   const uniqueCities = [...new Set(partnerships.map((item) => item.city).filter(Boolean))];
 
-  if (partnerships.length <= 1) return null;
-
   return (
-    <div onKeyDown={(e) => e.key === 'Enter' && handleConfirm()} className={s.container}>
-      <div
-        onMouseDown={() => setOpen(false)}
-        className={classNames(s.overlay, open && s.overlay_anim)}
-      />
+    <div className={s.container}>
+      <div className={classNames(s.overlay, open && s.overlay_anim)} />
 
       <FilterButton
         title="Компания"
         Icon={IconHome}
-        count={selected.length}
+        count={selectedCompanies.length}
         handleReset={handleReset}
-        handleOpen={() => setOpen((prev) => !prev)}
+        handleOpen={handleOpen}
+        load={load}
+        done={done}
+        buttonRef={buttonRef}
       />
 
-      <div className={classNames(s.modal, { [s.modal_open]: open })}>
+      <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: open })}>
         <div className={s.list}>
           <div className={s.headerTitle}>Мои компании</div>
         </div>

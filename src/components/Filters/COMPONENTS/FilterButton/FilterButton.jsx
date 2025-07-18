@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames';
-
+//components
 import LoaderCircle from 'components/General/LoaderCircle/LoaderCircle';
-
-import s from './FilterButton.module.scss';
 
 //icons
 import { ReactComponent as IconClose } from './icons/iconClose.svg';
 import { ReactComponent as IconDone } from './icons/iconDone.svg';
+
+//styles
+import s from './FilterButton.module.scss';
 
 const FilterButton = ({
   title,
@@ -20,9 +21,11 @@ const FilterButton = ({
   buttonRef,
 }) => {
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
   return (
     <div
       ref={buttonRef}
@@ -54,6 +57,7 @@ export const FilterButtonDate = ({
   title,
   Icon,
   load = false,
+  done = false,
   isSelected,
   handleReset,
   handleOpen,
@@ -66,7 +70,14 @@ export const FilterButtonDate = ({
       className={classNames(s.filter, isSelected && s.filter_active)}
     >
       <div className={s.icon}>
-        <Icon />
+        <Icon className={(load || done) && s.hidden} />
+        <div className={classNames(s.loader, load && s.loader_vis)}>
+          <LoaderCircle />
+        </div>
+
+        <div className={classNames(s.loader, !load && done && s.loader_vis)}>
+          <IconDone />
+        </div>
       </div>
 
       <p className={classNames(s.title, isSelected && s.title_active)}>{title}</p>

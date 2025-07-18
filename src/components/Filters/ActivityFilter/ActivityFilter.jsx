@@ -22,7 +22,7 @@ const accountsActivityList = [
   { id: 'unactive', name: 'Не активные' },
 ];
 
-const ActivityFilter = () => {
+const ActivityFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const dispatch = useDispatch();
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
@@ -30,10 +30,13 @@ const ActivityFilter = () => {
   const selectedActivity = useSelector((state) => state.filters.selectedActivity || []);
   const [openModal, setOpenModal] = useState(false);
   const [tempActivity, setTempActivity] = useState(selectedActivity || []);
+  const [load, setLoad] = useState(false);
+  const [done, setDone] = useState(false);
 
   const handleOpen = () => {
     setTempActivity(selectedActivity || []);
     setOpenModal((prev) => !prev);
+    setActiveFilter(name);
   };
 
   const handleConfirm = () => {
@@ -45,6 +48,7 @@ const ActivityFilter = () => {
     e?.stopPropagation();
     dispatch(setSelectedActivity([]));
     setOpenModal(false);
+    clearActiveFilter();
   };
 
   const toggleActivity = (id) => {
@@ -52,6 +56,12 @@ const ActivityFilter = () => {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
+  useEffect(() => {
+    setLoad(isFetching);
+
+    const hasSelected = selectedActivity?.length > 0;
+    setDone(!isFetching && hasSelected);
+  }, [isFetching, selectedActivity]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -76,6 +86,8 @@ const ActivityFilter = () => {
         handleOpen={handleOpen}
         handleReset={handleReset}
         buttonRef={buttonRef}
+        load={load}
+        done={done}
       />
 
       <div ref={modalRef} className={classNames(s.modal, { [s.modal_open]: openModal })}>
