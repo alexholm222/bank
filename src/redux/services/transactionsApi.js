@@ -37,7 +37,14 @@ export const transactionsApi = createApi({
 
       providesTags: ['TRANSACTIONS'],
     }),
+    getTransaction: build.query({
+      query: ({ id }) => ({
+        url: `/bank/transactions/detail/${id}`,
+        method: 'GET',
+      }),
+      transformResponse: (response) => response.data,
+    }),
   }),
 });
 
-export const { useGetTransactionsInfiniteQuery } = transactionsApi;
+export const { useGetTransactionsInfiniteQuery, useGetTransactionQuery } = transactionsApi;

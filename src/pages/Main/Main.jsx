@@ -40,6 +40,7 @@ const Main = () => {
     selectedReceivers,
     selectedPayers,
     selectedActivity,
+    selectedRecognizedType,
   } = useSelector((state) => state.filters);
 
   const transactionsParams = getTransactionsParams(
@@ -48,7 +49,8 @@ const Main = () => {
     dateEndPicker,
     transactionTypeFilter,
     transactionViewFilter,
-    isUnknownTransaction
+    isUnknownTransaction,
+    selectedRecognizedType
   );
 
   const {
@@ -58,6 +60,17 @@ const Main = () => {
     hasNextPage,
     isLoading,
   } = useGetTransactionsInfiniteQuery(transactionsParams);
+
+  //////////////////////////////////////////////////////////////////////////////////
+  //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
+  const { data: transactionsListUnknown } = useGetTransactionsInfiniteQuery({
+    'filter[requires_action]': '1',
+  });
+  useEffect(() => {
+    const hasUnknownTransactions = transactionsListUnknown?.pages?.[0]?.data?.length > 0;
+    setIsUnknownTransaction(hasUnknownTransactions);
+  }, [transactionsListUnknown]);
+  //////////////////////////////////////////////////////////////////////////////////
 
   const showAddAccountBtn = activeTab === 'accounts';
 

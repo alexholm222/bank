@@ -80,9 +80,10 @@
   padding: 16px 20px 16px 0;
 
   &.right {
+    justify-self: end;
     text-align: right;
+    padding-right: 0;
   }
-
   &.center {
     text-align: center;
   }

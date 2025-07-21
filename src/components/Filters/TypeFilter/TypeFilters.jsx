@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setTransactionTypeFilter, setTransactionViewFilter } from '../../../redux/filters/slice';
+import {
+  setSelectedRecognizedType,
+  setTransactionTypeFilter,
+  setTransactionViewFilter,
+} from '../../../redux/filters/slice';
 
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
@@ -30,10 +34,12 @@ const transactionViewList = [
 const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const selectedTypes = useSelector((state) => state.filters.transactionTypeFilter) || [];
   const selectedViews = useSelector((state) => state.filters.transactionViewFilter) || [];
+  const selectedRecognizedType = useSelector((state) => state.filters.selectedRecognizedType) || [];
 
   const [openModal, setOpenModal] = useState(false);
   const [transactionType, setTransactionType] = useState([]);
   const [transactionView, setTransactionView] = useState([]);
+  const [recognizedType, setRecognizedType] = useState('');
   const [load, setLoad] = useState(false);
   const [done, setDone] = useState(false);
 
@@ -44,13 +50,15 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
   useEffect(() => {
     setLoad(isFetching);
 
-    const hasActiveFilters = selectedTypes.length > 0 || selectedViews.length > 0;
+    const hasActiveFilters =
+      selectedTypes.length > 0 || selectedViews.length > 0 || selectedRecognizedType === '1';
     setDone(!isFetching && hasActiveFilters);
-  }, [isFetching, selectedTypes, selectedViews]);
+  }, [isFetching, selectedTypes, selectedViews, selectedRecognizedType]);
 
   const handleOpen = () => {
     setTransactionType(selectedTypes);
     setTransactionView(selectedViews);
+    setRecognizedType(selectedRecognizedType);
     setOpenModal(true);
     setActiveFilter(name);
   };
@@ -60,9 +68,11 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
   };
 
   const handleConfirm = () => {
+    setLoad(true);
     setActiveFilter(name);
     dispatch(setTransactionTypeFilter(transactionType));
     dispatch(setTransactionViewFilter(transactionView));
+    dispatch(setSelectedRecognizedType(recognizedType));
     setOpenModal(false);
   };
 
@@ -70,6 +80,7 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
     e.stopPropagation();
     dispatch(setTransactionTypeFilter(null));
     dispatch(setTransactionViewFilter(null));
+    dispatch(setSelectedRecognizedType(''));
     setOpenModal(false);
     setDone(false);
     clearActiveFilter();
@@ -129,6 +140,14 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
               <span className={s.checkboxLabel}>{item.name}</span>
             </div>
           ))}
+          <div
+            key="recognizedType"
+            className={s.item}
+            onClick={() => setRecognizedType((prev) => (prev === '1' ? '' : '1'))}
+          >
+            <CheckBox active={recognizedType === '1'} />
+            <span className={s.checkboxLabel}>Не распознана</span>
+          </div>
         </div>
 
         <div className={s.buttons}>

@@ -56,12 +56,21 @@ const ActivityFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
-  useEffect(() => {
-    setLoad(isFetching);
 
-    const hasSelected = selectedActivity?.length > 0;
-    setDone(!isFetching && hasSelected);
+  useEffect(() => {
+    const newLoad = isFetching;
+    const newDone = !isFetching && selectedActivity?.length > 0;
+
+    if (load !== newLoad) setLoad(newLoad);
+    if (done !== newDone) setDone(newDone);
   }, [isFetching, selectedActivity]);
+
+  // useEffect(() => {
+  //   setLoad(isFetching);
+
+  //   const hasSelected = selectedActivity?.length > 0;
+  //   setDone(!isFetching && hasSelected);
+  // }, [isFetching, selectedActivity]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

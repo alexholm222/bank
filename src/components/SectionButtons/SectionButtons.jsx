@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'react';
-import classNames from 'classnames';
+import { useDispatch } from 'react-redux';
+import { setSelectedRecognizedType } from '../../redux/filters/slice';
 
+//styles
+import classNames from 'classnames';
 import s from './SectionButtons.module.scss';
 
-const SectionButtons = ({ list, active, setActive, load }) => {
-  const [loadCount, setLoadCount] = useState(false);
-
-  useEffect(() => {
-    if (load) {
-      setLoadCount(true);
-    } else {
-      setTimeout(() => {
-        setLoadCount(false);
-      }, 100);
-    }
-  }, [load]);
-
+const SectionButtons = ({ list, active, setActive }) => {
+  const dispatch = useDispatch();
   const handleActive = (e) => {
+    dispatch(setSelectedRecognizedType(''));
     const id = e.currentTarget.id;
     setActive(id);
   };

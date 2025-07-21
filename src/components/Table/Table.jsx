@@ -18,7 +18,7 @@ const Table = ({ type, anim, isFetching, list = [] }) => {
 
   const handlerOpenFlow = (row) => {
     if (type === 'transactions') {
-      showModal('TRANSACTION', { data: row });
+      showModal('TRANSACTION', { id: row.id });
     }
     if (type === 'extractions') {
       showModal('EXTRACTION', { data: row });
@@ -33,23 +33,19 @@ const Table = ({ type, anim, isFetching, list = [] }) => {
   }
 
   return (
-    <table className={classNames(s.root, anim && s.root_anim, isFetching && s.root_fetch)}>
-      <thead>
-        <TableHeader type={type} />
-      </thead>
+    <div className={classNames(s.root, anim && s.root_anim, isFetching && s.root_fetch)}>
+      <TableHeader type={type} />
 
-      <tbody>
-        {list.map((row) => (
-          <tr
-            key={row.id}
-            className={classNames(s.dataRow, type === 'extractions' && s.noPointer)}
-            onClick={() => handlerOpenFlow(row)}
-          >
-            <TableRow row={row} type={type} />
-          </tr>
-        ))}
-      </tbody>
-    </table>
+      {list.map((row) => (
+        <div
+          key={row.id}
+          className={classNames(s.dataRow, type === 'extractions' && s.noPointer)}
+          onClick={() => handlerOpenFlow(row)}
+        >
+          <TableRow row={row} type={type} />
+        </div>
+      ))}
+    </div>
   );
 };
 

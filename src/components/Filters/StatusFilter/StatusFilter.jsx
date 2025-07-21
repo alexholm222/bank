@@ -26,11 +26,14 @@ const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) 
 
   const [openModal, setOpenModal] = useState(false);
   const [tempStatuses, setTempStatuses] = useState(selectedStatus);
-  const [load, setLoad] = useState(false);
-  const [done, setDone] = useState(false);
+  // const [load, setLoad] = useState(false);
+  // const [done, setDone] = useState(false);
 
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
+
+  const load = isFetching;
+  const done = !isFetching && selectedStatus.length > 0;
 
   const handleOpen = () => {
     setTempStatuses(selectedStatus);
@@ -54,12 +57,12 @@ const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) 
     clearActiveFilter();
   };
 
-  useEffect(() => {
-    setLoad(isFetching);
+  // useEffect(() => {
+  //   setLoad(isFetching);
 
-    const hasSelected = selectedStatus?.length > 0;
-    setDone(!isFetching && hasSelected);
-  }, [isFetching, selectedStatus]);
+  //   const hasSelected = selectedStatus?.length > 0;
+  //   setDone(!isFetching && hasSelected);
+  // }, [isFetching, selectedStatus]);
 
   useEffect(() => {
     const clickOutside = (e) => {

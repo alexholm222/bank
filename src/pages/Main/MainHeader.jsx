@@ -1,3 +1,8 @@
+// Redux
+import { useDispatch } from 'react-redux';
+import { setSelectedRecognizedType } from '../../redux/filters/slice';
+
+//Components
 import UniButton from 'components/General/UniButton/UniButton';
 import Information from 'components/Information/Information';
 import SectionButtons from 'components/SectionButtons/SectionButtons';
@@ -8,12 +13,11 @@ import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.
 
 // Styles
 import s from './Main.module.scss';
-import { useState } from 'react';
 
 const TABS = [
   { id: 'transactions', title: 'Транзакции' },
   { id: 'extractions', title: 'Выписки' },
-  { id: 'accounts', title: 'Банковские счета' },
+  // { id: 'accounts', title: 'Банковские счета' },
 ];
 
 const MainHeader = ({
@@ -24,19 +28,17 @@ const MainHeader = ({
   handleUpload,
   isLoading,
   isUnknownTransaction,
-  setIsUnknownTransaction,
 }) => {
-  const [isShowunknown, setIsShowunknown] = useState(false);
-
+  const dispatch = useDispatch();
   const handleShowUnknown = () => {
-    setIsShowunknown(true);
-    setIsUnknownTransaction(true);
+    dispatch(setSelectedRecognizedType('1'));
+    // setIsUnknownTransaction(false);
     setActiveTab('transactions');
   };
 
   return (
     <header className={s.header}>
-      <Information onClick={handleShowUnknown} open={true} />
+      {isUnknownTransaction && <Information onClick={handleShowUnknown} open={true} />}
       <div className={s.block}>
         <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
         <div className={s.buttons}>

@@ -7,7 +7,8 @@ const getTransactionsParams = (
   dateEnd,
   typeFilter,
   viewFilter,
-  isUnknownTransaction
+  isUnknownTransaction,
+  selectedRecognizedType
 ) => {
   return {
     'filter[search]': searchQuery,
@@ -17,7 +18,7 @@ const getTransactionsParams = (
     'filter[company_ids]': '',
     'filter[kind]': arrayToString(viewFilter) || '',
     'filter[type]': arrayToString(typeFilter) || '',
-    'filter[requires_action]': isUnknownTransaction ? '1' : '',
+    'filter[requires_action]': selectedRecognizedType || '',
   };
 };
 

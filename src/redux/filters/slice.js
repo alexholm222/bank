@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { set } from 'lodash';
 
 const initialState = {
   transactionTypeFilter: null,
@@ -8,6 +9,7 @@ const initialState = {
   selectedReceivers: [],
   selectedPayers: [],
   selectedActivity: null,
+  selectedRecognizedType: '',
 };
 
 const filtersSlice = createSlice({
@@ -35,6 +37,9 @@ const filtersSlice = createSlice({
     setSelectedActivity(state, action) {
       state.selectedActivity = action.payload;
     },
+    setSelectedRecognizedType(state, action) {
+      state.selectedRecognizedType = action.payload;
+    },
     resetAllFilters: () => initialState,
   },
 });
@@ -48,6 +53,7 @@ export const {
   setSelectedStatus,
   setSelectedActivity,
   resetAllFilters,
+  setSelectedRecognizedType,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

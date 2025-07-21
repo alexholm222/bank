@@ -19,29 +19,30 @@ import s from './Table.module.scss';
 const TableRow = ({ row, type }) => {
   const handleDeleteTransaction = (id, e) => {
     e.stopPropagation();
-    console.log('Удалить транзакцию с id:', id);
   };
 
-  const handleDownloadExtraction = () => {
-    console.log('Скачать выписку');
-  };
+  const handleDownloadExtraction = () => {};
 
-  const renderTransactionRow = () => (
-    <div className={classNames(s.gridRow, s.transactions)}>
-      <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
-      <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
-      <div className={classNames(s.gridCell, s.right, s.amount)}>
-        <AmountCell amount={formatSum(row?.type, row?.sum)} />
+  const renderTransactionRow = () => {
+    const receiver = row?.type === 'income' ? row?.partnership : row?.company;
+    const payer = row?.type === 'income' ? row?.company : row?.partnership;
+    return (
+      <div className={classNames(s.gridRow, s.transactions)}>
+        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
+        <div className={classNames(s.gridCell, s.right, s.amount)}>
+          <AmountCell amount={formatSum(row?.type, row?.sum)} />
+        </div>
+        <div className={s.gridCell}>{row.requires_action !== 1 ? payer : <WarningCell />}</div>
+        <div className={s.gridCell}>{receiver}</div>
+        <div className={classNames(s.gridCell, s.shrinkable)}>{row?.goal}</div>
+        <div className={s.gridCell}>{row?.kind}</div>
+        <div className={classNames(s.gridCell, s.right)}>
+          <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
+        </div>
       </div>
-      <div className={s.gridCell}>{row.requires_action !== 1 ? row?.company : <WarningCell />}</div>
-      <div className={s.gridCell}>{row?.partnership}</div>
-      <div className={classNames(s.gridCell, s.shrinkable)}>{row?.goal}</div>
-      <div className={s.gridCell}>{row?.kind}</div>
-      <div className={classNames(s.gridCell, s.right)}>
-        <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderExtractionRow = () => (
     <div className={classNames(s.gridRow, s.extractions)}>
@@ -53,7 +54,7 @@ const TableRow = ({ row, type }) => {
       </div>
       <div className={s.gridCell}>Менеджер Иванов</div>
       <div className={classNames(s.gridCell, s.gray)}>Бухгалтер</div>
-      <div className={s.gridCell}>
+      <div className={classNames(s.gridCell, s.right)}>
         <TagLabel alert={false} inactive={false} />
       </div>
     </div>
@@ -73,7 +74,7 @@ const TableRow = ({ row, type }) => {
         <div className={s.gridCell}>
           <TagLabel alert={false} inactive={true} />
         </div>
-        <div className={classNames(s.gridCell, s.copyCell)}>
+        <div className={classNames(s.gridCell, s.copyCell, s.right)}>
           <CopyTextIcon
             textToCopy={
               `Банк: ${p.bank}\n` +
