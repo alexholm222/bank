@@ -69,6 +69,7 @@ const Main = () => {
   useEffect(() => {
     const hasUnknownTransactions = transactionsListUnknown?.pages?.[0]?.data?.length > 0;
     setIsUnknownTransaction(hasUnknownTransactions);
+    setIsUnknownTransaction(hasUnknownTransactions);
   }, [transactionsListUnknown]);
   //////////////////////////////////////////////////////////////////////////////////
 

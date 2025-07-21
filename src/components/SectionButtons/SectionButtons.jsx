@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { setSelectedRecognizedType } from '../../redux/filters/slice';
+import { resetAllFilters } from '../../redux/filters/slice';
 
 //styles
 import classNames from 'classnames';
@@ -8,7 +8,7 @@ import s from './SectionButtons.module.scss';
 const SectionButtons = ({ list, active, setActive }) => {
   const dispatch = useDispatch();
   const handleActive = (e) => {
-    dispatch(setSelectedRecognizedType(''));
+    dispatch(resetAllFilters());
     const id = e.currentTarget.id;
     setActive(id);
   };

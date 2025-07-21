@@ -28,17 +28,19 @@ const MainHeader = ({
   handleUpload,
   isLoading,
   isUnknownTransaction,
+  setIsUnknownTransaction,
 }) => {
   const dispatch = useDispatch();
   const handleShowUnknown = () => {
     dispatch(setSelectedRecognizedType('1'));
-    // setIsUnknownTransaction(false);
+    setIsUnknownTransaction(false);
     setActiveTab('transactions');
   };
 
   return (
     <header className={s.header}>
-      {isUnknownTransaction && <Information onClick={handleShowUnknown} open={true} />}
+      <Information onClick={handleShowUnknown} open={isUnknownTransaction} />
+
       <div className={s.block}>
         <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
         <div className={s.buttons}>

@@ -105,7 +105,7 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
       <FilterButton
         title="Транзакции"
         Icon={IconFilterSettingts}
-        count={selectedTypes.length + selectedViews.length}
+        count={selectedTypes.length + (selectedViews.length || Number(selectedRecognizedType))}
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}

@@ -91,7 +91,7 @@ const UploadExtraction = () => {
         setSucces('Успешно распознано');
       } catch (e) {
         if (e.name === 'AbortError') {
-          console.log('Загрузка отменена');
+          setUploadError('Загрузка отменена');
         } else {
           setUploadError('Ошибка загрузки');
         }
