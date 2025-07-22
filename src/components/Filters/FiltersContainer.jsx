@@ -1,20 +1,23 @@
+import { useState } from 'react';
+// redux
 import { useSelector } from 'react-redux';
+import { isAnyFilterActive } from '../../redux/filters/selectors';
 
-import { companies, mockReceivers } from 'mock/mockData';
+// mock
+import { companies } from 'mock/mockData';
 
-import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
+// components
+import ActivityFilter from './ActivityFilter/ActivityFilter';
+import DetailsFilter from 'components/Filters/DetailsFilter/DetailsFilter';
 import ResetFiltersBtn from 'components/Filters/COMPONENTS/ResetFiltersAllBtn/ResetFiltersBtn';
 import DateFilter from 'components/Filters/DateFilter/DateFilter';
 import PayerFilter from 'components/Filters/PayerFilter/PayerFilter';
-import ReceiverFilter from 'components/Filters/ReceiverFilter/ReceiverFilter';
+import CompanyFilter from 'components/Filters/CompanyFilter/CompanyFilter';
 import StatusFilter from 'components/Filters/StatusFilter/StatusFilter';
 import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
 
+// styles
 import s from './FiltersContainer.module.scss';
-
-import { isAnyFilterActive } from '../../redux/filters/selectors';
-import ActivityFilter from './ActivityFilter/ActivityFilter';
-import { useState } from 'react';
 
 const FiltersContainer = ({ type, isFetching }) => {
   const [activeFilter, setActiveFilter] = useState(null);
@@ -23,33 +26,34 @@ const FiltersContainer = ({ type, isFetching }) => {
   const clearActiveFilter = () => setActiveFilter(null);
 
   const getFetching = (name) => (activeFilter === name ? isFetching : false);
+
   const filtersMap = {
     transactions: [
+      <DetailsFilter
+        key="details"
+        name="details"
+        isFetching={getFetching('details')}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        clearActiveFilter={clearActiveFilter}
+      />,
       <CompanyFilter
-        key="company"
-        name="company"
-        isFetching={getFetching('company')}
+        key="companies"
+        name="companies"
+        isFetching={getFetching('companies')}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
         clearActiveFilter={clearActiveFilter}
       />,
-      <ReceiverFilter
-        key="receiver"
-        name="receiver"
-        isFetching={getFetching('receiver')}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-      />,
-      <PayerFilter
-        key="payer"
-        name="payer"
-        isFetching={getFetching('payer')}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-        data={mockReceivers}
-      />,
+      // <PayerFilter
+      //   key="payer"
+      //   name="payer"
+      //   isFetching={getFetching('payer')}
+      //   activeFilter={activeFilter}
+      //   setActiveFilter={setActiveFilter}
+      //   clearActiveFilter={clearActiveFilter}
+      //   data={mockReceivers}
+      // />,
       <TypeFilter
         key="type"
         name="type"
@@ -68,7 +72,7 @@ const FiltersContainer = ({ type, isFetching }) => {
       />,
     ],
     extractions: [
-      <CompanyFilter
+      <DetailsFilter
         key="company"
         name="company"
         data={companies}
@@ -87,7 +91,7 @@ const FiltersContainer = ({ type, isFetching }) => {
       />,
     ],
     accounts: [
-      <CompanyFilter
+      <DetailsFilter
         key="company"
         name="company"
         data={companies}

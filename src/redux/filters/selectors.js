@@ -6,8 +6,7 @@ export const isAnyFilterActive = (state) => {
     transactionTypeFilter,
     transactionViewFilter,
     selectedCompanies,
-    selectedReceivers,
-    selectedPayers,
+    selectedPartnerships,
     selectedStatus,
     selectedActivity,
     selectedRecognizedType,
@@ -17,8 +16,7 @@ export const isAnyFilterActive = (state) => {
     transactionTypeFilter !== null ||
     transactionViewFilter !== null ||
     selectedCompanies.length > 0 ||
-    selectedReceivers.length > 0 ||
-    selectedPayers.length > 0 ||
+    selectedPartnerships.length > 0 ||
     (dateStartPicker && dateEndPicker) ||
     selectedStatus !== null ||
     selectedActivity !== null ||

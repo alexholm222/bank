@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+//mock
+import { mockData } from 'mock/mockData';
+
 //utils
 import getTransactionsParams from '../../utils/queryParams/getTransactionsParams';
 
@@ -8,6 +11,8 @@ import getTransactionsParams from '../../utils/queryParams/getTransactionsParams
 import { useGetTransactionsInfiniteQuery } from '../../redux/services/transactionsApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTabData } from '../../redux/tableData/tableDataSlice';
+import { useGetCompaniesQuery } from '../../redux/services/filtersApiActions';
+import { setCompanies, setPartnerships } from '../../redux/filters/companiesListSlice';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
@@ -20,7 +25,6 @@ import MainHeader from './MainHeader';
 
 // Styles
 import s from './Main.module.scss';
-import { mockData } from 'mock/mockData';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -35,23 +39,21 @@ const Main = () => {
   const {
     transactionTypeFilter,
     transactionViewFilter,
-    selectedStatus,
     selectedCompanies,
-    selectedReceivers,
-    selectedPayers,
-    selectedActivity,
+    selectedPartnerships,
     selectedRecognizedType,
   } = useSelector((state) => state.filters);
 
-  const transactionsParams = getTransactionsParams(
+  const transactionsParams = getTransactionsParams({
+    selectedPartnerships,
     searchQuery,
     dateStartPicker,
     dateEndPicker,
     transactionTypeFilter,
     transactionViewFilter,
-    isUnknownTransaction,
-    selectedRecognizedType
-  );
+    selectedRecognizedType,
+    selectedCompanies,
+  });
 
   const {
     data: transactionsList,
@@ -59,6 +61,7 @@ const Main = () => {
     fetchNextPage,
     hasNextPage,
     isLoading,
+    error,
   } = useGetTransactionsInfiniteQuery(transactionsParams);
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -69,8 +72,16 @@ const Main = () => {
   useEffect(() => {
     const hasUnknownTransactions = transactionsListUnknown?.pages?.[0]?.data?.length > 0;
     setIsUnknownTransaction(hasUnknownTransactions);
-    setIsUnknownTransaction(hasUnknownTransactions);
   }, [transactionsListUnknown]);
+  //////////////////////////////////////////////////////////////////////////////////
+  //Получаем список компаний для фильтров
+  const { data: companiesListForFilters } = useGetCompaniesQuery();
+  useEffect(() => {
+    if (companiesListForFilters) {
+      dispatch(setCompanies(companiesListForFilters.companies));
+      dispatch(setPartnerships(companiesListForFilters.partnership_details));
+    }
+  }, [companiesListForFilters, dispatch]);
   //////////////////////////////////////////////////////////////////////////////////
 
   const showAddAccountBtn = activeTab === 'accounts';
@@ -128,7 +139,7 @@ const Main = () => {
           hasMore={hasNextPage}
           scrollableTarget="scrollableDiv"
         >
-          <Table type={activeTab} list={allRows} isFetching={isLoading} />
+          <Table type={activeTab} list={allRows} isFetching={isLoading} error={error} />
         </InfiniteScroll>
       </div>
     </div>

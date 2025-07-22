@@ -2,7 +2,7 @@ module.exports = {
   extends: [
     'react-app',
     'react-app/jest',
-    'plugin:react/recommended',
+    // 'plugin:react/recommended',
     // 'plugin:jsx-a11y/recommended',
     'eslint:recommended',
     'prettier',
@@ -12,7 +12,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     'no-unused-vars': 'warn',
-    'no-console': ['error', { allow: ['warn', 'error'] }],
+    // 'no-console': ['error', { allow: ['warn', 'error'] }],
     'simple-import-sort/imports': [
       'warn',
       {

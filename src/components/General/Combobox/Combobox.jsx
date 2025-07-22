@@ -21,7 +21,9 @@ const CustomOption = (props) => {
     >
       <div className={s.label}>{data.label}</div>
       <div className={s.details}>
-        ИНН {data.inn} {data.kpp && `КПП ${data.kpp}`} {data.ogrnip && `ОГРНИП ${data.ogrnip}`}
+        {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
+        {data.kpp !== '0' && data.kpp && `КПП ${data.kpp}`}
+        {data.ogrnip !== '0' && data.ogrnip && `ОГРНИП ${data.ogrnip}`}
       </div>
     </div>
   );
@@ -35,7 +37,8 @@ const CustomSingleValue = (props) => {
       <div className={s.singleValue}>
         <span className={s.label}>{data.label}</span>
         <span className={s.details}>
-          ИНН {data.inn} {data.kpp && `КПП ${data.kpp}`}
+          {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
+          {data.kpp !== '0' && data.kpp && `КПП ${data.kpp}`}
         </span>
       </div>
     </components.SingleValue>
@@ -43,7 +46,7 @@ const CustomSingleValue = (props) => {
 };
 
 const Combobox = ({ className, options, selected }) => {
-  const [selectedOption, setSelectedOption] = useState(selected || options[0] || null);
+  const [selectedOption, setSelectedOption] = useState(selected);
   const [inputValue, setInputValue] = useState('');
 
   const selectRef = useRef(null);
@@ -84,12 +87,10 @@ const Combobox = ({ className, options, selected }) => {
           }}
         />
       </div>
-      {hasError && (
-        <div className={s.error}>
-          <IconWarning className={s.icon} />
-          Обязательное поле
-        </div>
-      )}
+      <div className={classNames(s.error, { [s.active]: hasError })}>
+        <IconWarning className={s.icon} />
+        Обязательное поле
+      </div>
     </div>
   );
 };

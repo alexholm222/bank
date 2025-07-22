@@ -1,13 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { set } from 'lodash';
 
 const initialState = {
   transactionTypeFilter: null,
   transactionViewFilter: null,
   selectedStatus: null,
   selectedCompanies: [],
-  selectedReceivers: [],
-  selectedPayers: [],
+  selectedPartnerships: [],
   selectedActivity: null,
   selectedRecognizedType: '',
 };
@@ -25,11 +23,8 @@ const filtersSlice = createSlice({
     setSelectedCompanies(state, action) {
       state.selectedCompanies = action.payload;
     },
-    setSelectedReceivers(state, action) {
-      state.selectedReceivers = action.payload;
-    },
-    setSelectedPayers(state, action) {
-      state.selectedPayers = action.payload;
+    setSelectedPartnerships(state, action) {
+      state.selectedPartnerships = action.payload;
     },
     setSelectedStatus(state, action) {
       state.selectedStatus = action.payload;
@@ -49,7 +44,7 @@ export const {
   setTransactionViewFilter,
   setSelectedCompanies,
   setSelectedReceivers,
-  setSelectedPayers,
+  setSelectedPartnerships,
   setSelectedStatus,
   setSelectedActivity,
   resetAllFilters,

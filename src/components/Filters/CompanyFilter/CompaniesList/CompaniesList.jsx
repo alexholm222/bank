@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import FilterSearch from 'components/Filters/COMPONENTS/FilterSearch/FilterSearch';
 import CheckBox from 'components/General/CheckBox/CheckBox';
@@ -7,20 +7,20 @@ import UniButton from 'components/General/UniButton/UniButton';
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
 
-import s from './ReceiverList.module.scss';
+import s from './CompaniesList.module.scss';
 
-const ReceiverList = ({ items, selectedReceivers, onChange, onConfirm, onReset }) => {
-  const receivers = Array.isArray(items) ? items : [];
-  const [filteredReceivers, setFilteredReceivers] = useState(receivers);
+const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }) => {
+  const companies = Array.isArray(items) ? items : [];
+  const [filteredCompanies, setFilteredCompanies] = useState(companies);
 
   useEffect(() => {
-    setFilteredReceivers(receivers);
+    setFilteredCompanies(companies);
   }, [items]);
 
   const handleCheck = (id) => {
-    const updated = selectedReceivers.includes(id)
-      ? selectedReceivers.filter((receiverId) => receiverId !== id)
-      : [...selectedReceivers, id];
+    const updated = selected.includes(id)
+      ? selected.filter((receiverId) => receiverId !== id)
+      : [...selected, id];
     onChange(updated);
   };
 
@@ -31,19 +31,20 @@ const ReceiverList = ({ items, selectedReceivers, onChange, onConfirm, onReset }
           <p>Заказчик</p>
         </div>
 
-        <FilterSearch receivers={receivers} onFilter={setFilteredReceivers} />
+        <FilterSearch items={companies} onFilter={setFilteredCompanies} isOpen={isOpen} />
 
         <ul className={s.list}>
-          {filteredReceivers.map((el) => (
+          {filteredCompanies.map((el) => (
             <li key={el.id} onClick={() => handleCheck(el.id)} className={s.item}>
               <div className={s.check}>
-                <CheckBox active={selectedReceivers.includes(el.id)} />
+                <CheckBox active={selected.includes(el.id)} />
               </div>
               <div className={s.block}>
                 <p>{el.name}</p>
                 <span>
-                  ИНН: {el.inn}{' '}
-                  {el.kpp ? `КПП: ${el.kpp}` : el.ogrnip ? `ОГРНИП: ${el.ogrnip}` : ''}
+                  {el.inn && <span>ИНН: {el.inn}</span>}
+
+                  {el.kpp ? ` КПП: ${el.kpp} ` : el.ogrnip ? `ОГРНИП: ${el.ogrnip}` : ''}
                 </span>
               </div>
             </li>
@@ -65,4 +66,4 @@ const ReceiverList = ({ items, selectedReceivers, onChange, onConfirm, onReset }
   );
 };
 
-export default ReceiverList;
+export default CompaniesList;

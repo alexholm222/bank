@@ -1,36 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ReactComponent as IconCloseGrey } from 'assets/icons/iconCloseGrey.svg';
 import { ReactComponent as IconSearch } from 'assets/icons/iconSearch.svg';
 
 import s from './FilterSearch.module.scss';
 
-const handleSearchReceivers = (query, receivers) => {
+const handleSearchReceivers = (query, items) => {
   const value = query.toLowerCase();
-  return receivers.filter(
-    (receiver) =>
-      receiver.name.toLowerCase().includes(value) ||
-      receiver.inn.includes(value) ||
-      receiver.kpp?.includes(value) ||
-      receiver.ogrnip?.includes(value)
+  return items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(value) ||
+      item.inn.includes(value) ||
+      item.kpp?.includes(value) ||
+      item.ogrnip?.includes(value)
   );
 };
 
-const FilterSearch = ({ receivers, onFilter }) => {
+const FilterSearch = ({ items, onFilter, isOpen }) => {
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [filtered, setFiltered] = useState(items);
   const handleSearch = (e) => {
     const value = e.currentTarget.value;
     setSearchQuery(value);
 
-    const result = handleSearchReceivers(value, receivers);
+    const result = handleSearchReceivers(value, items);
+    setFiltered(result);
     onFilter(result);
   };
-
   const handleClear = () => {
     setSearchQuery('');
-    onFilter(receivers);
+    setFiltered(items);
+    onFilter(items);
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchQuery('');
+      setFiltered(items);
+      onFilter(items);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -48,7 +57,7 @@ const FilterSearch = ({ receivers, onFilter }) => {
           </button>
         )}
       </div>
-      {searchQuery && (
+      {searchQuery && filtered.length === 0 && (
         <div className={s.empty}>{`Ничего не найдено по запросу "${searchQuery}"`}</div>
       )}
     </>

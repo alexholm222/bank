@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
@@ -23,29 +23,48 @@ import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg'
 
 // Styles
 import s from './Transaction.module.scss';
+import { useSelector } from 'react-redux';
 
-const incomeTransactionTypes = ['Поступление', 'Возврат'];
+// const incomeTransactionTypes = ['Поступление', 'Возврат'];
+const incomeTransactionTypes = {
+  income: 'Поступление',
+  outcome: 'Возврат',
+};
 const docTypes = ['Оказание услуг', 'Транспортный'];
 
 const Transaction = ({ id }) => {
+  const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
+  const partnershipslist = useSelector((state) => state.companiesList.companies) ?? [];
   const { hideModal } = useModal();
-  const [incomeType, setIncomeType] = useState(incomeTransactionTypes[0]);
+  const { data, isLoading } = useGetTransactionQuery({ id });
+  const [transaction, setTransaction] = useState(null);
+  const [incomeType, setIncomeType] = useState(null);
   const [docType, setDoctype] = useState(docTypes[0]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
+  const companyOptions = companieslist.map((company) => ({
+    value: company.id,
+    label: company.name,
+    inn: company.inn,
+    kpp: company.kpp,
+    ogrnip: company.ogrnip,
+  }));
 
-  const { data: transaction, isLoading } = useGetTransactionQuery({ id });
-
-  if (isLoading || !transaction) return null;
-
-  const { sum, type, kind, goal, partnership, company, number, date } = transaction;
+  console.log(incomeType);
+  useEffect(() => {
+    if (data) {
+      setTransaction(data);
+      setIncomeType(incomeTransactionTypes[data.type]);
+    }
+  }, [data]);
+  if (!transaction) return null;
 
   return (
     <Modal isOpen onClose={hideModal}>
       <div className={s.modal}>
         <header className={s.modalHeader}>
           <div className={s.title}>
-            <h3>{`Транзакция ${number} от ${date}`}</h3>
+            <h3>{`Транзакция ${transaction.number} от ${transaction.date}`}</h3>
           </div>
           <button className={s.close} onClick={hideModal}>
             <IconCloseBlack />
@@ -53,7 +72,11 @@ const Transaction = ({ id }) => {
         </header>
 
         <section className={s.body}>
-          <PaymentDetails payer={partnership} receiver={company} data={{ sum, type, kind, goal }} />
+          <PaymentDetails
+            payer={transaction.partnership}
+            receiver={transaction.company}
+            data={transaction}
+          />
         </section>
 
         <footer className={s.controlSection}>
@@ -68,7 +91,7 @@ const Transaction = ({ id }) => {
               />
             )}
             <Dropdown
-              options={incomeTransactionTypes}
+              options={Object.values(incomeTransactionTypes)}
               value={incomeType}
               style={{ width: '200px' }}
               onChange={setIncomeType}
@@ -76,13 +99,7 @@ const Transaction = ({ id }) => {
           </div>
 
           <div className={s.control}>
-            {/* <Dropdown
-              options={docTypes}
-              value={docType}
-              style={{ width: '200px' }}
-              onChange={setDoctype}
-            /> */}
-            <Combobox className={s.combobox} options={{}} />
+            <Combobox className={s.combobox} options={companyOptions} />
           </div>
 
           <div className={s.control_btn}>
