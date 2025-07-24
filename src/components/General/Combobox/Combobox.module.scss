@@ -1,14 +1,48 @@
-.root {
-  position: relative;
-  width: 100%;
-}
-
 .option {
   padding: 12px 16px;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
   &.focused {
     background-color: #f0f4ff;
+  }
+
+  .labelBlock {
+    flex-shrink: 0;
+    width: 400px;
+  }
+
+  .labelBadge {
+    display: inline-flex;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    padding: 8px;
+    height: 24px;
+
+    background: #f1f4f9;
+    border-radius: 4px;
+    color: #71869d;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    .labelText {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
   }
 
   .label {
@@ -16,9 +50,8 @@
     overflow: hidden;
     color: #121922;
     text-overflow: ellipsis;
-    font-family: Inter;
+    white-space: nowrap;
     font-size: 14px;
-    font-style: normal;
     font-weight: 400;
     line-height: 18px;
   }
@@ -67,7 +100,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 6px;
-  color: var(--UI-Red, #e10d0d);
+  color: #e10d0d;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

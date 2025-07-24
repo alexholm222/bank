@@ -17,8 +17,15 @@ const tableDataSlice = createSlice({
       if (tab === 'extractions') state.extractions = data;
       if (tab === 'accounts') state.accounts = data;
     },
+
+    removeTransactionById: (state, action) => {
+      const idToRemove = action.payload;
+      state.transactions = state.transactions.filter(
+        (transaction) => transaction.id !== idToRemove
+      );
+    },
   },
 });
 
-export const { setTabData } = tableDataSlice.actions;
+export const { setTabData, removeTransactionById } = tableDataSlice.actions;
 export default tableDataSlice.reducer;

@@ -1,16 +1,16 @@
-const customStyles = {
+const getCustomStyles = (hasError) => ({
   control: (base, state) => ({
     ...base,
     maxWidth: '100%',
     width: '100%',
     backgroundColor: '#fff',
-    borderColor: state.isFocused ? '#002cfb' : '#e0e5f2',
+    borderColor: hasError ? '#E10D0D' : state.isFocused ? '#002cfb' : '#e0e5f2',
     boxShadow: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     height: '40px',
     '&:hover': {
-      borderColor: '#002cfb',
+      borderColor: hasError ? '#E10D0D' : '#002cfb',
     },
   }),
   valueContainer: (base) => ({
@@ -47,17 +47,25 @@ const customStyles = {
       backgroundColor: '#e6f0ff',
     },
   }),
-  dropdownIndicator: (base) => ({
+  dropdownIndicator: (base, state) => ({
     ...base,
     color: '#002CFB',
-    padding: '4px',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'transform 0.2s ease',
+    transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : 'none',
+    transformOrigin: 'center',
     '&:hover': {
-      color: '#2e6fd8',
+      color: '#002CFB',
     },
   }),
+
   indicatorSeparator: () => ({
     display: 'none',
   }),
-};
+});
 
-export default customStyles;
+export default getCustomStyles;

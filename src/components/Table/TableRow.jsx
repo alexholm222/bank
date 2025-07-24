@@ -1,5 +1,10 @@
 import classNames from 'classnames';
 
+//redux
+import { useDeleteTransactionMutation } from '../../redux/services/transactionsApi';
+import { removeTransactionById } from '../../redux/tableData/tableDataSlice';
+import { useDispatch } from 'react-redux';
+
 // utils
 import formatShortYear from 'utils/formatShortYear';
 import formatSum from 'utils/formatSum';
@@ -17,8 +22,14 @@ import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 import s from './Table.module.scss';
 
 const TableRow = ({ row, type }) => {
+  const [deleteTransaction] = useDeleteTransactionMutation();
+  const dispatch = useDispatch();
   const handleDeleteTransaction = (id, e) => {
     e.stopPropagation();
+    deleteTransaction({ id })
+      .unwrap()
+      .then(() => dispatch(removeTransactionById(id)))
+      .catch(console.error);
   };
 
   const handleDownloadExtraction = () => {};
@@ -118,14 +129,16 @@ const TagLabel = ({ alert, inactive }) => (
   </div>
 );
 
-const DeleteTransaction = ({ onClick, id }) => (
-  <div className={s.deleteWrapper}>
-    <button className={s.deleteIconButton} aria-label="Удалить" onClick={(e) => onClick(id, e)}>
-      <IconClose className={s.deleteIcon} />
-      <IconCloseRed className={s.deleteIconRed} />
-    </button>
-  </div>
-);
+const DeleteTransaction = ({ onClick, id }) => {
+  return (
+    <div className={s.deleteWrapper}>
+      <button className={s.deleteIconButton} aria-label="Удалить" onClick={(e) => onClick(id, e)}>
+        <IconClose className={s.deleteIcon} />
+        <IconCloseRed className={s.deleteIconRed} />
+      </button>
+    </div>
+  );
+};
 
 const WarningCell = () => (
   <span className={s.warningCell}>

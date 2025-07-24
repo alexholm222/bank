@@ -53,7 +53,7 @@
   display: grid;
   grid-template-columns: 120px 1fr 1fr;
   text-align: left;
-  margin: 20px 0 12px;
+  margin: 0px 0 12px;
 
   & > div {
     color: #71869d;
@@ -154,7 +154,6 @@
     font-size: 14px;
   }
 }
-
 .controlSection {
   display: flex;
   flex-direction: column;

@@ -1,0 +1,63 @@
+import React from 'react';
+
+import classNames from 'classnames';
+
+// Styless
+import s from './Transaction.module.scss';
+
+const PaymentDetails = ({ payer, receiver, data }) => {
+  // const isSummaryFirst = data?.type === 'income';
+
+  const fields = [
+    ['Наименование', 'name'],
+    ['ИНН', 'inn'],
+    ['КПП', 'kpp'],
+    ['Банк', 'bank'],
+    ['БИК', 'bik'],
+    ['Корр. счет', 'ks'],
+    ['Расчетный счет', 'rs'],
+  ];
+
+  const summaryData = [
+    ['Сумма', data?.sum],
+    ['Тип транзакции', data?.type === 'income' ? 'Поступление' : 'Возврат'],
+    ['Вид', data?.kind],
+    ['Назначение', data?.goal],
+  ];
+
+  const renderSummaryBlock = () => (
+    <div className={s.paymentSummary}>
+      <div className={s.sectionSubtitle}>Детали платежа из выписки</div>
+      {summaryData.map(([label, value], index) => (
+        <div key={index} className={s.paymentsRow}>
+          <div className={s.paymentsLabel}>{label}</div>
+          <div className={s.content}>{value?.toString().trim() || '-'}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div className={s.paymentDetails}>
+      {/* {isSummaryFirst && renderSummaryBlock()} */}
+
+      <div className={classNames(s.row, s.gridHeader)}>
+        <div></div>
+        <div>Плательщик</div>
+        <div>Получатель</div>
+      </div>
+      <div className={s.gridInfo}>
+        {fields.map(([label, key], index) => (
+          <div key={index} className={s.row}>
+            <div className={s.label}>{label}</div>
+            <div>{payer?.[key]?.toString().trim() || '-'}</div>
+            <div>{receiver?.[key]?.toString().trim() || '-'}</div>
+          </div>
+        ))}
+      </div>
+      {renderSummaryBlock()}
+      {/* {!isSummaryFirst && renderSummaryBlock()} */}
+    </div>
+  );
+};
+export default PaymentDetails;

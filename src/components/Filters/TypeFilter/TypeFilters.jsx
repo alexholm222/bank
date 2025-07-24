@@ -126,10 +126,18 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
               <span className={s.checkboxLabel}>{item.name}</span>
             </div>
           ))}
+          <div
+            key="recognizedType"
+            className={s.item}
+            onClick={() => setRecognizedType((prev) => (prev === '1' ? '' : '1'))}
+          >
+            <CheckBox active={recognizedType === '1'} />
+            <span className={s.checkboxLabel}>Не распознана</span>
+          </div>
         </div>
 
         <div className={s.block}>
-          <div className={s.blockTitle}>Вид транзакции</div>
+          <div className={s.blockTitle}>Вид </div>
           {transactionViewList.map((item) => (
             <div
               key={item.id}
@@ -140,14 +148,6 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
               <span className={s.checkboxLabel}>{item.name}</span>
             </div>
           ))}
-          <div
-            key="recognizedType"
-            className={s.item}
-            onClick={() => setRecognizedType((prev) => (prev === '1' ? '' : '1'))}
-          >
-            <CheckBox active={recognizedType === '1'} />
-            <span className={s.checkboxLabel}>Не распознана</span>
-          </div>
         </div>
 
         <div className={s.buttons}>

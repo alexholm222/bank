@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const TRANSACTIONS_URL = '/bank/transactions';
 
+const TRANSACTIONS_URL = '/bank/transactions';
+console.log('Base URL:', process.env.REACT_APP_BASE_URL);
 export const transactionsApi = createApi({
   reducerPath: 'transactionsApi',
-  tagTypes: ['TRANSACTIONS'],
+  tagTypes: ['TRANSACTIONS', 'TRANSACTION'],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BASE_URL,
     prepareHeaders: (headers) => {
@@ -39,12 +40,36 @@ export const transactionsApi = createApi({
     }),
     getTransaction: build.query({
       query: ({ id }) => ({
-        url: `/bank/transactions/detail/${id}`,
+        url: `${TRANSACTIONS_URL}/detail/${id}`,
         method: 'GET',
       }),
       transformResponse: (response) => response.data,
+      providesTags: ['TRANSACTION'],
+    }),
+    updateTransaction: build.mutation({
+      query: ({ id, data }) => ({
+        url: `/bank/transactions/update/${id}`,
+        method: 'PATCH',
+        body: data,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+      invalidatesTags: ['TRANSACTION', 'TRANSACTIONS'],
+    }),
+
+    deleteTransaction: build.mutation({
+      query: ({ id }) => ({
+        url: `${TRANSACTIONS_URL}/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['TRANSACTIONS'],
     }),
   }),
 });
-
-export const { useGetTransactionsInfiniteQuery, useGetTransactionQuery } = transactionsApi;
+export const {
+  useGetTransactionsInfiniteQuery,
+  useGetTransactionQuery,
+  useUpdateTransactionMutation,
+  useDeleteTransactionMutation,
+} = transactionsApi;

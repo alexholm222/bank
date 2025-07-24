@@ -27,10 +27,10 @@
   &.transactions {
     grid-template-columns: minmax(100px, 100px) // Дата
       minmax(100px, 100px) // Номер
-      minmax(250px, 250px) // Сумма
+      minmax(200px, 250px) // Сумма
       minmax(200px, 1.5fr) // Плательщик
       minmax(150px, 1.5fr) // Получатель
-      minmax(250px, 2fr) // Назначение
+      minmax(200px, 2fr) // Назначение
       minmax(210px, 210px) // Вид
       minmax(80px, 80px); // Кнопка удалить
 

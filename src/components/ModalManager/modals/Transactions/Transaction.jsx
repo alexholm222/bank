@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import classNames from 'classnames';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
 
 // Redux
-import { useGetTransactionQuery } from '../../../../redux/services/transactionsApi';
+import {
+  useDeleteTransactionMutation,
+  useGetTransactionQuery,
+  useUpdateTransactionMutation,
+} from '../../../../redux/services/transactionsApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeTransactionById } from '../../../../redux/tableData/tableDataSlice';
 
 // Components
 import Combobox from 'components/General/Combobox/Combobox';
@@ -23,44 +28,95 @@ import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg'
 
 // Styles
 import s from './Transaction.module.scss';
-import { useSelector } from 'react-redux';
+import PaymentDetails from './PaymentsDetails';
 
 // const incomeTransactionTypes = ['Поступление', 'Возврат'];
 const incomeTransactionTypes = {
   income: 'Поступление',
   outcome: 'Возврат',
 };
-const docTypes = ['Оказание услуг', 'Транспортный'];
 
 const Transaction = ({ id }) => {
-  const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
-  const partnershipslist = useSelector((state) => state.companiesList.companies) ?? [];
   const { hideModal } = useModal();
-  const { data, isLoading } = useGetTransactionQuery({ id });
+  const [deleteTransaction] = useDeleteTransactionMutation();
+  const [updateTransaction] = useUpdateTransactionMutation();
+  const { data } = useGetTransactionQuery({ id });
+
+  const dispatch = useDispatch();
+  const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
+  // const partnershipslist = useSelector((state) => state.companiesList.companies) ?? [];
+
   const [transaction, setTransaction] = useState(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const [incomeType, setIncomeType] = useState(null);
-  const [docType, setDoctype] = useState(docTypes[0]);
+  // const [docType, setDoctype] = useState(docTypes[0]);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
-  const companyOptions = companieslist.map((company) => ({
-    value: company.id,
-    label: company.name,
-    inn: company.inn,
-    kpp: company.kpp,
-    ogrnip: company.ogrnip,
-  }));
+  const [hasValidationError, setHasValidationError] = useState(false);
 
-  console.log(incomeType);
+  const companyOptions = useMemo(
+    () =>
+      companieslist.map((company) => ({
+        value: company.id,
+        name: company.name,
+        label: company.label,
+        inn: company.inn,
+        kpp: company.kpp,
+        ogrnip: company.ogrnip,
+      })),
+    [companieslist]
+  );
+
+  const incomeTypeOptions = useMemo(() => Object.values(incomeTransactionTypes), []);
+  useEffect(() => {
+    const company = companyOptions.find((c) => c.value === selectedCompanyId) ?? null;
+    setSelectedCompany(company);
+  }, [selectedCompanyId, companyOptions]);
+
   useEffect(() => {
     if (data) {
       setTransaction(data);
       setIncomeType(incomeTransactionTypes[data.type]);
+      setSelectedCompanyId(data.company?.id);
+      setSelectedDate(dayjs(data.date, 'DD.MM.YYYY'));
     }
   }, [data]);
+
+  const handleDeleteTransaction = (id, e) => {
+    e.stopPropagation();
+    deleteTransaction({ id })
+      .unwrap()
+      .then(() => dispatch(removeTransactionById(id)))
+      .catch(console.error)
+      .finally(() => hideModal());
+  };
+
+  const handleUpdateTransaction = () => {
+    const isInvalid = !selectedCompanyId || !incomeType || !selectedDate;
+    if (isInvalid) {
+      setHasValidationError(true);
+      return;
+    }
+    setHasValidationError(false);
+    const typeKey = Object.keys(incomeTransactionTypes).find(
+      (key) => incomeTransactionTypes[key] === incomeType
+    );
+    const payload = {
+      date: selectedDate.format('DD.MM.YYYY'),
+      type: typeKey,
+      company_id: selectedCompanyId,
+    };
+    updateTransaction({ id: transaction.id, data: payload })
+      .unwrap()
+      .then(hideModal)
+      .catch(console.error);
+  };
+
   if (!transaction) return null;
 
   return (
-    <Modal isOpen onClose={hideModal}>
+    <Modal onClose={hideModal}>
       <div className={s.modal}>
         <header className={s.modalHeader}>
           <div className={s.title}>
@@ -91,15 +147,21 @@ const Transaction = ({ id }) => {
               />
             )}
             <Dropdown
-              options={Object.values(incomeTransactionTypes)}
+              options={incomeTypeOptions}
               value={incomeType}
               style={{ width: '200px' }}
               onChange={setIncomeType}
             />
           </div>
 
-          <div className={s.control}>
-            <Combobox className={s.combobox} options={companyOptions} />
+          <div>
+            <Combobox
+              hasError={hasValidationError}
+              value={selectedCompany}
+              className={s.combobox}
+              options={companyOptions}
+              onChange={(option) => setSelectedCompanyId(option.value)}
+            />
           </div>
 
           <div className={s.control_btn}>
@@ -109,7 +171,7 @@ const Transaction = ({ id }) => {
               type="danger"
               icon={IconDeleteRed}
               text="Удалить"
-              handler={() => {}}
+              onClick={(e) => handleDeleteTransaction(transaction.id, e)}
             />
             <UniButton
               iconPosition="right"
@@ -117,7 +179,7 @@ const Transaction = ({ id }) => {
               type="primary"
               icon={IconDoneWhite}
               text="Сохранить"
-              handler={() => {}}
+              onClick={handleUpdateTransaction}
             />
           </div>
         </footer>
@@ -129,60 +191,3 @@ const Transaction = ({ id }) => {
 };
 
 export default Transaction;
-
-const PaymentDetails = ({ payer, receiver, data }) => {
-  const isSummaryFirst = data?.type === 'income';
-
-  const fields = [
-    ['Наименование', 'name'],
-    ['ИНН', 'inn'],
-    ['КПП', 'kpp'],
-    ['Банк', 'bank'],
-    ['БИК', 'bik'],
-    ['Корр. счет', 'ks'],
-    ['Расчетный счет', 'rs'],
-  ];
-
-  const summaryData = [
-    ['Сумма', data?.sum],
-    ['Тип транзакции', data?.type === 'income' ? 'Поступление' : 'Возврат'],
-    ['Вид', data?.kind],
-    ['Назначение', data?.goal],
-  ];
-
-  const renderSummaryBlock = () => (
-    <div className={s.paymentSummary}>
-      <div className={s.sectionSubtitle}>Детали платежа из выписки</div>
-      {summaryData.map(([label, value], index) => (
-        <div key={index} className={s.paymentsRow}>
-          <div className={s.paymentsLabel}>{label}</div>
-          <div className={s.content}>{value?.toString().trim() || '-'}</div>
-        </div>
-      ))}
-    </div>
-  );
-
-  return (
-    <div className={s.paymentDetails}>
-      {isSummaryFirst && renderSummaryBlock()}
-
-      <div className={classNames(s.row, s.gridHeader)}>
-        <div></div>
-        <div>Плательщик</div>
-        <div>Получатель</div>
-      </div>
-
-      <div className={s.gridInfo}>
-        {fields.map(([label, key], index) => (
-          <div key={index} className={s.row}>
-            <div className={s.label}>{label}</div>
-            <div>{payer?.[key]?.toString().trim() || '-'}</div>
-            <div>{receiver?.[key]?.toString().trim() || '-'}</div>
-          </div>
-        ))}
-      </div>
-
-      {!isSummaryFirst && renderSummaryBlock()}
-    </div>
-  );
-};
