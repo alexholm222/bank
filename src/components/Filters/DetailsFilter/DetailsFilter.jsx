@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import React from 'react';
 
+// utils
+import renderOgrn from 'utils/renderOgrn';
+
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedPartnerships } from '../../../redux/filters/slice';
@@ -18,6 +21,8 @@ import { ReactComponent as IconHome } from 'assets/icons/iconHome.svg';
 // styles
 import classNames from 'classnames';
 import s from './DetailsFilter.module.scss';
+import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
+import groupCompaniesByCity from 'utils/groupCompaniesByCity';
 
 const CompanyItem = ({ data, selected, toggleSelection }) => {
   return (
@@ -26,11 +31,16 @@ const CompanyItem = ({ data, selected, toggleSelection }) => {
         <CheckBox active={selected} />
       </div>
       <div className={s.block}>
-        <p>{data.name}</p>
-        <span>
-          ИНН: {data.inn} {data.kpp ? `КПП: ${data.kpp}` : `ОГРНИП ${data.ogrnip}`}
-        </span>
-        <span>{`*${data.rs.slice(-4)} ${data.bank}`}</span>
+        <div className={s.blockDetails}>
+          <p>{data.name}</p>
+          <span>
+            {data?.inn && `ИНН ${data.inn} `}
+            {data?.kpp && `КПП ${data.kpp} `}
+          </span>
+          <span className={s.ogrnLine}>{renderOgrn(data)}</span>
+          <span>{`*${data.rs?.slice(-4)} ${data.bank}`}</span>
+        </div>
+        <CompanyLabelBadge label={data?.label} />
       </div>
     </div>
   );
@@ -45,6 +55,7 @@ export const DetailsFilter = ({ isFetching, setActiveFilter, clearActiveFilter, 
   const [localSelected, setLocalSelected] = useState([]);
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
+  console.log(partnershipsList);
 
   const [load, setLoad] = useState(false);
   const [done, setDone] = useState(false);
@@ -60,12 +71,6 @@ export const DetailsFilter = ({ isFetching, setActiveFilter, clearActiveFilter, 
     setDone(!isFetching && selectedPartnerships?.length > 0);
   }, [isFetching, selectedPartnerships]);
 
-  // const toggleSelection = (id) => {
-  //   const numericId = Number(id);
-  //   setLocalSelected((prev) =>
-  //     prev.includes(numericId) ? prev.filter((item) => item !== numericId) : [...prev, numericId]
-  //   );
-  // };
   const toggleSelection = useCallback((rs) => {
     setLocalSelected((prev) =>
       prev.includes(rs) ? prev.filter((item) => item !== rs) : [...prev, rs]
@@ -107,28 +112,7 @@ export const DetailsFilter = ({ isFetching, setActiveFilter, clearActiveFilter, 
     return () => document.body.removeEventListener('mousedown', clickOutside);
   }, []);
 
-  const companiesByCity = useMemo(() => {
-    const grouped = {};
-
-    partnershipsList.forEach((company) => {
-      const city = company.city;
-      if (city) {
-        if (!grouped[city]) grouped[city] = [];
-        grouped[city].push({
-          id: company.partnership_id,
-          name: company.partnership_name,
-          inn: company.inn,
-          kpp: company.kpp,
-          bank: company.bank,
-          rs: company.rs,
-          ogrnip: company?.origip,
-        });
-      }
-    });
-
-    return grouped;
-  }, [partnershipsList]);
-
+  const companiesByCity = useMemo(() => groupCompaniesByCity(partnershipsList), [partnershipsList]);
   return (
     <div className={s.container}>
       <div className={classNames(s.overlay, open && s.overlay_anim)} />

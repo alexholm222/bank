@@ -12,7 +12,7 @@
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///
+
 .gridRow {
   display: grid;
   align-items: center;
@@ -27,11 +27,11 @@
   &.transactions {
     grid-template-columns: minmax(100px, 100px) // Дата
       minmax(100px, 100px) // Номер
-      minmax(200px, 250px) // Сумма
+      minmax(200px, 200px) // Сумма
       minmax(200px, 1.5fr) // Плательщик
       minmax(150px, 1.5fr) // Получатель
       minmax(200px, 2fr) // Назначение
-      minmax(210px, 210px) // Вид
+      minmax(180px, 180px) // Вид
       minmax(80px, 80px); // Кнопка удалить
 
     cursor: pointer;
@@ -196,4 +196,18 @@
   font-size: 18px;
   font-weight: 400;
   line-height: 18px;
+}
+.withLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.companyText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }

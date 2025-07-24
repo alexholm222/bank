@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 
+// utils
+import renderOgrn from 'utils/renderOgrn';
+
+// components
 import FilterSearch from 'components/Filters/COMPONENTS/FilterSearch/FilterSearch';
 import CheckBox from 'components/General/CheckBox/CheckBox';
 import UniButton from 'components/General/UniButton/UniButton';
-
+import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
+// icons
 import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconDone } from 'assets/icons/iconDoneWhite.svg';
-
+// styles
 import s from './CompaniesList.module.scss';
 
 const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }) => {
@@ -40,12 +45,15 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
                 <CheckBox active={selected.includes(el.id)} />
               </div>
               <div className={s.block}>
-                <p>{el.name}</p>
-                <span>
-                  {el.inn && <span>ИНН: {el.inn}</span>}
-
-                  {el.kpp ? ` КПП: ${el.kpp} ` : el.ogrnip ? `ОГРНИП: ${el.ogrnip}` : ''}
-                </span>
+                <div className={s.blockDetails}>
+                  <p>{el.name}</p>
+                  <span>
+                    {el?.inn && `ИНН ${el.inn} `}
+                    {el?.kpp && `КПП ${el.kpp} `}
+                  </span>
+                  <span className={s.ogrnLine}>{renderOgrn(el)}</span>
+                </div>
+                <CompanyLabelBadge label={el.label} />
               </div>
             </li>
           ))}

@@ -2,7 +2,6 @@
   padding: 12px 16px;
   cursor: pointer;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
@@ -11,99 +10,96 @@
     background-color: #f0f4ff;
   }
 
-  .labelBlock {
+  .companyInfo {
     flex-shrink: 0;
     width: 400px;
-  }
 
-  .labelBadge {
-    display: inline-flex;
-    max-width: 100%;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    align-items: center;
-    justify-content: flex-start;
-
-    padding: 8px;
-    height: 24px;
-
-    background: #f1f4f9;
-    border-radius: 4px;
-    color: #71869d;
-
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px;
-    .labelText {
+    .companyName {
+      margin-bottom: 4px;
       overflow: hidden;
+      color: #121922;
       text-overflow: ellipsis;
       white-space: nowrap;
-      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 18px;
     }
-  }
 
-  .label {
-    margin-bottom: 4px;
-    overflow: hidden;
-    color: #121922;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px;
-  }
-
-  .details {
-    color: #6a7b92;
-    font-size: 12px;
+    .companyDetails {
+      color: #6a7b92;
+      font-size: 12px;
+    }
   }
 }
 
 .singleValue {
-  max-width: 100%;
-  // padding: 4px 12px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
   overflow: hidden;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 18px;
+  max-width: 100%;
+  .companyInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    gap: 8px;
+  }
 
-  .label {
+  .companyName {
+    max-width: 60%;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
-    display: inline-block;
   }
 
-  .details {
-    margin-left: 8px;
+  .companyDetails {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #6a7b92;
     font-size: 14px;
-    white-space: nowrap;
   }
 }
 
+.badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px;
+  height: 24px;
+  background: #f1f4f9;
+  border-radius: 4px;
+  color: #71869d;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  max-width: 150px;
+
+  .badgeText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
 .error {
-  margin-top: 0;
   overflow: hidden;
   height: 0;
   opacity: 0;
   visibility: hidden;
-  margin-top: 0;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   gap: 6px;
   color: #e10d0d;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
   line-height: 14px;
   transition: all 0.2s ease;
 
@@ -118,4 +114,16 @@
     width: 16px;
     height: 16px;
   }
+}
+.noOptionsMessage {
+  padding: 12px;
+  text-align: left;
+  overflow: hidden;
+  color: #71869d;
+  text-overflow: ellipsis;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
 }

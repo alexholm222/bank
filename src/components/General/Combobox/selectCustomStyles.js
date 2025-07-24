@@ -9,6 +9,8 @@ const getCustomStyles = (hasError) => ({
     borderRadius: '4px',
     cursor: 'pointer',
     height: '40px',
+    display: 'flex',
+    justifyContent: 'space-between',
     '&:hover': {
       borderColor: hasError ? '#E10D0D' : '#002cfb',
     },

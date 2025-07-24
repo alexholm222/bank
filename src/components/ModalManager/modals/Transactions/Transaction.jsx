@@ -85,11 +85,18 @@ const Transaction = ({ id }) => {
 
   const handleDeleteTransaction = (id, e) => {
     e.stopPropagation();
+
     deleteTransaction({ id })
       .unwrap()
-      .then(() => dispatch(removeTransactionById(id)))
-      .catch(console.error)
-      .finally(() => hideModal());
+      .then(() => {
+        dispatch(removeTransactionById(id));
+        hideModal();
+      })
+      .catch((error) => {
+        console.error('Ошибка при удалении транзакции:', error);
+        const status = error.status ?? 'Unknown status';
+        alert(`Не удалось удалить транзакцию. Код ошибки: ${status}. ${error.originalStatus}`);
+      });
   };
 
   const handleUpdateTransaction = () => {

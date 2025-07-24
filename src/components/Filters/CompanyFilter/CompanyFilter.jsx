@@ -14,7 +14,6 @@ import { ReactComponent as IconDocBag } from 'assets/icons/iconDocBag.svg';
 
 // Styles
 import s from './CompanyFilter.module.scss';
-import { set } from 'lodash';
 
 const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const dispatch = useDispatch();
@@ -56,12 +55,6 @@ const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name })
     const hasSelected = selectedCompanies?.length > 0;
     setDone(!isFetching && hasSelected);
   }, [isFetching, selectedCompanies]);
-  // useEffect(() => {
-  //   const hasSelected = selectedCompanies?.length > 0;
-
-  //   setLoad(isOpen && isFetching);
-  //   setDone(!isFetching && hasSelected);
-  // }, [isFetching, selectedCompanies, isOpen]);
 
   useEffect(() => {
     setLocalSelected(selectedCompanies);

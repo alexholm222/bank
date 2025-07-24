@@ -4,24 +4,17 @@ import classNames from 'classnames';
 
 // icons
 import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
-import { ReactComponent as IconChevronDown } from 'assets/icons/iconChewron.svg';
+// import { ReactComponent as IconChevronDown } from 'assets/icons/iconChevron.svg'; // не используется
 
 // styles
 import s from './Combobox.module.scss';
-
-import customStyles from './selectCustomStyles';
 import getCustomStyles from './selectCustomStyles';
-
-// const CustomDropdownIndicator = (props) => {
-//   return (
-//     <components.DropdownIndicator {...props}>
-//       <IconChevronDown className={s.dropdownIcon} />
-//     </components.DropdownIndicator>
-//   );
-// };
+import CompanyLabelBadge from '../CompanyLabelBadge/CompanyLabelBadge';
 
 const CustomOption = (props) => {
+  const isValid = (val) => typeof val === 'string' && val.trim() && val !== '0';
   const { data, innerRef, innerProps, isFocused } = props;
+  const isOGRNIP = data.inn.length === 12 && data.ogrn && isValid(data.ogrn);
 
   return (
     <div
@@ -29,21 +22,15 @@ const CustomOption = (props) => {
       {...innerProps}
       className={classNames(s.option, { [s.focused]: isFocused })}
     >
-      <div className={s.labelBlock}>
-        <div className={s.label}>
-          {data.name}
-          <div className={s.details}>
-            {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
-            {data.kpp !== '0' && data.kpp && `КПП ${data.kpp}`}
-            {data.ogrnip !== '0' && data.ogrnip && `ОГРНИП ${data.ogrnip}`}
-          </div>
+      <div className={s.companyInfo}>
+        <div className={s.companyName}>{data.name}</div>
+        <div className={s.companyDetails}>
+          {isValid(data.inn) && `ИНН ${data.inn} `}
+          {isValid(data.kpp) && `КПП ${data.kpp} `}
+          {isValid(data.ogrn) && (isOGRNIP ? `ОГРНИП ${data.ogrn}` : `ОГРН ${data.ogrn}`)}
         </div>
       </div>
-      {data.label && (
-        <div className={s.labelBadge}>
-          <span className={s.labelText}>{data.label}</span>
-        </div>
-      )}
+      <CompanyLabelBadge label={data.label} />
     </div>
   );
 };
@@ -54,20 +41,28 @@ const CustomSingleValue = (props) => {
   return (
     <components.SingleValue {...props}>
       <div className={s.singleValue}>
-        <span className={s.label}>{data.name}</span>
-        <span className={s.details}>
-          {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
-          {data.kpp !== '0' && data.kpp && `КПП ${data.kpp}`}
-        </span>
-        {data.label && <div>{data.label}</div>}
+        <div className={s.companyInfo}>
+          <span className={s.companyName}>{data.name}</span>
+          <span className={s.companyDetails}>
+            {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
+            {data.kpp !== '0' && data.kpp && ` КПП ${data.kpp}`}
+          </span>
+        </div>
+        <CompanyLabelBadge label={data.label} />
       </div>
     </components.SingleValue>
+  );
+};
+const CustomNoOptionsMessage = (props) => {
+  return (
+    <components.NoOptionsMessage {...props}>
+      <div className={s.noOptionsMessage}>По вашему запросу ничего не найдено</div>
+    </components.NoOptionsMessage>
   );
 };
 
 const Combobox = ({ className, options, value, onChange, hasError = false }) => {
   const [inputValue, setInputValue] = useState('');
-
   const selectRef = useRef(null);
 
   const handleChange = (option) => {
@@ -81,30 +76,24 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
     }
   };
 
-  const handleWrapperClick = (e) => {
-    e.stopPropagation();
-  };
-
   return (
     <div className={classNames(s.root, className)} onMouseDown={(e) => e.stopPropagation()}>
-      <div onClick={handleWrapperClick}>
-        <Select
-          ref={selectRef}
-          options={options}
-          value={value}
-          onChange={handleChange}
-          placeholder=""
-          styles={getCustomStyles(hasError)}
-          isSearchable
-          inputValue={inputValue}
-          onInputChange={handleInputChange}
-          components={{
-            Option: CustomOption,
-            SingleValue: (props) => <CustomSingleValue {...props} />,
-            // DropdownIndicator: CustomDropdownIndicator,
-          }}
-        />
-      </div>
+      <Select
+        ref={selectRef}
+        options={options}
+        value={value}
+        onChange={handleChange}
+        placeholder=""
+        styles={getCustomStyles(hasError)}
+        isSearchable
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
+        components={{
+          Option: CustomOption,
+          SingleValue: CustomSingleValue,
+          NoOptionsMessage: CustomNoOptionsMessage,
+        }}
+      />
       <div className={classNames(s.error, { [s.active]: hasError })}>
         <IconWarning className={s.icon} />
         Обязательное поле
@@ -112,4 +101,5 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
     </div>
   );
 };
+
 export default Combobox;

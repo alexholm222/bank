@@ -20,23 +20,32 @@ import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 
 // styles
 import s from './Table.module.scss';
+import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
 
 const TableRow = ({ row, type }) => {
   const [deleteTransaction] = useDeleteTransactionMutation();
   const dispatch = useDispatch();
   const handleDeleteTransaction = (id, e) => {
     e.stopPropagation();
+
     deleteTransaction({ id })
       .unwrap()
-      .then(() => dispatch(removeTransactionById(id)))
-      .catch(console.error);
+      .then(() => {
+        dispatch(removeTransactionById(id));
+      })
+      .catch((error) => {
+        console.error('Ошибка при удалении транзакции:', error);
+        const status = error.status ?? 'Unknown status';
+        alert(`Не удалось удалить транзакцию. Код ошибки: ${status}. ${error.originalStatus}`);
+      });
   };
 
   const handleDownloadExtraction = () => {};
-
   const renderTransactionRow = () => {
     const receiver = row?.type === 'income' ? row?.partnership : row?.company;
     const payer = row?.type === 'income' ? row?.company : row?.partnership;
+    const isRecognized = row?.recognized === 1;
+
     return (
       <div className={classNames(s.gridRow, s.transactions)}>
         <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
@@ -44,8 +53,20 @@ const TableRow = ({ row, type }) => {
         <div className={classNames(s.gridCell, s.right, s.amount)}>
           <AmountCell amount={formatSum(row?.type, row?.sum)} />
         </div>
-        <div className={s.gridCell}>{row.requires_action !== 1 ? payer : <WarningCell />}</div>
-        <div className={s.gridCell}>{receiver}</div>
+        <div className={s.gridCell}>
+          {isRecognized ? (
+            <WarningCell />
+          ) : (
+            <CompanyCell name={payer} labelCondition={row.company === payer} label={row?.label} />
+          )}
+        </div>
+        <div className={s.gridCell}>
+          <CompanyCell
+            name={receiver}
+            labelCondition={row.company === receiver}
+            label={row?.label}
+          />
+        </div>
         <div className={classNames(s.gridCell, s.shrinkable)}>{row?.goal}</div>
         <div className={s.gridCell}>{row?.kind}</div>
         <div className={classNames(s.gridCell, s.right)}>
@@ -146,3 +167,13 @@ const WarningCell = () => (
     <span>Не распознан</span>
   </span>
 );
+const CompanyCell = ({ name, labelCondition, label }) => {
+  const displayLabel = labelCondition ? label : null;
+
+  return (
+    <div className={s.withLabel}>
+      <span className={s.companyText}>{name}</span>
+      <CompanyLabelBadge label={displayLabel} />
+    </div>
+  );
+};
