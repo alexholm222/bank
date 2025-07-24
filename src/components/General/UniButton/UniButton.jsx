@@ -36,7 +36,7 @@ const UniButton = ({
         className
       )}
       style={buttonStyle}
-      onClick={onClick}
+      onClick={(e) => onClick?.(e)}
       disabled={isDisabled}
     >
       {children ? (

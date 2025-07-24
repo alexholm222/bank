@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const TRANSACTIONS_URL = '/bank/transactions';
-console.log('Base URL:', process.env.REACT_APP_BASE_URL);
+
 export const transactionsApi = createApi({
   reducerPath: 'transactionsApi',
   tagTypes: ['TRANSACTIONS', 'TRANSACTION'],

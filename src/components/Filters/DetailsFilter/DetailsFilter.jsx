@@ -55,7 +55,6 @@ export const DetailsFilter = ({ isFetching, setActiveFilter, clearActiveFilter, 
   const [localSelected, setLocalSelected] = useState([]);
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
-  console.log(partnershipsList);
 
   const [load, setLoad] = useState(false);
   const [done, setDone] = useState(false);

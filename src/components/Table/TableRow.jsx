@@ -9,6 +9,9 @@ import { useDispatch } from 'react-redux';
 import formatShortYear from 'utils/formatShortYear';
 import formatSum from 'utils/formatSum';
 
+//hooks
+import useDeleteTransaction from 'hooks/useDeleteTransaction';
+
 // components
 import CopyTextIcon from './CopyTextIcon';
 import DownloadButton from 'components/General/DownloadButton/DownloadButton';
@@ -23,21 +26,10 @@ import s from './Table.module.scss';
 import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
 
 const TableRow = ({ row, type }) => {
-  const [deleteTransaction] = useDeleteTransactionMutation();
-  const dispatch = useDispatch();
-  const handleDeleteTransaction = (id, e) => {
+  const handleDeleteTransaction = useDeleteTransaction();
+  const handleDelete = (id, e) => {
     e.stopPropagation();
-
-    deleteTransaction({ id })
-      .unwrap()
-      .then(() => {
-        dispatch(removeTransactionById(id));
-      })
-      .catch((error) => {
-        console.error('Ошибка при удалении транзакции:', error);
-        const status = error.status ?? 'Unknown status';
-        alert(`Не удалось удалить транзакцию. Код ошибки: ${status}. ${error.originalStatus}`);
-      });
+    handleDeleteTransaction(id);
   };
 
   const handleDownloadExtraction = () => {};

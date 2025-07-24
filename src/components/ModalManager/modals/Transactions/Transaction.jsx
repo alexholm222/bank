@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
+import useDeleteTransaction from 'hooks/useDeleteTransaction';
 
 // Redux
 import {
@@ -11,7 +12,6 @@ import {
   useUpdateTransactionMutation,
 } from '../../../../redux/services/transactionsApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeTransactionById } from '../../../../redux/tableData/tableDataSlice';
 
 // Components
 import Combobox from 'components/General/Combobox/Combobox';
@@ -20,6 +20,7 @@ import DatePickerCalendar from 'components/General/DatePickerCalendar/DatePicker
 import Dropdown from 'components/General/Dropdown/Dropdown';
 import Modal from 'components/General/Modal/Modal';
 import UniButton from 'components/General/UniButton/UniButton';
+import PaymentDetails from './PaymentsDetails';
 
 // Icons
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
@@ -28,7 +29,6 @@ import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg'
 
 // Styles
 import s from './Transaction.module.scss';
-import PaymentDetails from './PaymentsDetails';
 
 // const incomeTransactionTypes = ['Поступление', 'Возврат'];
 const incomeTransactionTypes = {
@@ -82,23 +82,7 @@ const Transaction = ({ id }) => {
       setSelectedDate(dayjs(data.date, 'DD.MM.YYYY'));
     }
   }, [data]);
-
-  const handleDeleteTransaction = (id, e) => {
-    e.stopPropagation();
-
-    deleteTransaction({ id })
-      .unwrap()
-      .then(() => {
-        dispatch(removeTransactionById(id));
-        hideModal();
-      })
-      .catch((error) => {
-        console.error('Ошибка при удалении транзакции:', error);
-        const status = error.status ?? 'Unknown status';
-        alert(`Не удалось удалить транзакцию. Код ошибки: ${status}. ${error.originalStatus}`);
-      });
-  };
-
+  const handleDeleteTransaction = useDeleteTransaction();
   const handleUpdateTransaction = () => {
     const isInvalid = !selectedCompanyId || !incomeType || !selectedDate;
     if (isInvalid) {
@@ -186,7 +170,7 @@ const Transaction = ({ id }) => {
               type="primary"
               icon={IconDoneWhite}
               text="Сохранить"
-              onClick={handleUpdateTransaction}
+              onClick={() => handleUpdateTransaction()}
             />
           </div>
         </footer>
