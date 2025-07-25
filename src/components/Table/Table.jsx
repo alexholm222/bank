@@ -31,12 +31,13 @@ const Table = ({ type, anim, isFetching, list = [], error }) => {
   if (isFetching) {
     return <TableSceleton isLoading={isFetching} />;
   }
+  if (error) {
+    return <div className={s.error}> {`Произошла ошибка ${error.originalStatus}`}</div>;
+  }
   if (list.length === 0) {
     return <div className={s.noData}> По вашему запросу ничего не найдено ...</div>;
   }
-  if (error) {
-    return <div className={s.error}> Произошла ошибка ...</div>;
-  }
+
   return (
     <div className={classNames(s.root, anim && s.root_anim, isFetching && s.root_fetch)}>
       <TableHeader type={type} />

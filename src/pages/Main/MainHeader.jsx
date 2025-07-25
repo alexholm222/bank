@@ -39,8 +39,6 @@ const MainHeader = ({
 
   return (
     <header className={s.header}>
-      <Information onClick={handleShowUnknown} open={isUnknownTransaction} />
-
       <div className={s.block}>
         <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
         <div className={s.buttons}>
@@ -51,6 +49,7 @@ const MainHeader = ({
           )}
         </div>
       </div>
+      <Information onClick={handleShowUnknown} open={isUnknownTransaction} />
     </header>
   );
 };
