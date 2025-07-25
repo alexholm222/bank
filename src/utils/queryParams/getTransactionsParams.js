@@ -6,19 +6,20 @@ const getTransactionsParams = ({
   dateStart,
   dateEnd,
 
-  viewFilter,
+  transactionViewFilter,
   selectedRecognizedType,
   selectedPartnerships,
   selectedCompanies,
   transactionTypeFilter,
 }) => {
+  console.log(transactionViewFilter);
   return {
     'filter[search]': searchQuery,
     'filter[date_start]': formatDate(dateStart),
     'filter[date_end]': formatDate(dateEnd),
     'filter[partnership_details]': arrayToString(selectedPartnerships) || '',
     'filter[company_ids]': arrayToString(selectedCompanies) || '',
-    'filter[kind]': arrayToString(viewFilter) || '',
+    'filter[kind]': arrayToString(transactionViewFilter) || '',
     'filter[type]': arrayToString(transactionTypeFilter) || '',
     'filter[requires_action]': selectedRecognizedType || '',
   };

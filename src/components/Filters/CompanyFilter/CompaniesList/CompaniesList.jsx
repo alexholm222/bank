@@ -33,14 +33,18 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
   };
 
   useEffect(() => {
-    if (listRef.current) {
-      const listItems = listRef.current.querySelectorAll('li');
-      let heightSum = 0;
-      for (let i = 0; i < 4 && i < listItems.length; i++) {
-        heightSum += listItems[i].offsetHeight;
+    const frame = requestAnimationFrame(() => {
+      if (listRef.current) {
+        const listItems = listRef.current.querySelectorAll('li');
+        let heightSum = 0;
+        for (let i = 0; i < 4 && i < listItems.length; i++) {
+          heightSum += listItems[i].offsetHeight;
+        }
+        setMaxHeight(`${heightSum}px`);
       }
-      setMaxHeight(heightSum);
-    }
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, [items]);
 
   return (
