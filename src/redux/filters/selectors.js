@@ -13,7 +13,7 @@ export const isAnyFilterActive = (state) => {
   } = state.filters;
 
   return (
-    transactionTypeFilter !== null ||
+    transactionTypeFilter.length > 0 ||
     transactionViewFilter !== null ||
     selectedCompanies.length > 0 ||
     selectedPartnerships.length > 0 ||

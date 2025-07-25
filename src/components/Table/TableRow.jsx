@@ -34,9 +34,11 @@ const TableRow = ({ row, type }) => {
 
   const handleDownloadExtraction = () => {};
   const renderTransactionRow = () => {
-    const receiver = row?.type === 'income' ? row?.partnership : row?.company;
-    const payer = row?.type === 'income' ? row?.company : row?.partnership;
-    const isRecognized = row?.recognized === 1;
+    const receiver =
+      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.partnership : row?.company;
+    const payer =
+      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.company : row?.partnership;
+    const isRecognized = row?.requires_action === 1;
 
     return (
       <div className={classNames(s.gridRow, s.transactions)}>

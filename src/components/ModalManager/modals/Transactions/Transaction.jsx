@@ -7,11 +7,10 @@ import useDeleteTransaction from 'hooks/useDeleteTransaction';
 
 // Redux
 import {
-  useDeleteTransactionMutation,
   useGetTransactionQuery,
   useUpdateTransactionMutation,
 } from '../../../../redux/services/transactionsApi';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // Components
 import Combobox from 'components/General/Combobox/Combobox';
@@ -30,34 +29,55 @@ import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg'
 // Styles
 import s from './Transaction.module.scss';
 
-// const incomeTransactionTypes = ['Поступление', 'Возврат'];
-const incomeTransactionTypes = {
+const transactionTypeMap = {
   income: 'Поступление',
-  outcome: 'Возврат',
+  refund_income: 'Возврат поступления',
+  outcome: 'Платеж',
+  refund_outcome: 'Возврат платежа',
 };
+
+const typeGroups = {
+  income: ['income', 'refund_income'],
+  outcome: ['outcome', 'refund_outcome'],
+};
+
+const getKeyByValue = (obj, value) => Object.keys(obj).find((key) => obj[key] === value);
 
 const Transaction = ({ id }) => {
   const { hideModal } = useModal();
-  const [deleteTransaction] = useDeleteTransactionMutation();
   const [updateTransaction] = useUpdateTransactionMutation();
   const { data } = useGetTransactionQuery({ id });
-
-  const dispatch = useDispatch();
-  const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
-  // const partnershipslist = useSelector((state) => state.companiesList.companies) ?? [];
-
+  const companies = useSelector((state) => state.companiesList.companies) ?? [];
+  const handleDeleteTransaction = useDeleteTransaction();
   const [transaction, setTransaction] = useState(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [incomeType, setIncomeType] = useState(null);
-  // const [docType, setDoctype] = useState(docTypes[0]);
+  const [transactionType, setTransactionType] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
   const [hasValidationError, setHasValidationError] = useState(false);
+  // const [payer, setPayer] = useState(null);
+  // const [receiver, setReceiver] = useState(null);
+  const typeKey = getKeyByValue(transactionTypeMap, transactionType);
+  const isIncome = typeKey === 'income' || typeKey === 'refund_outcome';
+  const company = useMemo(
+    () => ({
+      name: data?.company_name,
+      inn: data?.inn,
+      kpp: data?.kpp,
+      bank: data?.bank,
+      bik: data?.bik,
+      ks: data?.ks,
+      rs: data?.rs,
+    }),
+    [data]
+  );
+  const payer = !isIncome ? data?.partnership : company;
+  const receiver = !isIncome ? company : data?.partnership;
 
   const companyOptions = useMemo(
     () =>
-      companieslist.map((company) => ({
+      companies.map((company) => ({
         value: company.id,
         name: company.name,
         label: company.label,
@@ -65,39 +85,52 @@ const Transaction = ({ id }) => {
         kpp: company.kpp,
         ogrnip: company.ogrnip,
       })),
-    [companieslist]
+    [companies]
   );
 
-  const incomeTypeOptions = useMemo(() => Object.values(incomeTransactionTypes), []);
+  const isIncomeType = useMemo(
+    () => transactionType === 'income' || transactionType === 'refund_outcome',
+    [transactionType]
+  );
+
+  const transactionTypeOptions = useMemo(() => {
+    if (!data) return [];
+    const group = isIncomeType ? typeGroups.income : typeGroups.outcome;
+    return group.map((key) => transactionTypeMap[key]);
+  }, [data, isIncomeType]);
+
   useEffect(() => {
     const company = companyOptions.find((c) => c.value === selectedCompanyId) ?? null;
     setSelectedCompany(company);
   }, [selectedCompanyId, companyOptions]);
 
   useEffect(() => {
-    if (data) {
-      setTransaction(data);
-      setIncomeType(incomeTransactionTypes[data.type]);
-      setSelectedCompanyId(data.company?.id);
-      setSelectedDate(dayjs(data.date, 'DD.MM.YYYY'));
-    }
+    if (!data) return;
+    setSelectedCompanyId(data?.company_id ?? null);
+    setTransaction(data);
+    setSelectedDate(dayjs(data.date, 'DD.MM.YYYY'));
+    setTransactionType(transactionTypeMap[data.type]);
+    // setPayer(isIncomeType ? data.partnership : company);
+    // setReceiver(isIncomeType ? company : data.partnership);
   }, [data]);
-  const handleDeleteTransaction = useDeleteTransaction();
+
   const handleUpdateTransaction = () => {
-    const isInvalid = !selectedCompanyId || !incomeType || !selectedDate;
+    const isInvalid = !selectedCompanyId || !transactionType || !selectedDate;
     if (isInvalid) {
       setHasValidationError(true);
       return;
     }
     setHasValidationError(false);
-    const typeKey = Object.keys(incomeTransactionTypes).find(
-      (key) => incomeTransactionTypes[key] === incomeType
-    );
+
+    const typeKey = getKeyByValue(transactionTypeMap, transactionType);
+    if (!typeKey) return;
+
     const payload = {
       date: selectedDate.format('DD.MM.YYYY'),
       type: typeKey,
       company_id: selectedCompanyId,
     };
+
     updateTransaction({ id: transaction.id, data: payload })
       .unwrap()
       .then(hideModal)
@@ -105,6 +138,16 @@ const Transaction = ({ id }) => {
   };
 
   if (!transaction) return null;
+
+  // const company = {
+  //   name: transaction?.company_name,
+  //   inn: transaction?.inn,
+  //   kpp: transaction?.kpp,
+  //   bank: transaction?.bank,
+  //   bik: transaction?.bik,
+  //   ks: transaction?.ks,
+  //   rs: transaction?.rs,
+  // };
 
   return (
     <Modal onClose={hideModal}>
@@ -119,11 +162,7 @@ const Transaction = ({ id }) => {
         </header>
 
         <section className={s.body}>
-          <PaymentDetails
-            payer={transaction.partnership}
-            receiver={transaction.company}
-            data={transaction}
-          />
+          <PaymentDetails payer={payer} receiver={receiver} data={transaction} />
         </section>
 
         <footer className={s.controlSection}>
@@ -138,10 +177,10 @@ const Transaction = ({ id }) => {
               />
             )}
             <Dropdown
-              options={incomeTypeOptions}
-              value={incomeType}
-              style={{ width: '200px' }}
-              onChange={setIncomeType}
+              options={transactionTypeOptions}
+              value={transactionType}
+              style={{ width: '240px' }}
+              onChange={setTransactionType}
             />
           </div>
 
@@ -170,7 +209,7 @@ const Transaction = ({ id }) => {
               type="primary"
               icon={IconDoneWhite}
               text="Сохранить"
-              onClick={() => handleUpdateTransaction()}
+              onClick={handleUpdateTransaction}
             />
           </div>
         </footer>

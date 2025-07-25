@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  transactionTypeFilter: null,
+  transactionTypeFilter: [],
   transactionViewFilter: null,
   selectedStatus: null,
   selectedCompanies: [],

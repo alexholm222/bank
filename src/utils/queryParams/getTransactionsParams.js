@@ -5,11 +5,12 @@ const getTransactionsParams = ({
   searchQuery,
   dateStart,
   dateEnd,
-  typeFilter,
+
   viewFilter,
   selectedRecognizedType,
   selectedPartnerships,
   selectedCompanies,
+  transactionTypeFilter,
 }) => {
   return {
     'filter[search]': searchQuery,
@@ -18,7 +19,7 @@ const getTransactionsParams = ({
     'filter[partnership_details]': arrayToString(selectedPartnerships) || '',
     'filter[company_ids]': arrayToString(selectedCompanies) || '',
     'filter[kind]': arrayToString(viewFilter) || '',
-    'filter[type]': arrayToString(typeFilter) || '',
+    'filter[type]': arrayToString(transactionTypeFilter) || '',
     'filter[requires_action]': selectedRecognizedType || '',
   };
 };

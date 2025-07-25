@@ -24,6 +24,8 @@ import classNames from 'classnames';
 const transactionTypeList = [
   { id: 'income', name: 'Поступления' },
   { id: 'outcome', name: 'Списания' },
+  { id: 'refund_income', name: 'Возврат поступлений' },
+  { id: 'refund_outcome', name: 'Возврат списаний' },
 ];
 
 const transactionViewList = [
@@ -71,6 +73,7 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
     setLoad(true);
     setActiveFilter(name);
     dispatch(setTransactionTypeFilter(transactionType));
+    console.log(transactionType);
     dispatch(setTransactionViewFilter(transactionView));
     dispatch(setSelectedRecognizedType(recognizedType));
     setOpenModal(false);
@@ -78,7 +81,7 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setTransactionTypeFilter(null));
+    dispatch(setTransactionTypeFilter([]));
     dispatch(setTransactionViewFilter(null));
     dispatch(setSelectedRecognizedType(''));
     setOpenModal(false);

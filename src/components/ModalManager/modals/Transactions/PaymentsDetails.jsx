@@ -6,7 +6,12 @@ import classNames from 'classnames';
 import s from './Transaction.module.scss';
 
 const PaymentDetails = ({ payer, receiver, data }) => {
-  // const isSummaryFirst = data?.type === 'income';
+  const typeTransactionMap = {
+    income: 'Поступление',
+    outcome: 'Платеж',
+    refund_income: 'Возврат поступления',
+    refund_outcome: 'Возврат списания',
+  };
 
   const fields = [
     ['Наименование', 'name'],
@@ -20,7 +25,7 @@ const PaymentDetails = ({ payer, receiver, data }) => {
 
   const summaryData = [
     ['Сумма', data?.sum],
-    ['Тип транзакции', data?.type === 'income' ? 'Поступление' : 'Возврат'],
+    ['Тип транзакции', typeTransactionMap[data?.type]],
     ['Вид', data?.kind],
     ['Назначение', data?.goal],
   ];
@@ -31,7 +36,7 @@ const PaymentDetails = ({ payer, receiver, data }) => {
       {summaryData.map(([label, value], index) => (
         <div key={index} className={s.paymentsRow}>
           <div className={s.paymentsLabel}>{label}</div>
-          <div className={s.content}>{value?.toString().trim() || '-'}</div>
+          <div className={s.content}>{value?.toString().trim() || '—'}</div>
         </div>
       ))}
     </div>
@@ -50,8 +55,8 @@ const PaymentDetails = ({ payer, receiver, data }) => {
         {fields.map(([label, key], index) => (
           <div key={index} className={s.row}>
             <div className={s.label}>{label}</div>
-            <div>{payer?.[key]?.toString().trim() || '-'}</div>
-            <div>{receiver?.[key]?.toString().trim() || '-'}</div>
+            <div>{payer?.[key]?.toString().trim() || '—'}</div>
+            <div>{receiver?.[key]?.toString().trim() || '—'}</div>
           </div>
         ))}
       </div>

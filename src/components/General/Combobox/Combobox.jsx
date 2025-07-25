@@ -12,9 +12,17 @@ import getCustomStyles from './selectCustomStyles';
 import CompanyLabelBadge from '../CompanyLabelBadge/CompanyLabelBadge';
 
 const CustomOption = (props) => {
-  const isValid = (val) => typeof val === 'string' && val.trim() && val !== '0';
+  const isValid = (val) => typeof val === 'string' && val.trim() !== '' && val !== '0';
   const { data, innerRef, innerProps, isFocused } = props;
-  const isOGRNIP = data.inn.length === 12 && data.ogrn && isValid(data.ogrn);
+  const isOGRNIP = data.inn?.length === 12 && isValid(data.ogrn);
+
+  const details = [
+    isValid(data.inn) ? `ИНН ${data.inn}` : null,
+    isValid(data.kpp) ? `КПП ${data.kpp}` : null,
+    isValid(data.ogrn) ? (isOGRNIP ? `ОГРНИП ${data.ogrn}` : `ОГРН ${data.ogrn}`) : null,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div
@@ -24,11 +32,7 @@ const CustomOption = (props) => {
     >
       <div className={s.companyInfo}>
         <div className={s.companyName}>{data.name}</div>
-        <div className={s.companyDetails}>
-          {isValid(data.inn) && `ИНН ${data.inn} `}
-          {isValid(data.kpp) && `КПП ${data.kpp} `}
-          {isValid(data.ogrn) && (isOGRNIP ? `ОГРНИП ${data.ogrn}` : `ОГРН ${data.ogrn}`)}
-        </div>
+        <div className={s.companyDetails}>{details || '—'}</div>
       </div>
       <CompanyLabelBadge label={data.label} />
     </div>
@@ -96,7 +100,7 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
       />
       <div className={classNames(s.error, { [s.active]: hasError })}>
         <IconWarning className={s.icon} />
-        Обязательное поле
+        Плательщик не определен
       </div>
     </div>
   );

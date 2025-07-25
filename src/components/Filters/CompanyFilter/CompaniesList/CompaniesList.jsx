@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // utils
 import renderOgrn from 'utils/renderOgrn';
@@ -18,6 +18,9 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
   const companies = Array.isArray(items) ? items : [];
   const [filteredCompanies, setFilteredCompanies] = useState(companies);
 
+  const listRef = useRef(null);
+  const [maxHeight, setMaxHeight] = useState('auto');
+
   useEffect(() => {
     setFilteredCompanies(companies);
   }, [items]);
@@ -29,6 +32,17 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
     onChange(updated);
   };
 
+  useEffect(() => {
+    if (listRef.current) {
+      const listItems = listRef.current.querySelectorAll('li');
+      let heightSum = 0;
+      for (let i = 0; i < 4 && i < listItems.length; i++) {
+        heightSum += listItems[i].offsetHeight;
+      }
+      setMaxHeight(heightSum);
+    }
+  }, [items]);
+
   return (
     <div className={s.root}>
       <div className={s.container}>
@@ -38,7 +52,7 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
 
         <FilterSearch items={companies} onFilter={setFilteredCompanies} isOpen={isOpen} />
 
-        <ul className={s.list}>
+        <ul className={s.list} style={{ maxHeight }} ref={listRef}>
           {filteredCompanies.map((el) => (
             <li key={el.id} onClick={() => handleCheck(el.id)} className={s.item}>
               <div className={s.check}>

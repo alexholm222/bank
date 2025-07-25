@@ -138,6 +138,7 @@ const Main = () => {
           next={fetchNextPage}
           hasMore={hasNextPage}
           scrollableTarget="scrollableDiv"
+          style={{ overflow: allRows.length === 0 ? 'hidden' : 'auto' }}
         >
           <Table type={activeTab} list={allRows} isFetching={isLoading} error={error} />
         </InfiniteScroll>
