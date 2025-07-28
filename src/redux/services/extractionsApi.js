@@ -1,22 +1,24 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const EXTRACTIONS_URL = '/bank/extracts';
+
 export const extractionsApi = createApi({
   reducerPath: 'extractionsApi',
+  tagTypes: ['EXTRACTIONS', 'EXTRACTION'],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BASE_URL,
     prepareHeaders: (headers) => {
-      const token = document.getElementById('root_performers')?.getAttribute('token');
+      const token = document.getElementById('root_bank')?.getAttribute('token');
       if (token) headers.set('Authorization', token);
-      headers.set('Content-Type', 'application/json');
       return headers;
     },
   }),
   endpoints: (build) => ({
     getExtractions: build.infiniteQuery({
-      query: ({ pageParam = 1, filters }) => ({
-        url: `/bank?page=${pageParam}`,
+      query: ({ queryArg, pageParam = 1 }) => ({
+        url: `${EXTRACTIONS_URL}?page=${pageParam}`,
         method: 'GET',
-        params: filters,
+        params: queryArg,
       }),
       transformResponse: (response) => ({
         data: response?.data?.data || [],
@@ -32,8 +34,26 @@ export const extractionsApi = createApi({
           return Number(nextPage);
         },
       },
+      providesTags: ['EXTRACTIONS'],
+    }),
+
+    uploadExtraction: build.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        return {
+          url: `${EXTRACTIONS_URL}/upload`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+      invalidatesTags: ['EXTRACTIONS'],
+      transformResponse: (responseText) => {
+        return { message: responseText };
+      },
     }),
   }),
 });
 
-export const { useGetExtractionsInfiniteQuery } = extractionsApi;
+export const { useGetExtractionsInfiniteQuery, useUploadExtractionMutation } = extractionsApi;

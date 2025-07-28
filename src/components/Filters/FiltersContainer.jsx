@@ -89,6 +89,14 @@ const FiltersContainer = ({ type, isFetching }) => {
         setActiveFilter={setActiveFilter}
         clearActiveFilter={clearActiveFilter}
       />,
+      <DateFilter
+        key="date"
+        name="date"
+        isFetching={getFetching('date')}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        clearActiveFilter={clearActiveFilter}
+      />,
     ],
     accounts: [
       <DetailsFilter

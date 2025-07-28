@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 
 import filtersSlice from './filters/slice';
 import dateRangeReducer from './filters/dateRangeSlice';
-import modalReducer from './modal/modalSlice';
+import modalReducer from './modalManager/modalSlice';
 import tableDataReducer from './tableData/tableDataSlice';
 import companiesListReducer from '../redux/filters/companiesListSlice';
 

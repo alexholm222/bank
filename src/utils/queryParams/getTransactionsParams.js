@@ -12,7 +12,6 @@ const getTransactionsParams = ({
   selectedCompanies,
   transactionTypeFilter,
 }) => {
-  console.log(transactionViewFilter);
   return {
     'filter[search]': searchQuery,
     'filter[date_start]': formatDate(dateStart),

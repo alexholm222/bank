@@ -49,6 +49,7 @@ const Transaction = ({ id }) => {
   const { data } = useGetTransactionQuery({ id });
   const companies = useSelector((state) => state.companiesList.companies) ?? [];
   const handleDeleteTransaction = useDeleteTransaction();
+
   const [transaction, setTransaction] = useState(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -56,10 +57,16 @@ const Transaction = ({ id }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [openCalendar, setOpenCalendar] = useState(false);
   const [hasValidationError, setHasValidationError] = useState(false);
-  // const [payer, setPayer] = useState(null);
-  // const [receiver, setReceiver] = useState(null);
+
   const typeKey = getKeyByValue(transactionTypeMap, transactionType);
-  const isIncome = typeKey === 'income' || typeKey === 'refund_outcome';
+
+  const isIncomeType = useMemo(() => typeGroups.income.includes(typeKey), [typeKey]);
+
+  const transactionTypeOptions = useMemo(() => {
+    const group = isIncomeType ? typeGroups.income : typeGroups.outcome;
+    return group.map((key) => transactionTypeMap[key]);
+  }, [isIncomeType]);
+
   const company = useMemo(
     () => ({
       name: data?.company_name,
@@ -72,8 +79,9 @@ const Transaction = ({ id }) => {
     }),
     [data]
   );
-  const payer = !isIncome ? data?.partnership : company;
-  const receiver = !isIncome ? company : data?.partnership;
+
+  const payer = isIncomeType ? company : data?.partnership;
+  const receiver = isIncomeType ? data?.partnership : company;
 
   const companyOptions = useMemo(
     () =>
@@ -88,17 +96,6 @@ const Transaction = ({ id }) => {
     [companies]
   );
 
-  const isIncomeType = useMemo(
-    () => transactionType === 'income' || transactionType === 'refund_outcome',
-    [transactionType]
-  );
-
-  const transactionTypeOptions = useMemo(() => {
-    if (!data) return [];
-    const group = isIncomeType ? typeGroups.income : typeGroups.outcome;
-    return group.map((key) => transactionTypeMap[key]);
-  }, [data, isIncomeType]);
-
   useEffect(() => {
     const company = companyOptions.find((c) => c.value === selectedCompanyId) ?? null;
     setSelectedCompany(company);
@@ -106,24 +103,22 @@ const Transaction = ({ id }) => {
 
   useEffect(() => {
     if (!data) return;
-    setSelectedCompanyId(data?.company_id ?? null);
     setTransaction(data);
+    setSelectedCompanyId(data?.company_id ?? null);
     setSelectedDate(dayjs(data.date, 'DD.MM.YYYY'));
     setTransactionType(transactionTypeMap[data.type]);
-    // setPayer(isIncomeType ? data.partnership : company);
-    // setReceiver(isIncomeType ? company : data.partnership);
   }, [data]);
 
   const handleUpdateTransaction = () => {
-    const isInvalid = !selectedCompanyId || !transactionType || !selectedDate;
+    const typeKey = getKeyByValue(transactionTypeMap, transactionType);
+    const isInvalid = !selectedCompanyId || !typeKey || !selectedDate;
+
     if (isInvalid) {
       setHasValidationError(true);
       return;
     }
-    setHasValidationError(false);
 
-    const typeKey = getKeyByValue(transactionTypeMap, transactionType);
-    if (!typeKey) return;
+    setHasValidationError(false);
 
     const payload = {
       date: selectedDate.format('DD.MM.YYYY'),
@@ -138,16 +133,6 @@ const Transaction = ({ id }) => {
   };
 
   if (!transaction) return null;
-
-  // const company = {
-  //   name: transaction?.company_name,
-  //   inn: transaction?.inn,
-  //   kpp: transaction?.kpp,
-  //   bank: transaction?.bank,
-  //   bik: transaction?.bik,
-  //   ks: transaction?.ks,
-  //   rs: transaction?.rs,
-  // };
 
   return (
     <Modal onClose={hideModal}>

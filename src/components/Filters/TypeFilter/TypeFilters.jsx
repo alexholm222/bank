@@ -79,7 +79,6 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
     dispatch(setSelectedRecognizedType(recognizedType));
     setOpenModal(false);
   };
-  console.log(transactionView);
 
   const handleReset = (e) => {
     e.stopPropagation();

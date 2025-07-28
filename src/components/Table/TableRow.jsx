@@ -25,19 +25,30 @@ import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 import s from './Table.module.scss';
 import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
 
+const ACTOR_POSITIONS = {
+  director: 'Директор',
+  manager: 'Менеджер',
+  accountant: 'Бухгалтер',
+};
+
 const TableRow = ({ row, type }) => {
   const handleDeleteTransaction = useDeleteTransaction();
-  const handleDelete = (id, e) => {
-    e.stopPropagation();
-    handleDeleteTransaction(id);
+
+  console.log(row);
+  const handleDownloadExtraction = (fileUrl) => {
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.setAttribute('download', '');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  const handleDownloadExtraction = () => {};
   const renderTransactionRow = () => {
     const receiver =
-      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.partnership : row?.company;
+      row?.type === 'income' || row?.type === 'refund_income' ? row?.partnership : row?.company;
     const payer =
-      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.company : row?.partnership;
+      row?.type === 'income' || row?.type === 'refund_income' ? row?.company : row?.partnership;
     const isRecognized = row?.requires_action === 1;
 
     return (
@@ -70,21 +81,30 @@ const TableRow = ({ row, type }) => {
     );
   };
 
-  const renderExtractionRow = () => (
-    <div className={classNames(s.gridRow, s.extractions)}>
-      <div className={s.gridCell}>02.07.20 10:00</div>
-      <div className={s.gridCell}>{row?.payer?.name}</div>
-      <div className={s.gridCell}>115678</div>
-      <div className={s.gridCell}>
-        <DownloadButton onClick={handleDownloadExtraction} />
+  const renderExtractionRow = () => {
+    const fullName =
+      row?.person?.surname || row?.person?.name || row?.person?.patronymic
+        ? `${row?.person?.surname || ''} ${row?.person?.name || ''} ${row?.person?.patronymic || ''}`.trim()
+        : '—';
+
+    return (
+      <div className={classNames(s.gridRow, s.extractions)}>
+        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={s.gridCell}>{row?.partnership?.name}</div>
+        <div className={s.gridCell}>{row?.partnership?.rs}</div>
+        <div className={s.gridCell}>
+          <DownloadButton onClick={() => handleDownloadExtraction(row?.file)} />
+        </div>
+        <div className={s.gridCell}> Иванов Иван Иванович</div>
+        <div className={classNames(s.gridCell, s.gray)}>
+          {ACTOR_POSITIONS[row?.person?.position]}
+        </div>
+        <div className={classNames(s.gridCell, s.right)}>
+          {row?.status === 1 && <TagLabel alert={true} inactive={false} />}
+        </div>
       </div>
-      <div className={s.gridCell}>Менеджер Иванов</div>
-      <div className={classNames(s.gridCell, s.gray)}>Бухгалтер</div>
-      <div className={classNames(s.gridCell, s.right)}>
-        <TagLabel alert={false} inactive={false} />
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderAccountRow = () => {
     const p = row?.payer || {};

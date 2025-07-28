@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
+import { selectSelectedStatus } from '../../../redux/filters/filtersSelectors';
+
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 import UniButton from 'components/General/UniButton/UniButton';
@@ -21,7 +23,7 @@ const extractionsStatuses = [
 ];
 
 const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
-  const selectedStatus = useSelector((state) => state.filters.selectedStatus || []);
+  const selectedStatus = useSelector(selectSelectedStatus);
   const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
@@ -52,17 +54,10 @@ const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) 
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setSelectedStatus([]));
+    dispatch(setSelectedStatus(null));
     setOpenModal(false);
     clearActiveFilter();
   };
-
-  // useEffect(() => {
-  //   setLoad(isFetching);
-
-  //   const hasSelected = selectedStatus?.length > 0;
-  //   setDone(!isFetching && hasSelected);
-  // }, [isFetching, selectedStatus]);
 
   useEffect(() => {
     const clickOutside = (e) => {

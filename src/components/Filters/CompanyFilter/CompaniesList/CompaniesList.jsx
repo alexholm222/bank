@@ -63,14 +63,21 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
                 <CheckBox active={selected.includes(el.id)} />
               </div>
               <div className={s.block}>
-                <div className={s.blockDetails}>
-                  <p>{el.name}</p>
-                  <span>
-                    {el?.inn && `ИНН ${el.inn} `}
-                    {el?.kpp && `КПП ${el.kpp} `}
-                  </span>
-                  <span className={s.ogrnLine}>{renderOgrn(el)}</span>
-                </div>
+                {el?.inn?.length === 10 ? (
+                  <div className={s.blockDetails}>
+                    <p>{el.name}</p>
+                    <span>
+                      {el?.inn && `ИНН ${el.inn} `}
+                      {el?.kpp && `КПП ${el.kpp}`}
+                    </span>
+                  </div>
+                ) : (
+                  <div className={s.blockDetails}>
+                    <p>{el.name}</p>
+                    <span>{el?.inn && `ИНН ${el.inn} `}</span>
+                    <span> {el?.ogrn && `ОГРНИП ${el.ogrn}`}</span>
+                  </div>
+                )}
                 <CompanyLabelBadge label={el.label} />
               </div>
             </li>

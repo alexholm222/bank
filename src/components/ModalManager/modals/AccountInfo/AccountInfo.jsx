@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import Tippy from '@tippyjs/react';
@@ -10,7 +9,6 @@ import { useModal } from 'hooks/useModal';
 // Components
 import Modal from 'components/General/Modal/Modal';
 import Switch from 'components/General/Switch/Switch';
-import Tooltip from 'components/General/Tooltip/Tooltip';
 import UniButton from 'components/General/UniButton/UniButton';
 
 // Icons
