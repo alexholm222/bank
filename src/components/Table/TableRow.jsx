@@ -34,7 +34,6 @@ const ACTOR_POSITIONS = {
 const TableRow = ({ row, type }) => {
   const handleDeleteTransaction = useDeleteTransaction();
 
-  console.log(row);
   const handleDownloadExtraction = (fileUrl) => {
     const link = document.createElement('a');
     link.href = fileUrl;

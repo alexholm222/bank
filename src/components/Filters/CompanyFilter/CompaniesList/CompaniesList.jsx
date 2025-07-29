@@ -100,3 +100,19 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
 };
 
 export default CompaniesList;
+const partnership = {
+  partnership_name: 'ООО «ТЕСТОВАЯ КОМПАНИЯ»',
+  inn: '6317148649',
+  kpp: '',
+  rs: '33333333333333333333',
+  bank: 'СБЕРтест',
+  city: 'Санкт-Петербург',
+  num: 1,
+  partnership_id: 17,
+  nds: 20,
+  bill_num: 1,
+  act_num: 1,
+  invoice_num: 1,
+  upd_num: 1,
+  ogrn: '123123123',
+};
