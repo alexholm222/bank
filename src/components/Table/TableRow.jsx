@@ -84,7 +84,7 @@ const TableRow = ({ row, type }) => {
   const renderExtractionRow = () => {
     const fullName =
       row?.person?.surname || row?.person?.name || row?.person?.patronymic
-        ? `${row?.person?.surname || ''} ${row?.person?.name || ''} ${row?.person?.patronymic || ''}`.trim()
+        ? `${row?.person?.surname || ''} ${row?.person?.name || ''} `.trim()
         : '—';
 
     return (
@@ -95,7 +95,7 @@ const TableRow = ({ row, type }) => {
         <div className={s.gridCell}>
           <DownloadButton onClick={() => handleDownloadExtraction(row?.file)} />
         </div>
-        <div className={s.gridCell}> Иванов Иван Иванович</div>
+        <div className={classNames(s.gridCell, s.rightAlign)}>{fullName} </div>
         <div className={classNames(s.gridCell, s.gray)}>
           {ACTOR_POSITIONS[row?.person?.position]}
         </div>

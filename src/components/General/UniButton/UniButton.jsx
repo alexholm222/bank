@@ -16,7 +16,7 @@ const UniButton = ({
   onClick,
   disabled = false,
   isLoading = false,
-  loaderColor = '#002CFB',
+  loaderColor = '#fff',
 }) => {
   const buttonStyle = {
     ...(width && { width: `${width}px` }),
@@ -24,36 +24,39 @@ const UniButton = ({
     ...style,
   };
 
-  const isDisabled = disabled || isLoading;
+  const renderIcon = () => {
+    if (isLoading) {
+      return <LoaderButton color={loaderColor} className={classNames(s.icon, s.loader)} />;
+    }
+
+    return Icon ? <Icon className={s.icon} /> : null;
+  };
 
   return (
     <button
       className={classNames(
         s.button,
         s[`button_${type}`],
-        s[`icon_${iconPosition}`],
-        { [s.button_disabled]: isDisabled },
+        { [s.button_disabled]: disabled },
+        { [s.button_loading]: isLoading },
         className
       )}
       style={buttonStyle}
       onClick={(e) => onClick?.(e)}
-      disabled={isDisabled}
+      disabled={disabled}
     >
       {children ? (
         children
       ) : (
-        <>
-          {/* Loader */}
-          <div className={classNames(s.loader, { [s.loader_visible]: isLoading })}>
-            <LoaderButton color={loaderColor} />
-          </div>
-
-          {/* Icon */}
-          {Icon && !isLoading && <Icon className={s.icon} />}
-
-          {/* Text */}
-          <span className={classNames({ [s.text_hidden]: isLoading })}>{text}</span>
-        </>
+        <div
+          className={classNames(s.content, {
+            [s.icon_left]: iconPosition === 'left',
+            [s.icon_right]: iconPosition === 'right',
+          })}
+        >
+          {renderIcon()}
+          <span>{text}</span>
+        </div>
       )}
     </button>
   );

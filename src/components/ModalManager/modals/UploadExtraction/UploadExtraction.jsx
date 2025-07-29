@@ -91,16 +91,15 @@ const UploadExtraction = () => {
       });
   };
 
-  const handleClose = () => {
-    hideModal();
-  };
-
   const handleCancelUpload = () => {
     if (controllerRef.current) {
       controllerRef.current.abort();
     }
     setValidationError('');
     setUploadError('');
+    setFile(null);
+    setSucces('');
+    hideModal();
   };
 
   useEffect(() => {
@@ -112,7 +111,7 @@ const UploadExtraction = () => {
     };
   }, []);
   const getIcon = () => {
-    if (!file || uploadError) return IconDoneGrey;
+    if (!file) return IconDoneGrey;
     if (success) return IconDoneDouble;
     return IconDoneWhite;
   };
@@ -179,14 +178,14 @@ const UploadExtraction = () => {
             />
           )}
           <UniButton
+            disabled={!file}
             iconPosition="right"
             icon={getIcon()}
             text={success ? 'Готово' : 'Распознать'}
             isLoading={isLoading}
             type="primary"
-            onClick={success ? handleClose : handleSubmit}
-            disabled={!file}
-            className={classNames(s.submit)}
+            onClick={success ? handleCancelUpload : handleSubmit}
+            className={classNames(s.submit, (!file || isLoading) && s.disabledLike)}
             // width={330}
           />
         </div>

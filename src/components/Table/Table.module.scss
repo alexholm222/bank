@@ -30,8 +30,8 @@
       minmax(200px, 200px) // Сумма
       minmax(200px, 1.5fr) // Плательщик
       minmax(150px, 1.5fr) // Получатель
-      minmax(200px, 2fr) // Назначение
-      minmax(180px, 180px) // Вид
+      minmax(200px, 1.8fr) // Назначение
+      minmax(200px, 200px) // Вид
       minmax(80px, 80px); // Кнопка удалить
 
     cursor: pointer;
@@ -210,4 +210,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
+}
+.rightAlign {
+  text-align: right;
 }
