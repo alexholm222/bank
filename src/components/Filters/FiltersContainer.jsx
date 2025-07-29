@@ -20,9 +20,10 @@ import TypeFilter from 'components/Filters/TypeFilter/TypeFilters';
 import s from './FiltersContainer.module.scss';
 
 const FiltersContainer = ({ type, isFetching }) => {
+  console.log(isFetching);
   const [activeFilter, setActiveFilter] = useState(null);
   const hasFilters = useSelector(isAnyFilterActive);
-
+  console.log(activeFilter);
   const clearActiveFilter = () => setActiveFilter(null);
 
   const getFetching = (name) => (activeFilter === name ? isFetching : false);

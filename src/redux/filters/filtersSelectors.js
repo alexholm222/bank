@@ -24,7 +24,7 @@ export const selectSelectedPartnerships = createSelector(
 
 export const selectSelectedStatus = createSelector(
   [selectFilters],
-  (filters) => filters.selectedStatus || []
+  (filters) => filters.selectedStatus || ''
 );
 
 export const selectSelectedActivity = createSelector(

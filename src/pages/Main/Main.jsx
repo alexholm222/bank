@@ -24,6 +24,7 @@ import MainHeader from './MainHeader';
 
 // Styles
 import s from './Main.module.scss';
+import getExtractionsParams from 'utils/queryParams/getExtractionsParams';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const Main = () => {
     selectedCompanies,
     selectedPartnerships,
     selectedRecognizedType,
+    selectedStatus,
   } = useSelector((state) => state.filters);
 
   const transactionsParams = getTransactionsParams({
@@ -65,8 +67,16 @@ const Main = () => {
     error,
   } = useGetTransactionsInfiniteQuery(transactionsParams);
 
+  const extractionsParams = getExtractionsParams({
+    searchQuery,
+    dateStartPicker,
+    dateEndPicker,
+    selectedPartnerships,
+    selectedStatus,
+  });
+
   const { data: extractionsList, isFetching: isFetchingExtractions } =
-    useGetExtractionsInfiniteQuery();
+    useGetExtractionsInfiniteQuery(extractionsParams);
 
   //////////////////////////////////////////////////////////////////////////////////
   //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
@@ -126,13 +136,9 @@ const Main = () => {
       />
 
       <div className={s.queryPanel}>
-        <Search
-          isFetching={isFetchingTransactions}
-          searchValue={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <Search isFetching={isFetching} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
 
-        <FiltersContainer type={activeTab} isFetching={isFetchingTransactions} />
+        <FiltersContainer type={activeTab} isFetching={isFetching} />
       </div>
 
       <div className={s.container}>

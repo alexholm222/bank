@@ -99,7 +99,7 @@ const TableRow = ({ row, type }) => {
           {ACTOR_POSITIONS[row?.person?.position]}
         </div>
         <div className={classNames(s.gridCell, s.right)}>
-          {row?.status === 1 && <TagLabel alert={true} inactive={false} />}
+          {row?.status !== 1 && <TagLabel alert={true} inactive={false} />}
         </div>
       </div>
     );

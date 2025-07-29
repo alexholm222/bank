@@ -5,7 +5,6 @@ const getTransactionsParams = ({
   searchQuery,
   dateStartPicker,
   dateEndPicker,
-
   transactionViewFilter,
   selectedRecognizedType,
   selectedPartnerships,

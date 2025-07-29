@@ -18,7 +18,7 @@ export const isAnyFilterActive = (state) => {
     selectedCompanies.length > 0 ||
     selectedPartnerships.length > 0 ||
     (dateStartPicker && dateEndPicker) ||
-    selectedStatus !== null ||
+    selectedStatus !== '' ||
     selectedActivity !== null ||
     selectedRecognizedType !== ''
   );
