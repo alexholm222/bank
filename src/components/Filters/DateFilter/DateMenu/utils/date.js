@@ -6,6 +6,13 @@ const insertZeroNum = (count) => {
   return count < 10 ? `0${count}` : count;
 };
 
+// const getDateFormatted = (date) => {
+//   const year = date.getFullYear();
+//   const month = date.getMonth();
+//   const day = date.getDate();
+//   return `${year}-${insertZeroNum(month + 1)}-${insertZeroNum(day)}`;
+// };
+
 const getDateFormatted = (date) => {
   const year = date.getFullYear();
   const month = date.getMonth();

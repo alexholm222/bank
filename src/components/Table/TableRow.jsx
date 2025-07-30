@@ -81,10 +81,13 @@ const TableRow = ({ row, type }) => {
   };
 
   const renderExtractionRow = () => {
-    const fullName =
-      row?.person?.surname || row?.person?.name || row?.person?.patronymic
-        ? `${row?.person?.surname || ''} ${row?.person?.name || ''} `.trim()
-        : '—';
+    const getFullName = (row) => {
+      const fullName =
+        row?.person?.surname || row?.person?.name || row?.person?.patronymic
+          ? `${row?.person?.surname || ''} ${row?.person?.name || ''} `.trim()
+          : '—';
+      return fullName;
+    };
 
     return (
       <div className={classNames(s.gridRow, s.extractions)}>
@@ -94,9 +97,11 @@ const TableRow = ({ row, type }) => {
         <div className={s.gridCell}>
           <DownloadButton onClick={() => handleDownloadExtraction(row?.file)} />
         </div>
-        <div className={classNames(s.gridCell, s.rightAlign)}>{fullName} </div>
+        <div className={classNames(s.gridCell, s.rightAlign)}>
+          {row?.email ? row?.email : getFullName(row)}{' '}
+        </div>
         <div className={classNames(s.gridCell, s.gray)}>
-          {ACTOR_POSITIONS[row?.person?.position]}
+          {!row?.email && ACTOR_POSITIONS[row?.person?.position]}
         </div>
         <div className={classNames(s.gridCell, s.right)}>
           {row?.status !== 1 && <TagLabel alert={true} inactive={false} />}

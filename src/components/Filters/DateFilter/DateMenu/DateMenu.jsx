@@ -20,63 +20,54 @@ import {
   setDateStartPicker as setDateStart,
 } from '../../../../redux/filters/dateRangeSlice';
 
-export const DateMenu = ({ isOpen, setIsOpen, setDone, setLoadFilter }) => {
+export const DateMenu = ({ isOpen, setIsOpen, setActiveFilter }) => {
   const dispatch = useDispatch();
 
   const handlerAll = () => {
-    setLoadFilter(true);
-    // setDone(false);
-
     dispatch(setDateStart(''));
     dispatch(setDateEnd(''));
     setIsOpen(false);
   };
 
   const handlerThreeDays = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getThreeDay()));
     dispatch(setDateEnd(getNextDay()));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
   const handlerWeek = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getWeek()));
     dispatch(setDateEnd(getCurrentDay()));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
   const handlerLastWeek = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getLastWeek('start')));
     dispatch(setDateEnd(getLastWeek('end')));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
   const handlerTwoLastWeek = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getTwoLastWeek()));
     dispatch(setDateEnd(getCurrentDay()));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
   const handlerLastMonth = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getLastMonth('start')));
     dispatch(setDateEnd(getLastMonth('end')));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
   const handlerBeforeLastMonth = () => {
-    setLoadFilter(true);
-    // setDone(true);
     dispatch(setDateStart(getBeforeLastMonth('start')));
     dispatch(setDateEnd(getBeforeLastMonth('end')));
+    setActiveFilter('date');
     setIsOpen(false);
   };
 
@@ -109,11 +100,7 @@ export const DateMenu = ({ isOpen, setIsOpen, setDone, setLoadFilter }) => {
         </li>
       </ul>
       <div className={styles.date}>
-        <DatePickerСhoose
-          setOpenDateFilter={setIsOpen}
-          setLoadFilter={setLoadFilter}
-          // setDone={setDone}
-        />
+        <DatePickerСhoose setOpenDateFilter={setIsOpen} setActiveFilter={setActiveFilter} />
       </div>
     </div>
   );
