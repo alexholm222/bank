@@ -40,7 +40,7 @@ const TableRow = ({ row, type }) => {
 
     return (
       <div className={classNames(s.gridRow, s.transactions)}>
-        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={s.gridCell}>{row?.date}</div>
         <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
         <div className={classNames(s.gridCell, s.right, s.amount)}>
           <AmountCell amount={formatSum(row?.type, row?.sum)} />
@@ -79,7 +79,7 @@ const TableRow = ({ row, type }) => {
 
     return (
       <div className={classNames(s.gridRow, s.extractions)}>
-        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={s.gridCell}>{row?.date}</div>
         <div className={s.gridCell}>{row?.partnership?.name}</div>
         <div className={s.gridCell}>{row?.partnership?.rs}</div>
         <div className={s.gridCell}>
