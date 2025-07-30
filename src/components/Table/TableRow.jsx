@@ -11,7 +11,7 @@ import useDownloadExtraction from 'hooks/useDownloadExtraction';
 // components
 import CopyTextIcon from './CopyTextIcon';
 import DownloadButton from 'components/General/DownloadButton/DownloadButton';
-
+import Goal from '../Goal/Goal';
 // icons
 import { ReactComponent as IconClose } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconCloseRed } from 'assets/icons/iconCloseRed.svg';
@@ -40,8 +40,8 @@ const TableRow = ({ row, type }) => {
 
     return (
       <div className={classNames(s.gridRow, s.transactions)}>
-        <div className={s.gridCell}>{row?.date}</div>
-        <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
+        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={classNames(s.gridCell, s.right)}>{row?.number}</div>
         <div className={classNames(s.gridCell, s.right, s.amount)}>
           <AmountCell amount={formatSum(row?.type, row?.sum)} />
         </div>
@@ -59,7 +59,7 @@ const TableRow = ({ row, type }) => {
             label={row?.label}
           />
         </div>
-        <div className={classNames(s.gridCell, s.shrinkable)}>{row?.goal}</div>
+        <div className={classNames(s.gridCell, s.shrinkable)}><Goal text={row?.goal}/></div>
         <div className={s.gridCell}>{row?.kind}</div>
         <div className={classNames(s.gridCell, s.right)}>
           <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />

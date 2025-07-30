@@ -4,6 +4,8 @@ import classNames from 'classnames';
 
 // Styless
 import s from './Transaction.module.scss';
+//components
+import Goal from 'components/Goal/Goal';
 
 const PaymentDetails = ({ payer, receiver, data }) => {
   const typeTransactionMap = {
@@ -36,7 +38,8 @@ const PaymentDetails = ({ payer, receiver, data }) => {
       {summaryData.map(([label, value], index) => (
         <div key={index} className={s.paymentsRow}>
           <div className={s.paymentsLabel}>{label}</div>
-          <div className={s.content}>{value?.toString().trim() || '—'}</div>
+          {label === 'Назначение' && <div className={classNames(s.content, s.content_2)}><Goal text={value?.toString().trim() || '—'} /></div>}
+          {label !== 'Назначение' && <div className={s.content}>{value?.toString().trim() || '—'}</div>}
         </div>
       ))}
     </div>

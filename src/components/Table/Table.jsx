@@ -13,7 +13,7 @@ import TableRow from './TableRow';
 // Styles
 import s from './Table.module.scss';
 
-const Table = ({ type, anim, isFetching, list = [], error }) => {
+const Table = ({ type, anim, isLoading, isFetching, list = [], error }) => {
   const { showModal } = useModal();
 
   const handlerOpenFlow = (row) => {
@@ -28,8 +28,8 @@ const Table = ({ type, anim, isFetching, list = [], error }) => {
     }
   };
 
-  if (isFetching) {
-    return <TableSceleton isLoading={isFetching} />;
+  if (isLoading) {
+    return <TableSceleton isLoading={isLoading} />;
   }
   if (error) {
     return <div className={s.error}> {`Произошла ошибка ${error.originalStatus}`}</div>;

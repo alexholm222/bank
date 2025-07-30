@@ -20,7 +20,7 @@ const Dropdown = ({
 
   const wrapperRef = useRef(null);
 
-  const handleOptionClick = (option) => {
+/*   const handleOptionClick = (option) => {
     onChange(option);
     setIsOpen(false);
   };
@@ -33,14 +33,14 @@ const Dropdown = ({
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, []); */
 
   return (
     <div className={classNames(s.wrapper)} ref={wrapperRef}>
       {label && <span className={s.label}>{label}</span>}
       <div
         className={s.selectBox}
-        onClick={() => setIsOpen((prev) => !prev)}
+    /*     onClick={() => setIsOpen((prev) => !prev)} */
         tabIndex={0}
         style={style}
       >
@@ -57,7 +57,7 @@ const Dropdown = ({
             <li
               key={option}
               className={`${s.option} ${option === value ? s.selected : ''}`}
-              onClick={() => handleOptionClick(option)}
+            /*   onClick={() => handleOptionClick(option)} */
             >
               {option}
             </li>

@@ -4,10 +4,11 @@
   height: 100vh;
   min-width: 1440px;
   overflow: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   scrollbar-gutter: stable;
   cursor: default;
   height: 100vh;
+  font-size: 14px;
   overflow-y: auto;
 }
 

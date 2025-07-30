@@ -35,9 +35,10 @@ const CompanyItem = ({ data, selected, toggleSelection }) => {
           <p>{data.name}</p>
           <span>
             {data?.inn && `ИНН ${data.inn} `}
-            {data?.kpp && `КПП ${data.kpp} `}
+            {data?.kpp && data?.inn.length === 10 && `КПП ${data.kpp} `}
+            {data?.inn.length === 12 && renderOgrn(data)}
           </span>
-          <span className={s.ogrnLine}>{renderOgrn(data)}</span>
+      
           <span>{`*${data.rs?.slice(-4)} ${data.bank}`}</span>
         </div>
         <CompanyLabelBadge label={data?.label} />

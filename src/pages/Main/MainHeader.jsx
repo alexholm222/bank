@@ -16,7 +16,7 @@ import s from './Main.module.scss';
 
 const TABS = [
   { id: 'transactions', title: 'Транзакции' },
- /*  { id: 'extractions', title: 'Выписки' }, */
+  { id: 'extractions', title: 'Выписки' },
   // { id: 'accounts', title: 'Банковские счета' },
 ];
 

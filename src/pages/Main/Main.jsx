@@ -98,6 +98,7 @@ const Main = () => {
   }, [companiesListForFilters, dispatch]);
   //////////////////////////////////////////////////////////////////////////////////
 
+
   const showAddAccountBtn = activeTab === 'accounts';
   const handleUpload = () => showModal('UPLOAD_EXTRACTION');
   const handleAddAccount = () => showModal('ADD_ACCOUNT');
@@ -149,7 +150,7 @@ const Main = () => {
           scrollableTarget="scrollableDiv"
           style={{ overflow: allRows.length === 0 ? 'hidden' : 'auto' }}
         >
-          <Table type={activeTab} list={allRows} isFetching={isFetching} error={error} />
+          <Table  type={activeTab} list={allRows} isLoading={isLoading} isFetching={isFetching} error={error} />
         </InfiniteScroll>
       </div>
     </div>

@@ -49,7 +49,6 @@ const Transaction = ({ id }) => {
   const { data } = useGetTransactionQuery({ id });
   const companies = useSelector((state) => state.companiesList.companies) ?? [];
   const handleDeleteTransaction = useDeleteTransaction();
-
   const [transaction, setTransaction] = useState(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
