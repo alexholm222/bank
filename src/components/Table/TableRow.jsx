@@ -1,16 +1,12 @@
 import classNames from 'classnames';
 
-//redux
-import { useDeleteTransactionMutation } from '../../redux/services/transactionsApi';
-import { removeTransactionById } from '../../redux/tableData/tableDataSlice';
-import { useDispatch } from 'react-redux';
-
 // utils
 import formatShortYear from 'utils/formatShortYear';
 import formatSum from 'utils/formatSum';
 
 //hooks
 import useDeleteTransaction from 'hooks/useDeleteTransaction';
+import useDownloadExtraction from 'hooks/useDownloadExtraction';
 
 // components
 import CopyTextIcon from './CopyTextIcon';
@@ -33,15 +29,7 @@ const ACTOR_POSITIONS = {
 
 const TableRow = ({ row, type }) => {
   const handleDeleteTransaction = useDeleteTransaction();
-
-  const handleDownloadExtraction = (fileUrl) => {
-    const link = document.createElement('a');
-    link.href = fileUrl;
-    link.setAttribute('download', '');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const handleDownloadExtraction = useDownloadExtraction();
 
   const renderTransactionRow = () => {
     const receiver =
@@ -95,7 +83,7 @@ const TableRow = ({ row, type }) => {
         <div className={s.gridCell}>{row?.partnership?.name}</div>
         <div className={s.gridCell}>{row?.partnership?.rs}</div>
         <div className={s.gridCell}>
-          <DownloadButton onClick={() => handleDownloadExtraction(row?.file)} />
+          <DownloadButton onClick={() => handleDownloadExtraction(row.id)} />
         </div>
         <div className={classNames(s.gridCell, s.flexCell)}>
           <div>{row?.email ? row?.email : getFullName(row)}</div>

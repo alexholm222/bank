@@ -53,7 +53,20 @@ export const extractionsApi = createApi({
         return { message: responseText };
       },
     }),
+    getExtractionDownloadPath: build.query({
+      query: ({ id }) => ({
+        url: `${EXTRACTIONS_URL}/yadisk/${id}`,
+        method: 'GET',
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ['TRANSACTION'],
+    }),
   }),
 });
 
-export const { useGetExtractionsInfiniteQuery, useUploadExtractionMutation } = extractionsApi;
+export const {
+  useGetExtractionsInfiniteQuery,
+  useUploadExtractionMutation,
+  useGetExtractionDownloadPathQuery,
+  useLazyGetExtractionDownloadPathQuery,
+} = extractionsApi;

@@ -8,11 +8,10 @@ const getExtractionsParams = ({
   selectedPartnerships,
   selectedStatus,
 }) => {
-  console.log(selectedStatus);
   let status = '';
   if (selectedStatus === 'recognized') status = '1';
   if (selectedStatus === 'unrecognized') status = '0';
-  console.log(status);
+
   return {
     'filter[search]': searchQuery,
     'filter[date_start]': formatDate(dateStartPicker),
