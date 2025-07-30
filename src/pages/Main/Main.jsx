@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-//mock
-import { mockData } from 'mock/mockData';
-
 //utils
 import getTransactionsParams from '../../utils/queryParams/getTransactionsParams';
 
@@ -13,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setTabData } from '../../redux/tableData/tableDataSlice';
 import { useGetCompaniesQuery } from '../../redux/services/filtersApiActions';
 import { setCompanies, setPartnerships } from '../../redux/filters/companiesListSlice';
+import { useGetExtractionsInfiniteQuery } from '../../redux/services/extractionsApi';
+import { makeSelectAllRows } from '../../redux/tableData/tableDataSelectors';
 
 // Hooks
 import { useModal } from 'hooks/useModal';
@@ -25,6 +24,7 @@ import MainHeader from './MainHeader';
 
 // Styles
 import s from './Main.module.scss';
+import getExtractionsParams from 'utils/queryParams/getExtractionsParams';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -34,14 +34,17 @@ const Main = () => {
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
   const [searchQuery, setSearchQuery] = useState('');
   const [isUnknownTransaction, setIsUnknownTransaction] = useState(false);
-  const transactions = useSelector((state) => state.tableData.transactions);
   const [activeTab, setActiveTab] = useState('transactions');
+  const selectAllRows = useMemo(() => makeSelectAllRows(activeTab), [activeTab]);
+  const allRows = useSelector(selectAllRows);
+
   const {
     transactionTypeFilter,
     transactionViewFilter,
     selectedCompanies,
     selectedPartnerships,
     selectedRecognizedType,
+    selectedStatus,
   } = useSelector((state) => state.filters);
 
   const transactionsParams = getTransactionsParams({
@@ -64,6 +67,17 @@ const Main = () => {
     error,
   } = useGetTransactionsInfiniteQuery(transactionsParams);
 
+  const extractionsParams = getExtractionsParams({
+    searchQuery,
+    dateStartPicker,
+    dateEndPicker,
+    selectedPartnerships,
+    selectedStatus,
+  });
+
+  const { data: extractionsList, isFetching: isFetchingExtractions } =
+    useGetExtractionsInfiniteQuery(extractionsParams);
+
   //////////////////////////////////////////////////////////////////////////////////
   //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
   const { data: transactionsListUnknown } = useGetTransactionsInfiniteQuery({
@@ -85,29 +99,28 @@ const Main = () => {
   //////////////////////////////////////////////////////////////////////////////////
 
   const showAddAccountBtn = activeTab === 'accounts';
-
-  const allRows = useMemo(() => {
-    switch (activeTab) {
-      case 'transactions':
-        return transactions;
-      case 'extractions':
-        return mockData;
-      case 'accounts':
-        return mockData;
-      default:
-        return [];
-    }
-  }, [activeTab, transactions]);
-
   const handleUpload = () => showModal('UPLOAD_EXTRACTION');
   const handleAddAccount = () => showModal('ADD_ACCOUNT');
 
+  const isFetching = useMemo(() => {
+    if (activeTab === 'transactions') return isFetchingTransactions;
+    if (activeTab === 'extractions') return isFetchingExtractions;
+    return false;
+  }, [activeTab, isFetchingTransactions, isFetchingExtractions]);
+
   useEffect(() => {
-    if (transactionsList?.pages?.length) {
+    if (transactionsList?.pages?.length && activeTab === 'transactions') {
       const allItems = transactionsList.pages.flatMap((page) => page.data);
-      dispatch(setTabData({ tab: activeTab, data: allItems }));
+      dispatch(setTabData({ tab: 'transactions', data: allItems }));
     }
   }, [transactionsList, dispatch, activeTab]);
+
+  useEffect(() => {
+    if (extractionsList?.pages?.length && activeTab === 'extractions') {
+      const allItems = extractionsList.pages.flatMap((page) => page.data);
+      dispatch(setTabData({ tab: 'extractions', data: allItems }));
+    }
+  }, [extractionsList, dispatch, activeTab]);
 
   return (
     <div className={s.root} ref={containerRef}>
@@ -123,13 +136,9 @@ const Main = () => {
       />
 
       <div className={s.queryPanel}>
-        <Search
-          isFetching={isFetchingTransactions}
-          searchValue={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <Search isFetching={isFetching} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
 
-        <FiltersContainer type={activeTab} isFetching={isFetchingTransactions} />
+        <FiltersContainer type={activeTab} isFetching={isFetching} />
       </div>
 
       <div className={s.container}>
@@ -140,7 +149,7 @@ const Main = () => {
           scrollableTarget="scrollableDiv"
           style={{ overflow: allRows.length === 0 ? 'hidden' : 'auto' }}
         >
-          <Table type={activeTab} list={allRows} isFetching={isLoading} error={error} />
+          <Table type={activeTab} list={allRows} isFetching={isFetching} error={error} />
         </InfiniteScroll>
       </div>
     </div>

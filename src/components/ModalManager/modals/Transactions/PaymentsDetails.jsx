@@ -10,7 +10,7 @@ const PaymentDetails = ({ payer, receiver, data }) => {
     income: 'Поступление',
     outcome: 'Платеж',
     refund_income: 'Возврат поступления',
-    refund_outcome: 'Возврат списания',
+    refund_outcome: 'Возврат платежа',
   };
 
   const fields = [

@@ -3,11 +3,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import classNames from 'classnames';
 
+//redux
+import { useUploadExtractionMutation } from '../../../../redux/services/extractionsApi';
+
 //hooks
 import { useModal } from 'hooks/useModal';
 
 //components
-import LoaderButton from 'components/General/LoaderButton/LoaderButton';
+
 import Modal from 'components/General/Modal/Modal';
 import UniButton from 'components/General/UniButton/UniButton';
 
@@ -19,21 +22,21 @@ import { ReactComponent as IconCloseRound } from 'assets/icons/iconCloseRound.sv
 import { ReactComponent as IconDelete } from 'assets/icons/iconDelete.svg';
 import { ReactComponent as IconDoneGrey } from 'assets/icons/iconDoneGrey.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
+import { ReactComponent as IconDoneDouble } from 'assets/icons/iconDoneDouble.svg';
 import { ReactComponent as IconUploadBlack } from 'assets/icons/iconUploadBlack.svg';
 
 //styles
 import s from './UploadExtraction.module.scss';
 
 const UploadExtraction = () => {
-  //   const [uploadDocument, { isLoading, isError }] = useUploadDocumentMutation();
-  const isLoading = false;
+  const [uploadExtraction, { isLoading, isError }] = useUploadExtractionMutation();
+
   const [file, setFile] = useState(null);
   const [validationError, setValidationError] = useState('');
   const [uploadError, setUploadError] = useState('');
   const [success, setSucces] = useState('');
 
-  const { modalProps, hideModal } = useModal();
-  const isSubmitDisabled = file;
+  const { hideModal } = useModal();
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0) {
@@ -45,7 +48,7 @@ const UploadExtraction = () => {
   }, []);
 
   const onDropRejected = useCallback(() => {
-    setValidationError('Ошибка, проверь данные и загрузи снова');
+    setValidationError('Неверный формат файла');
     setFile(null);
   }, []);
 
@@ -61,9 +64,6 @@ const UploadExtraction = () => {
     multiple: false,
     maxSize: 20 * 1024 * 1024,
     accept: {
-      'application/msword': ['.doc'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'application/pdf': ['.pdf'],
       'text/plain': ['.txt'],
     },
   });
@@ -71,34 +71,24 @@ const UploadExtraction = () => {
   const controllerRef = useRef(null);
 
   const handleSubmit = async () => {
-    if (!isSubmitDisabled) {
-      const body = new FormData();
-      body.append('file', file);
-      body.append('filename', file.name);
+    if (!file) return;
 
-      const abortController = new AbortController();
-      controllerRef.current = abortController;
+    const abortController = new AbortController();
+    controllerRef.current = abortController;
 
-      try {
-        // await uploadDocument(
-        //   {
-        //     id,
-        //     body,
-        //   },
-        //   { signal: abortController.signal }
-        // ).unwrap();
-
+    await uploadExtraction(file, {
+      signal: abortController.signal,
+    })
+      .unwrap()
+      .then(() => {
         setSucces('Успешно распознано');
-      } catch (e) {
-        if (e.name === 'AbortError') {
-          setUploadError('Загрузка отменена');
-        } else {
-          setUploadError('Ошибка загрузки');
-        }
-      } finally {
+      })
+      .catch((error) => {
+        setUploadError(`Не удалось распознать выписку.`);
+      })
+      .finally(() => {
         controllerRef.current = null;
-      }
-    }
+      });
   };
 
   const handleCancelUpload = () => {
@@ -107,6 +97,9 @@ const UploadExtraction = () => {
     }
     setValidationError('');
     setUploadError('');
+    setFile(null);
+    setSucces('');
+    hideModal();
   };
 
   useEffect(() => {
@@ -117,6 +110,11 @@ const UploadExtraction = () => {
       setUploadError('');
     };
   }, []);
+  const getIcon = () => {
+    if (!file) return IconDoneGrey;
+    if (success) return IconDoneDouble;
+    return IconDoneWhite;
+  };
 
   return (
     <Modal isOpen={true} onClose={hideModal}>
@@ -146,7 +144,7 @@ const UploadExtraction = () => {
               </>
             )}
           </div>
-          <div className={s.sizeInfo}>Файлы до 20 Мбайт</div>
+          <div className={s.sizeInfo}>Формат TXT до 20 Мбайт</div>
         </div>
 
         <div className={classNames(s.file_info, file && s.file_info_vis)}>
@@ -163,39 +161,33 @@ const UploadExtraction = () => {
             </div>
           </div>
 
-          <IconDelete className={s.delete} onClick={handleDelete} />
+          {!success && <IconDelete className={s.delete} onClick={handleDelete} />}
         </div>
 
         {validationError && <div className={s.error}>{validationError}</div>}
         <div className={s.buttonsWrapper}>
-          {' '}
+          {!success && (
+            <UniButton
+              iconPosition="right"
+              text={'Отмена'}
+              icon={IconCloseBlue}
+              type="outline"
+              onClick={handleCancelUpload}
+              className={classNames(s.submit)}
+              width={100}
+            />
+          )}
           <UniButton
+            disabled={!file}
             iconPosition="right"
-            text={'Отмена'}
-            icon={IconCloseBlue}
-            type="outline"
-            onClick={handleCancelUpload}
-            className={classNames(s.submit)}
-            width={100}
-          ></UniButton>
-          <UniButton
+            icon={getIcon()}
+            text={success ? 'Готово' : 'Распознать'}
+            isLoading={isLoading}
             type="primary"
-            onClick={handleSubmit}
-            disabled={!isSubmitDisabled}
-            className={classNames(s.submit)}
-            width={330}
-          >
-            {!isLoading ? (
-              <>
-                <span>{success ? 'Готово' : 'Распознать'}</span>
-                {!isSubmitDisabled ? <IconDoneGrey /> : <IconDoneWhite />}
-              </>
-            ) : (
-              <div className={classNames(s.loader, s.loader_vis)}>
-                <LoaderButton color="#FFF" />
-              </div>
-            )}
-          </UniButton>
+            onClick={success ? handleCancelUpload : handleSubmit}
+            className={classNames(s.submit, (!file || isLoading) && s.disabledLike)}
+            // width={330}
+          />
         </div>
       </div>
     </Modal>

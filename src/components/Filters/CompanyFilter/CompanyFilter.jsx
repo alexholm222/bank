@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 // Redux
 import { setSelectedCompanies } from '../../../redux/filters/slice';
+import { selectSelectedCompanies } from '../../../redux/filters/filtersSelectors';
 
 // Components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
@@ -17,7 +18,7 @@ import s from './CompanyFilter.module.scss';
 
 const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
   const dispatch = useDispatch();
-  const selectedCompanies = useSelector((state) => state.filters.selectedCompanies);
+  const selectedCompanies = useSelector(selectSelectedCompanies);
   const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
   const [localSelected, setLocalSelected] = useState(selectedCompanies);
   const [isOpen, setIsOpen] = useState(false);

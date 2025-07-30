@@ -35,7 +35,6 @@ const TableHeader = ({ type }) => {
         <div>Файл</div>
         <div>Кто загрузил</div>
         <div></div>
-        <div></div>
       </div>
     );
   }

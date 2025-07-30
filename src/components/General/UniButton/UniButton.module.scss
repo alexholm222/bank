@@ -1,32 +1,23 @@
 .button {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   padding: 10px 20px;
   height: 40px;
   border-radius: 4px;
   box-sizing: border-box;
   cursor: pointer;
   text-align: center;
-
   font-family: Inter, sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: 0.056px;
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   span {
     white-space: nowrap;
-  }
-
-  &.icon_left {
-    flex-direction: row;
-  }
-
-  &.icon_right {
-    flex-direction: row-reverse;
   }
 
   &.button_primary {
@@ -68,27 +59,33 @@
     pointer-events: none;
   }
 
-  .loader {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+  &.button_loading {
+    cursor: not-allowed;
+  }
+}
 
-    &.loader_visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
+.content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &.icon_right {
+    flex-direction: row-reverse;
   }
 
-  .icon {
-    transition: opacity 0.3s ease;
+  &.icon_left {
+    flex-direction: row;
   }
+}
 
-  .text_hidden {
-    display: none;
-  }
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
 }

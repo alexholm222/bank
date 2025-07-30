@@ -45,15 +45,6 @@ const FiltersContainer = ({ type, isFetching }) => {
         setActiveFilter={setActiveFilter}
         clearActiveFilter={clearActiveFilter}
       />,
-      // <PayerFilter
-      //   key="payer"
-      //   name="payer"
-      //   isFetching={getFetching('payer')}
-      //   activeFilter={activeFilter}
-      //   setActiveFilter={setActiveFilter}
-      //   clearActiveFilter={clearActiveFilter}
-      //   data={mockReceivers}
-      // />,
       <TypeFilter
         key="type"
         name="type"
@@ -89,6 +80,14 @@ const FiltersContainer = ({ type, isFetching }) => {
         setActiveFilter={setActiveFilter}
         clearActiveFilter={clearActiveFilter}
       />,
+      <DateFilter
+        key="date"
+        name="date"
+        isFetching={getFetching('date')}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        clearActiveFilter={clearActiveFilter}
+      />,
     ],
     accounts: [
       <DetailsFilter
@@ -111,7 +110,7 @@ const FiltersContainer = ({ type, isFetching }) => {
       <DateFilter
         key="date"
         name="date"
-        isFetching={getFetching('date')}
+        isFetching={isFetching}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
         clearActiveFilter={clearActiveFilter}

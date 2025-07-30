@@ -78,7 +78,7 @@ export const DetailsFilter = ({ isFetching, setActiveFilter, clearActiveFilter, 
 
   const handleConfirm = () => {
     dispatch(setSelectedPartnerships(localSelected));
-    setActiveFilter('details');
+    setActiveFilter(name);
     setOpen(false);
   };
   const handleOpen = () => {

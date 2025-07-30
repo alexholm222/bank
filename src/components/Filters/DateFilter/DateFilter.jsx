@@ -9,39 +9,43 @@ import { setDateEndPicker, setDateStartPicker } from '../../../redux/filters/dat
 import { FilterButtonDate } from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 import { DateMenu } from './DateMenu/DateMenu';
 import { getTitleDateDuration } from './DateMenu/utils/date';
+
+// Icons
 import { ReactComponent as IconCalendar } from 'assets/icons/iconCalendar.svg';
 
 // Styles
 import s from './DateFilter.module.scss';
 
-const DateFilter = ({ isFetching, activeFilter, setActiveFilter, clearActiveFilter, name }) => {
+const DateFilter = ({ isFetching, setActiveFilter, clearActiveFilter }) => {
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange || {});
   const dispatch = useDispatch();
   const ref = useRef(null);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(isFetching);
+
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldResetPicker, setShouldResetPicker] = useState(false);
 
   const isSelected = Boolean(dateStartPicker && dateEndPicker);
   const title = isSelected ? getTitleDateDuration(dateStartPicker, dateEndPicker) : 'Период';
 
   const handleOpen = () => {
-    setActiveFilter(name);
     setIsOpen(true);
   };
 
   const handleReset = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    clearActiveFilter();
     dispatch(setDateStartPicker(null));
     dispatch(setDateEndPicker(null));
     setDone(false);
-    clearActiveFilter();
+    setShouldResetPicker(true);
   };
 
   useEffect(() => {
-    setLoad(isFetching);
-    setDone(!isFetching && !!dateStartPicker && !!dateEndPicker);
+    setLoad(!!isFetching);
+    setDone(!!dateStartPicker && !!dateEndPicker && !isFetching);
   }, [isFetching, dateStartPicker, dateEndPicker]);
 
   useEffect(() => {
@@ -70,7 +74,13 @@ const DateFilter = ({ isFetching, activeFilter, setActiveFilter, clearActiveFilt
         />
       </div>
 
-      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} setLoadFilter={setLoad} />
+      <DateMenu
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setActiveFilter={setActiveFilter}
+        shouldResetPicker={shouldResetPicker}
+        setShouldResetPicker={setShouldResetPicker}
+      />
     </div>
   );
 };

@@ -1,16 +1,12 @@
 import classNames from 'classnames';
 
-//redux
-import { useDeleteTransactionMutation } from '../../redux/services/transactionsApi';
-import { removeTransactionById } from '../../redux/tableData/tableDataSlice';
-import { useDispatch } from 'react-redux';
-
 // utils
 import formatShortYear from 'utils/formatShortYear';
 import formatSum from 'utils/formatSum';
 
 //hooks
 import useDeleteTransaction from 'hooks/useDeleteTransaction';
+import useDownloadExtraction from 'hooks/useDownloadExtraction';
 
 // components
 import CopyTextIcon from './CopyTextIcon';
@@ -25,24 +21,26 @@ import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 import s from './Table.module.scss';
 import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
 
+const ACTOR_POSITIONS = {
+  director: 'Директор',
+  operator: 'Менеджер',
+  accountant: 'Бухгалтер',
+};
+
 const TableRow = ({ row, type }) => {
   const handleDeleteTransaction = useDeleteTransaction();
-  const handleDelete = (id, e) => {
-    e.stopPropagation();
-    handleDeleteTransaction(id);
-  };
+  const handleDownloadExtraction = useDownloadExtraction();
 
-  const handleDownloadExtraction = () => {};
   const renderTransactionRow = () => {
     const receiver =
-      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.partnership : row?.company;
+      row?.type === 'income' || row?.type === 'refund_income' ? row?.partnership : row?.company;
     const payer =
-      row?.type === 'income' || row?.type === 'refund_outcome' ? row?.company : row?.partnership;
+      row?.type === 'income' || row?.type === 'refund_income' ? row?.company : row?.partnership;
     const isRecognized = row?.requires_action === 1;
 
     return (
       <div className={classNames(s.gridRow, s.transactions)}>
-        <div className={s.gridCell}>{formatShortYear(row?.date)}</div>
+        <div className={s.gridCell}>{row?.date}</div>
         <div className={classNames(s.gridCell, s.center)}>{row?.number}</div>
         <div className={classNames(s.gridCell, s.right, s.amount)}>
           <AmountCell amount={formatSum(row?.type, row?.sum)} />
@@ -72,21 +70,34 @@ const TableRow = ({ row, type }) => {
     );
   };
 
-  const renderExtractionRow = () => (
-    <div className={classNames(s.gridRow, s.extractions)}>
-      <div className={s.gridCell}>02.07.20 10:00</div>
-      <div className={s.gridCell}>{row?.payer?.name}</div>
-      <div className={s.gridCell}>115678</div>
-      <div className={s.gridCell}>
-        <DownloadButton onClick={handleDownloadExtraction} />
+  const renderExtractionRow = () => {
+    const getFullName = (row) => {
+      const fullName =
+        row?.person?.surname || row?.person?.name
+          ? `${row?.person?.surname || ''} ${row?.person?.name || ''} `.trim()
+          : '—';
+      return fullName;
+    };
+
+    return (
+      <div className={classNames(s.gridRow, s.extractions)}>
+        <div className={s.gridCell}>{row?.date}</div>
+        <div className={s.gridCell}>{row?.partnership?.name}</div>
+        <div className={s.gridCell}>{row?.partnership?.rs}</div>
+        <div className={s.gridCell}>
+          <DownloadButton onClick={() => handleDownloadExtraction(row.id)} />
+        </div>
+        <div className={classNames(s.gridCell, s.flexCell)}>
+          <div>{row?.email ? row?.email : getFullName(row)}</div>
+
+          <div className={s.gray}>{!row?.email && ACTOR_POSITIONS[row?.person?.position]}</div>
+        </div>
+        <div className={classNames(s.gridCell, s.right)}>
+          {row?.status !== 1 && <TagLabel alert={true} inactive={false} />}
+        </div>
       </div>
-      <div className={s.gridCell}>Менеджер Иванов</div>
-      <div className={classNames(s.gridCell, s.gray)}>Бухгалтер</div>
-      <div className={classNames(s.gridCell, s.right)}>
-        <TagLabel alert={false} inactive={false} />
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderAccountRow = () => {
     const p = row?.payer || {};

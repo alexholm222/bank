@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
+import { selectSelectedStatus } from '../../../redux/filters/filtersSelectors';
+
 // components
 import FilterButton from 'components/Filters/COMPONENTS/FilterButton/FilterButton';
 import UniButton from 'components/General/UniButton/UniButton';
@@ -21,48 +23,38 @@ const extractionsStatuses = [
 ];
 
 const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
-  const selectedStatus = useSelector((state) => state.filters.selectedStatus || []);
+  const selectedStatus = useSelector(selectSelectedStatus);
   const dispatch = useDispatch();
 
   const [openModal, setOpenModal] = useState(false);
-  const [tempStatuses, setTempStatuses] = useState(selectedStatus);
-  // const [load, setLoad] = useState(false);
-  // const [done, setDone] = useState(false);
+  const [tempStatus, setTempStatus] = useState(selectedStatus || '');
 
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
 
-  const load = isFetching;
-  const done = !isFetching && selectedStatus.length > 0;
+  const done = !isFetching && selectedStatus !== '';
 
   const handleOpen = () => {
-    setTempStatuses(selectedStatus);
+    setTempStatus(selectedStatus || '');
     setOpenModal(true);
-    setActiveFilter(name);
   };
 
   const handleToggle = (id) => {
-    setTempStatuses((prev) => (prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]));
+    setTempStatus((prev) => (prev === id ? '' : id));
   };
 
   const handleConfirm = () => {
-    dispatch(setSelectedStatus(tempStatuses));
+    dispatch(setSelectedStatus(tempStatus));
+    setActiveFilter(name);
     setOpenModal(false);
   };
 
   const handleReset = (e) => {
     e.stopPropagation();
-    dispatch(setSelectedStatus([]));
+    dispatch(setSelectedStatus(''));
     setOpenModal(false);
     clearActiveFilter();
   };
-
-  // useEffect(() => {
-  //   setLoad(isFetching);
-
-  //   const hasSelected = selectedStatus?.length > 0;
-  //   setDone(!isFetching && hasSelected);
-  // }, [isFetching, selectedStatus]);
 
   useEffect(() => {
     const clickOutside = (e) => {
@@ -83,11 +75,11 @@ const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) 
       <FilterButton
         title="Статус"
         Icon={IconDocSuccess}
-        count={selectedStatus.length}
+        count={selectedStatus !== '' ? 1 : ''}
         handleReset={handleReset}
         handleOpen={handleOpen}
         buttonRef={buttonRef}
-        load={load}
+        load={isFetching}
         done={done}
       />
 
@@ -97,7 +89,7 @@ const StatusFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) 
 
           {extractionsStatuses.map((item) => (
             <div key={item.id} className={s.item} onClick={() => handleToggle(item.id)}>
-              <CheckBox active={tempStatuses.includes(item.id)} />
+              <CheckBox active={tempStatus === item.id} />
               <span className={s.checkboxLabel}>{item.name}</span>
             </div>
           ))}

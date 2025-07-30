@@ -73,8 +73,9 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
     setLoad(true);
     setActiveFilter(name);
     dispatch(setTransactionTypeFilter(transactionType));
-    console.log(transactionType);
+
     dispatch(setTransactionViewFilter(transactionView));
+
     dispatch(setSelectedRecognizedType(recognizedType));
     setOpenModal(false);
   };
@@ -135,7 +136,7 @@ const TypeFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) =>
             onClick={() => setRecognizedType((prev) => (prev === '1' ? '' : '1'))}
           >
             <CheckBox active={recognizedType === '1'} />
-            <span className={s.checkboxLabel}>Не распознана</span>
+            <span className={s.checkboxLabel}>Не распознано</span>
           </div>
         </div>
 
