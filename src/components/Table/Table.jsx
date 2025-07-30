@@ -41,6 +41,7 @@ const Table = ({ type, anim, isFetching, list = [], error }) => {
   return (
     <div className={classNames(s.root, anim && s.root_anim, isFetching && s.root_fetch)}>
       <TableHeader type={type} />
+      <div className={s.line}></div>
 
       {list.map((row) => (
         <div
@@ -49,6 +50,7 @@ const Table = ({ type, anim, isFetching, list = [], error }) => {
           onClick={() => handlerOpenFlow(row)}
         >
           <TableRow row={row} type={type} />
+           <div className={s.line}></div>
         </div>
       ))}
     </div>

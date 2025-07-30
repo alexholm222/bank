@@ -66,6 +66,8 @@ const TableRow = ({ row, type }) => {
         <div className={classNames(s.gridCell, s.right)}>
           <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
         </div>
+
+       
       </div>
     );
   };
