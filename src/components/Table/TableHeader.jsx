@@ -33,8 +33,7 @@ const TableHeader = ({ type }) => {
         <div>Компания</div>
         <div>Счет</div>
         <div>Файл</div>
-        <div className={s.rightAlign}>Кто загрузил</div>
-        <div></div>
+        <div>Кто загрузил</div>
         <div></div>
       </div>
     );

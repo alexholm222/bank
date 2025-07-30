@@ -27,7 +27,7 @@ import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabel
 
 const ACTOR_POSITIONS = {
   director: 'Директор',
-  manager: 'Менеджер',
+  operator: 'Менеджер',
   accountant: 'Бухгалтер',
 };
 
@@ -83,7 +83,7 @@ const TableRow = ({ row, type }) => {
   const renderExtractionRow = () => {
     const getFullName = (row) => {
       const fullName =
-        row?.person?.surname || row?.person?.name || row?.person?.patronymic
+        row?.person?.surname || row?.person?.name
           ? `${row?.person?.surname || ''} ${row?.person?.name || ''} `.trim()
           : '—';
       return fullName;
@@ -97,11 +97,10 @@ const TableRow = ({ row, type }) => {
         <div className={s.gridCell}>
           <DownloadButton onClick={() => handleDownloadExtraction(row?.file)} />
         </div>
-        <div className={classNames(s.gridCell, s.rightAlign)}>
-          {row?.email ? row?.email : getFullName(row)}{' '}
-        </div>
-        <div className={classNames(s.gridCell, s.gray)}>
-          {!row?.email && ACTOR_POSITIONS[row?.person?.position]}
+        <div className={classNames(s.gridCell, s.flexCell)}>
+          <div>{row?.email ? row?.email : getFullName(row)}</div>
+
+          <div className={s.gray}>{!row?.email && ACTOR_POSITIONS[row?.person?.position]}</div>
         </div>
         <div className={classNames(s.gridCell, s.right)}>
           {row?.status !== 1 && <TagLabel alert={true} inactive={false} />}

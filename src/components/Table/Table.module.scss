@@ -50,7 +50,7 @@
       minmax(120px, 1fr) // Счет
       minmax(100px, 0.5fr) // Файл
       minmax(250px, 1fr) // Кто загрузил
-      minmax(100px, 0.5fr) // Должность
+      // minmax(100px, 0.5fr) // Должность
       minmax(150px, 150px); // Распознана/Не распознана
 
     cursor: default;
@@ -211,6 +211,14 @@
   white-space: nowrap;
   min-width: 0;
 }
-.rightAlign {
-  text-align: right;
+.flexCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  .gray {
+    color: #71869d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

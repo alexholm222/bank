@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 //libs
@@ -13,7 +13,12 @@ import { setDateEndPicker, setDateStartPicker } from '../../../../../redux/filte
 import 'react-datepicker/dist/react-datepicker.css';
 import './DatePickerСhoose.scss';
 
-export const DatePickerСhoose = ({ setOpenDateFilter, setActiveFilter }) => {
+export const DatePickerСhoose = ({
+  setOpenDateFilter,
+  setActiveFilter,
+  setShouldResetPicker,
+  shouldResetPicker,
+}) => {
   const dispatch = useDispatch();
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
 
@@ -34,6 +39,13 @@ export const DatePickerСhoose = ({ setOpenDateFilter, setActiveFilter }) => {
   };
 
   registerLocale('ru', ru);
+
+  useEffect(() => {
+    if (shouldResetPicker) {
+      setTempDates([null, null]);
+      setShouldResetPicker(false); // сброс флага
+    }
+  }, [shouldResetPicker]);
 
   return (
     <DatePicker

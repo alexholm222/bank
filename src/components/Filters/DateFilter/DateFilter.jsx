@@ -24,6 +24,7 @@ const DateFilter = ({ isFetching, setActiveFilter, clearActiveFilter }) => {
 
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldResetPicker, setShouldResetPicker] = useState(false);
 
   const isSelected = Boolean(dateStartPicker && dateEndPicker);
   const title = isSelected ? getTitleDateDuration(dateStartPicker, dateEndPicker) : 'Период';
@@ -39,6 +40,7 @@ const DateFilter = ({ isFetching, setActiveFilter, clearActiveFilter }) => {
     dispatch(setDateStartPicker(null));
     dispatch(setDateEndPicker(null));
     setDone(false);
+    setShouldResetPicker(true);
   };
 
   useEffect(() => {
@@ -72,7 +74,13 @@ const DateFilter = ({ isFetching, setActiveFilter, clearActiveFilter }) => {
         />
       </div>
 
-      <DateMenu isOpen={isOpen} setIsOpen={setIsOpen} setActiveFilter={setActiveFilter} />
+      <DateMenu
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setActiveFilter={setActiveFilter}
+        shouldResetPicker={shouldResetPicker}
+        setShouldResetPicker={setShouldResetPicker}
+      />
     </div>
   );
 };

@@ -63,7 +63,7 @@ export const transactionsApi = createApi({
         url: `${TRANSACTIONS_URL}/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['TRANSACTIONS'],
+      // invalidatesTags: ['TRANSACTIONS'],
     }),
   }),
 });
