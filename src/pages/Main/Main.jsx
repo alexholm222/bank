@@ -99,9 +99,9 @@ const Main = () => {
   //////////////////////////////////////////////////////////////////////////////////
 
   const showAddAccountBtn = activeTab === 'accounts';
-
   const handleUpload = () => showModal('UPLOAD_EXTRACTION');
   const handleAddAccount = () => showModal('ADD_ACCOUNT');
+
   const isFetching = useMemo(() => {
     if (activeTab === 'transactions') return isFetchingTransactions;
     if (activeTab === 'extractions') return isFetchingExtractions;
