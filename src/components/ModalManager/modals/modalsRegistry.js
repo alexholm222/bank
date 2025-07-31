@@ -1,9 +1,13 @@
-import React from 'react';
+import Transaction from './Transactions/Transaction';
+import AddAccountModal from './AddAccount/AddAccountModal';
+import UploadExtraction from './UploadExtraction/UploadExtraction';
+import AccountInfo from './AccountInfo/AccountInfo';
+import ChangeDetail from './ChangeDetail/ChangeDetail';
 
 export const MODALS = {
-  TRANSACTION: React.lazy(() => import('./Transactions/Transaction')),
-  ADD_ACCOUNT: React.lazy(() => import('./AddAccount/AddAccountModal')),
-  UPLOAD_EXTRACTION: React.lazy(() => import('./UploadExtraction/UploadExtraction')),
-  ACCOUNT_INFO: React.lazy(() => import('./AccountInfo/AccountInfo')),
-  CHANGE_ACCOUNT_DETAIL: React.lazy(() => import('./ChangeDetail/ChangeDetail')),
+  TRANSACTION: Transaction,
+  ADD_ACCOUNT: AddAccountModal,
+  UPLOAD_EXTRACTION: UploadExtraction,
+  ACCOUNT_INFO: AccountInfo,
+  CHANGE_ACCOUNT_DETAIL: ChangeDetail,
 };
