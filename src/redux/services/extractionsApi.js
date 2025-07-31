@@ -56,7 +56,7 @@ export const extractionsApi = createApi({
     getExtractionDownloadPath: build.query({
       query: ({ id }) => ({
         url: `${EXTRACTIONS_URL}/yadisk/${id}`,
-        method: 'GET',
+        method: 'GET'
       }),
       transformResponse: (response) => response.data,
       providesTags: ['TRANSACTION'],
