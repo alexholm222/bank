@@ -75,6 +75,7 @@ const Transaction = ({ id }) => {
       bik: data?.bik,
       ks: data?.ks,
       rs: data?.rs,
+      value: data?.inn,
     }),
     [data]
   );

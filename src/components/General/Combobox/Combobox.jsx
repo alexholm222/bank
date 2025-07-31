@@ -90,6 +90,10 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
         options={options}
         value={value}
         onChange={handleChange}
+        filterOption={(option, inputValue) =>
+          option.data.label.toLowerCase().includes(inputValue.toLowerCase()) ||
+          option.data.inn.toLowerCase().includes(inputValue.toLowerCase())
+        }
         placeholder=""
         styles={getCustomStyles(hasError)}
         isSearchable
