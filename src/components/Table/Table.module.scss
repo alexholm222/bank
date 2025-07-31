@@ -1,8 +1,8 @@
 .root {
   table-layout: fixed;
   width: 100%;
- /*  padding: 0 0 20px 0; */
- overflow: hidden;
+  /*  padding: 0 0 20px 0; */
+  overflow: hidden;
   width: 100%;
   max-width: 100%;
   background-color: #fff;
@@ -25,7 +25,7 @@
   padding: 0 20px;
   margin-top: -1px;
   height: 50px;
- /*  border-bottom: 1px solid #eff4fb; */
+  /*  border-bottom: 1px solid #eff4fb; */
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
@@ -85,7 +85,7 @@
   margin: -1px 20px 0;
   width: calc(100% - 40px);
   height: 1px;
-  background-color: #EAF0FA;
+  background-color: #eaf0fa;
 }
 
 .gridCell {

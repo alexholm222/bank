@@ -31,10 +31,10 @@ const CustomOption = (props) => {
       className={classNames(s.option, { [s.focused]: isFocused })}
     >
       <div className={s.companyInfo}>
-        <div className={s.companyName}>{data.name}</div>
+        <div className={s.companyName}>{data.label}</div>
         <div className={s.companyDetails}>{details || '—'}</div>
       </div>
-      <CompanyLabelBadge label={data.label} />
+      <CompanyLabelBadge label={data.badge} />
     </div>
   );
 };
@@ -46,13 +46,13 @@ const CustomSingleValue = (props) => {
     <components.SingleValue {...props}>
       <div className={s.singleValue}>
         <div className={s.companyInfo}>
-          <span className={s.companyName}>{data.name}</span>
+          <span className={s.companyName}>{data.label}</span>
           <span className={s.companyDetails}>
             {data.inn !== '0' && data.inn && `ИНН ${data.inn}`}
             {data.kpp !== '0' && data.kpp && ` КПП ${data.kpp}`}
           </span>
         </div>
-        <CompanyLabelBadge label={data.label} />
+        <CompanyLabelBadge label={data.badge} />
       </div>
     </components.SingleValue>
   );
@@ -79,6 +79,9 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
       setInputValue(value);
     }
   };
+  const handleMenuClose = () => {
+    setInputValue('');
+  };
 
   return (
     <div className={classNames(s.root, className)} onMouseDown={(e) => e.stopPropagation()}>
@@ -92,6 +95,7 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
         isSearchable
         inputValue={inputValue}
         onInputChange={handleInputChange}
+        onMenuClose={handleMenuClose}
         components={{
           Option: CustomOption,
           SingleValue: CustomSingleValue,

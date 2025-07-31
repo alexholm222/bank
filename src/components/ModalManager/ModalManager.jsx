@@ -13,8 +13,6 @@ const ModalManager = () => {
   const ModalComponent = MODALS[activeModal];
   if (!ModalComponent) return null;
 
-  console.log(ModalComponent)
-
   return ReactDOM.createPortal(
     <React.Suspense fallback={null}>
       <ModalComponent {...modalProps} onClose={hideModal} />

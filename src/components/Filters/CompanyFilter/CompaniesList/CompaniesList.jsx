@@ -21,8 +21,6 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
   const listRef = useRef(null);
   const [maxHeight, setMaxHeight] = useState('auto');
 
-  console.log(maxHeight)
-
   useEffect(() => {
     setFilteredCompanies(companies);
   }, [items]);
@@ -82,11 +80,11 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
                       <p>{el.name}</p>
                       <CompanyLabelBadge label={el.label} />
                     </div>
-                    <span>{el?.inn && `ИНН ${el.inn} `} {/* {el?.ogrn && `ОГРНИП ${el.ogrn}`} */}</span>
-
+                    <span>
+                      {el?.inn && `ИНН ${el.inn} `} {/* {el?.ogrn && `ОГРНИП ${el.ogrn}`} */}
+                    </span>
                   </div>
                 )}
-
               </div>
             </li>
           ))}

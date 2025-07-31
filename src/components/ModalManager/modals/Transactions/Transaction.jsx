@@ -86,8 +86,8 @@ const Transaction = ({ id }) => {
     () =>
       companies.map((company) => ({
         value: company.id,
-        name: company.name,
-        label: company.label,
+        label: company.name,
+        badge: company.label,
         inn: company.inn,
         kpp: company.kpp,
         ogrnip: company.ogrnip,
