@@ -12,7 +12,7 @@ const TableHeader = ({ type }) => {
     return (
       <div className={classNames(s.gridRow, s.gridHeader, s.transactions)} key={'transactions'}>
         <div>Дата</div>
-        <div className={classNames(s.gridCell, s.center)}>Номер</div>
+        <div className={classNames(s.gridCell, s.right)}>Номер</div>
         <div className={classNames(s.gridCell, s.right, s.amount)}>Сумма, ₽</div>
         <div>Плательщик</div>
         <div>Получатель</div>

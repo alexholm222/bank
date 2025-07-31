@@ -72,4 +72,5 @@ export const {
   useGetTransactionQuery,
   useUpdateTransactionMutation,
   useDeleteTransactionMutation,
+  useLazyGetTransactionsInfiniteQuery,
 } = transactionsApi;

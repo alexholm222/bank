@@ -17,7 +17,7 @@ const ModalManager = () => {
     <React.Suspense fallback={null}>
       <ModalComponent {...modalProps} onClose={hideModal} />
     </React.Suspense>,
-    document.getElementById('modal-root')
+    document.body
   );
 };
 

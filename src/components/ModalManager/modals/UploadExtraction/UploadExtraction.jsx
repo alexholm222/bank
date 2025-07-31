@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 //libs
 import { useDropzone } from 'react-dropzone';
 import classNames from 'classnames';
@@ -30,6 +31,7 @@ import s from './UploadExtraction.module.scss';
 
 const UploadExtraction = () => {
   const [uploadExtraction, { isLoading, isError }] = useUploadExtractionMutation();
+  const navigate = useNavigate()
 
   const [file, setFile] = useState(null);
   const [validationError, setValidationError] = useState('');
@@ -100,6 +102,7 @@ const UploadExtraction = () => {
     setFile(null);
     setSucces('');
     hideModal();
+    
   };
 
   useEffect(() => {
@@ -140,11 +143,11 @@ const UploadExtraction = () => {
               <span>Отпустите здесь файл</span>
             ) : (
               <>
-                Перетащи или <span className={s.uploadLink}>загрузи файл</span>
+                Нажмите, чтобы загрузить файл, либо перетащите сюда
               </>
             )}
           </div>
-          <div className={s.sizeInfo}>Формат TXT до 20 Мбайт</div>
+          <div className={s.sizeInfo}>1С формат TXT до 20 Мбайт</div>
         </div>
 
         <div className={classNames(s.file_info, file && s.file_info_vis)}>
@@ -186,7 +189,7 @@ const UploadExtraction = () => {
             type="primary"
             onClick={success ? handleCancelUpload : handleSubmit}
             className={classNames(s.submit, (!file || isLoading) && s.disabledLike)}
-            // width={330}
+          // width={330}
           />
         </div>
       </div>

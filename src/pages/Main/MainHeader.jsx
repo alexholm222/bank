@@ -1,5 +1,5 @@
 // Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedRecognizedType } from '../../redux/filters/slice';
 
 //Components
@@ -17,7 +17,7 @@ import s from './Main.module.scss';
 const TABS = [
   { id: 'transactions', title: 'Транзакции' },
   { id: 'extractions', title: 'Выписки' },
-  // { id: 'accounts', title: 'Банковские счета' },
+  /*   { id: 'accounts', title: 'Банковские счета' }, */
 ];
 
 const MainHeader = ({
@@ -27,19 +27,24 @@ const MainHeader = ({
   handleAddAccount,
   handleUpload,
   isLoading,
-  isUnknownTransaction,
   setIsUnknownTransaction,
 }) => {
+  const isUnknownTransaction = useSelector((state) => state.unknownTransactions);
+
+  const { selectedRecognizedType } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
   const handleShowUnknown = () => {
     dispatch(setSelectedRecognizedType('1'));
-    setIsUnknownTransaction(false);
+    dispatch(setIsUnknownTransaction(false));
     setActiveTab('transactions');
   };
 
   return (
     <header className={s.header}>
-      <Information onClick={handleShowUnknown} open={isUnknownTransaction} />
+      <Information
+        onClick={handleShowUnknown}
+        open={isUnknownTransaction && selectedRecognizedType !== '1'}
+      />
       <div className={s.block}>
         <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
         <div className={s.buttons}>

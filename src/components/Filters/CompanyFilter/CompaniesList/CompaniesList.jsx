@@ -37,7 +37,7 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
       if (listRef.current) {
         const listItems = listRef.current.querySelectorAll('li');
         let heightSum = 0;
-        for (let i = 0; i < 4 && i < listItems.length; i++) {
+        for (let i = 0; i < 6 && i < listItems.length; i++) {
           heightSum += listItems[i].offsetHeight;
         }
         setMaxHeight(`${heightSum}px`);
@@ -65,7 +65,10 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
               <div className={s.block}>
                 {el?.inn?.length === 10 ? (
                   <div className={s.blockDetails}>
-                    <p>{el.name}</p>
+                    <div className={s.name}>
+                      <p>{el.name}</p>
+                      <CompanyLabelBadge label={el.label} />
+                    </div>
                     <span>
                       {el?.inn && `ИНН ${el.inn} `}
                       {el?.kpp && `КПП ${el.kpp}`}
@@ -73,12 +76,15 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
                   </div>
                 ) : (
                   <div className={s.blockDetails}>
-                    <p>{el.name}</p>
-                    <span>{el?.inn && `ИНН ${el.inn} `}</span>
-                    <span> {el?.ogrn && `ОГРНИП ${el.ogrn}`}</span>
+                    <div className={s.name}>
+                      <p>{el.name}</p>
+                      <CompanyLabelBadge label={el.label} />
+                    </div>
+                    <span>
+                      {el?.inn && `ИНН ${el.inn} `} {/* {el?.ogrn && `ОГРНИП ${el.ogrn}`} */}
+                    </span>
                   </div>
                 )}
-                <CompanyLabelBadge label={el.label} />
               </div>
             </li>
           ))}
@@ -100,19 +106,3 @@ const CompaniesList = ({ items, selected, onChange, onConfirm, onReset, isOpen }
 };
 
 export default CompaniesList;
-const partnership = {
-  partnership_name: 'ООО «ТЕСТОВАЯ КОМПАНИЯ»',
-  inn: '6317148649',
-  kpp: '',
-  rs: '33333333333333333333',
-  bank: 'СБЕРтест',
-  city: 'Санкт-Петербург',
-  num: 1,
-  partnership_id: 17,
-  nds: 20,
-  bill_num: 1,
-  act_num: 1,
-  invoice_num: 1,
-  upd_num: 1,
-  ogrn: '123123123',
-};

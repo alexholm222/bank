@@ -7,13 +7,15 @@
   font-style: normal;
   font-weight: 400;
   line-height: 18px;
+  display: flex;
+  flex-direction: column;
+
   &_header {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
-    height: 40px;
+    margin-bottom: 20px;
   }
 
   .title {
@@ -39,10 +41,9 @@
 .dropzone {
   width: 450px;
   height: 70px;
-  margin-top: 10px;
   border: 2px dashed #dce1e7;
+  margin-bottom: 20px;
   border-radius: 8px;
-  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,12 +52,12 @@
   opacity: 1;
   overflow: hidden;
   transition: all 0.2s ease-in-out;
-  &.dropzone_vis {
+ /*  &.dropzone_vis {
     opacity: 0;
     height: 0;
     margin-bottom: 0;
     pointer-events: none;
-  }
+  } */
 }
 
 .uploadLabel {
@@ -77,9 +78,9 @@
 }
 
 .sizeInfo {
-  margin-top: 8px;
+  margin-top: 2px;
   font-size: 14px;
-  color: #98a0af;
+  color: #71869D;
 }
 
 .submit {
@@ -106,6 +107,9 @@
 }
 
 .file_info {
+  position: absolute;
+  top: 64px;
+  width: calc(100% - 48px);
   border-radius: 8px;
   border: 1px solid #ecf2fc;
   background: #f8fafd;
@@ -194,6 +198,4 @@
   gap: 2px;
   align-items: flex-start;
 }
-.disabledLike {
-  cursor: not-allowed;
-}
+

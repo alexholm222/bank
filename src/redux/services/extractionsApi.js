@@ -69,4 +69,5 @@ export const {
   useUploadExtractionMutation,
   useGetExtractionDownloadPathQuery,
   useLazyGetExtractionDownloadPathQuery,
+  useLazyGetTransactionsInfiniteQuery,
 } = extractionsApi;

@@ -18,6 +18,10 @@ const App = () => {
         <Route path="/" element={<Main />} />
       </Routes>
 
+      <Routes>
+        <Route path="/statements" element={<Main />} />
+      </Routes>
+
       {/* Глобальные модалки */}
       <ModalManager />
 

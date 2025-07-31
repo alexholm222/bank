@@ -12,7 +12,7 @@ import { useGetCompaniesQuery } from '../../redux/services/filtersApiActions';
 import { setCompanies, setPartnerships } from '../../redux/filters/companiesListSlice';
 import { useGetExtractionsInfiniteQuery } from '../../redux/services/extractionsApi';
 import { makeSelectAllRows } from '../../redux/tableData/tableDataSelectors';
-
+import { setIsUnknownTransaction } from '../../redux/filters/unknownTransactionsSlice';
 // Hooks
 import { useModal } from 'hooks/useModal';
 
@@ -33,9 +33,9 @@ const Main = () => {
 
   const { dateStartPicker, dateEndPicker } = useSelector((state) => state.dateRange);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isUnknownTransaction, setIsUnknownTransaction] = useState(false);
   const [activeTab, setActiveTab] = useState('transactions');
   const selectAllRows = useMemo(() => makeSelectAllRows(activeTab), [activeTab]);
+
   const allRows = useSelector(selectAllRows);
 
   const {
@@ -80,13 +80,20 @@ const Main = () => {
 
   //////////////////////////////////////////////////////////////////////////////////
   //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
-  const { data: transactionsListUnknown } = useGetTransactionsInfiniteQuery({
-    'filter[requires_action]': '1',
-  });
+  const { data: transactionsListUnknown, isSuccess } = useGetTransactionsInfiniteQuery(
+    { 'filter[requires_action]': '1' },
+    {
+      skip: selectedRecognizedType !== '',
+    }
+  );
+
   useEffect(() => {
-    const hasUnknownTransactions = transactionsListUnknown?.pages?.[0]?.data?.length > 0;
-    setIsUnknownTransaction(hasUnknownTransactions);
-  }, [transactionsListUnknown]);
+    if (isSuccess && selectedRecognizedType === '') {
+      const hasUnknown = transactionsListUnknown?.pages?.[0]?.data?.length > 0;
+      dispatch(setIsUnknownTransaction(hasUnknown));
+    }
+  }, [isSuccess, transactionsListUnknown, selectedRecognizedType, dispatch]);
+
   //////////////////////////////////////////////////////////////////////////////////
   //Получаем список компаний для фильтров
   const { data: companiesListForFilters } = useGetCompaniesQuery();
@@ -131,7 +138,6 @@ const Main = () => {
         handleAddAccount={handleAddAccount}
         handleUpload={handleUpload}
         isLoading={isLoading}
-        isUnknownTransaction={isUnknownTransaction}
         setIsUnknownTransaction={setIsUnknownTransaction}
       />
 
@@ -149,7 +155,13 @@ const Main = () => {
           scrollableTarget="scrollableDiv"
           style={{ overflow: allRows.length === 0 ? 'hidden' : 'auto' }}
         >
-          <Table type={activeTab} list={allRows} isFetching={isFetching} error={error} />
+          <Table
+            type={activeTab}
+            list={allRows}
+            isLoading={isLoading}
+            isFetching={isFetching}
+            error={error}
+          />
         </InfiniteScroll>
       </div>
     </div>

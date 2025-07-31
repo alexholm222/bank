@@ -105,7 +105,7 @@
 .paymentsRow {
   display: flex;
   align-items: flex-start;
-  overflow: hidden;
+  /* overflow: hidden; */
   gap: 0;
   margin-bottom: 12px;
 
@@ -120,6 +120,11 @@
     word-break: break-word;
     max-width: 496px;
     flex: 1;
+
+    &_2 {
+      cursor: pointer;
+      overflow: visible;
+    }
   }
 }
 

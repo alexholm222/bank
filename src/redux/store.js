@@ -6,6 +6,7 @@ import dateRangeReducer from './filters/dateRangeSlice';
 import modalReducer from './modalManager/modalSlice';
 import tableDataReducer from './tableData/tableDataSlice';
 import companiesListReducer from '../redux/filters/companiesListSlice';
+import unknownTransactionsSliceReducer from './filters/unknownTransactionsSlice';
 
 import { transactionsApi } from './services/transactionsApi';
 import { extractionsApi } from './services/extractionsApi';
@@ -18,6 +19,8 @@ export const store = configureStore({
     modal: modalReducer,
     tableData: tableDataReducer,
     companiesList: companiesListReducer,
+    unknownTransactions: unknownTransactionsSliceReducer,
+
     [transactionsApi.reducerPath]: transactionsApi.reducer,
     [extractionsApi.reducerPath]: extractionsApi.reducer,
     [filtersApiActions.reducerPath]: filtersApiActions.reducer,

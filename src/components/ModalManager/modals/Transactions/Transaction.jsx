@@ -49,7 +49,6 @@ const Transaction = ({ id }) => {
   const { data } = useGetTransactionQuery({ id });
   const companies = useSelector((state) => state.companiesList.companies) ?? [];
   const handleDeleteTransaction = useDeleteTransaction();
-
   const [transaction, setTransaction] = useState(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -87,8 +86,8 @@ const Transaction = ({ id }) => {
     () =>
       companies.map((company) => ({
         value: company.id,
-        name: company.name,
-        label: company.label,
+        label: company.name,
+        badge: company.label,
         inn: company.inn,
         kpp: company.kpp,
         ogrnip: company.ogrnip,

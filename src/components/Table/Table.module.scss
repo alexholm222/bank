@@ -1,7 +1,8 @@
 .root {
   table-layout: fixed;
   width: 100%;
-  padding: 0 28px 20px 28px;
+  /*  padding: 0 0 20px 0; */
+  overflow: hidden;
   width: 100%;
   max-width: 100%;
   background-color: #fff;
@@ -9,6 +10,11 @@
   border-spacing: 0;
   opacity: 1;
   color: var(--Text-Primary, #121922);
+  transition: all 0.15s;
+
+  &_anim {
+    opacity: 1;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,8 +23,9 @@
   display: grid;
   align-items: center;
   padding: 0 20px;
+  margin-top: -1px;
   height: 50px;
-  border-bottom: 1px solid #eff4fb;
+  /*  border-bottom: 1px solid #eff4fb; */
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
@@ -73,11 +80,18 @@
     }
   }
 }
+
+.line {
+  margin: -1px 20px 0;
+  width: calc(100% - 40px);
+  height: 1px;
+  background-color: #eaf0fa;
+}
+
 .gridCell {
-  overflow: hidden;
+  padding-right: 12px;
   white-space: nowrap;
   text-overflow: ellipsis;
-  padding: 16px 20px 16px 0;
 
   &.right {
     justify-self: end;
@@ -98,7 +112,7 @@
 
 .gridHeader {
   @extend .gridRow;
-  font-weight: 500;
+  font-weight: 400;
   color: #71869d;
 
   &:hover {

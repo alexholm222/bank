@@ -14,6 +14,7 @@ const useDownloadTransaction = () => {
         const link = document.createElement('a');
         link.href = result.path;
         link.setAttribute('download', '');
+        link.setAttribute('target', '_blank');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
