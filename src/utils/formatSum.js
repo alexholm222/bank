@@ -1,3 +1,5 @@
+
+
 const formatSum = (type, sum) => {
   const sign = type === 'income' || type === 'refund_outcome' ? '+' : '-';
   const num = parseFloat(sum);

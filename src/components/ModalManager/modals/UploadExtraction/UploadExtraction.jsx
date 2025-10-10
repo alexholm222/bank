@@ -84,6 +84,7 @@ const UploadExtraction = () => {
       .unwrap()
       .then(() => {
         setSucces('Успешно распознано');
+
       })
       .catch((error) => {
         setUploadError(`Не удалось распознать выписку.`);
@@ -102,7 +103,7 @@ const UploadExtraction = () => {
     setFile(null);
     setSucces('');
     hideModal();
-    
+
   };
 
   useEffect(() => {

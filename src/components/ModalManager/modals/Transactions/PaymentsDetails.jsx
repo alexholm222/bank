@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import s from './Transaction.module.scss';
 //components
 import Goal from 'components/Goal/Goal';
+//utils
+import { addSpaceNumber } from 'utils/addSpaceNumber';
 
 const PaymentDetails = ({ payer, receiver, data }) => {
   const typeTransactionMap = {
@@ -26,7 +28,7 @@ const PaymentDetails = ({ payer, receiver, data }) => {
   ];
 
   const summaryData = [
-    ['Сумма', data?.sum],
+    ['Сумма', `${addSpaceNumber(data?.sum.split('.')?.[0])}.${data?.sum.split('.')[1]}`],
     ['Тип транзакции', typeTransactionMap[data?.type]],
     ['Вид', data?.kind],
     ['Назначение', data?.goal],

@@ -55,12 +55,13 @@ const Main = () => {
     transactionTypeFilter,
     transactionViewFilter,
     selectedRecognizedType,
-    selectedCompanies,
+    selectedCompanies
   });
 
   const {
     data: transactionsList,
     isFetching: isFetchingTransactions,
+    refetch,
     fetchNextPage,
     hasNextPage,
     isLoading,
@@ -75,7 +76,7 @@ const Main = () => {
     selectedStatus,
   });
 
-  const { data: extractionsList, isFetching: isFetchingExtractions } =
+  const { data: extractionsList, isFetching: isFetchingExtractions, isLoading: isLoadingExtractions } =
     useGetExtractionsInfiniteQuery(extractionsParams);
 
   //////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +87,13 @@ const Main = () => {
       skip: selectedRecognizedType !== '',
     }
   );
+
+  useEffect(() => {
+    if (!isLoadingExtractions && isFetchingExtractions) {
+      refetch()
+      return
+    }
+  }, [isFetchingExtractions, isLoadingExtractions])
 
   useEffect(() => {
     if (isSuccess && selectedRecognizedType === '') {

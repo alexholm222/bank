@@ -3,6 +3,7 @@ import classNames from 'classnames';
 // utils
 import formatShortYear from 'utils/formatShortYear';
 import formatSum from 'utils/formatSum';
+import { addSpaceNumber } from 'utils/addSpaceNumber';
 
 //hooks
 import useDeleteTransaction from 'hooks/useDeleteTransaction';
@@ -144,7 +145,7 @@ const AmountCell = ({ amount }) => {
     <span>
       <span style={{ color: isNegative ? '#000' : 'green' }}>
         {isNegative ? '-' : '+'}
-        {intPart}
+        {addSpaceNumber(intPart)}
       </span>
       <span style={{ color: '#71869d' }}>.{decimalPart}</span>
     </span>

@@ -48,7 +48,7 @@ export const extractionsApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: ['EXTRACTIONS'],
+      invalidatesTags: ['EXTRACTIONS', 'TRANSACTIONS'],
       transformResponse: (responseText) => {
         return { message: responseText };
       },
