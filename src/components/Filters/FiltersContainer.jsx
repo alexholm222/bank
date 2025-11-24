@@ -90,31 +90,31 @@ const FiltersContainer = ({ type, isFetching }) => {
       />,
     ],
     accounts: [
-      <DetailsFilter
-        key="company"
-        name="company"
-        data={companies}
-        isFetching={getFetching('company')}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-      />,
-      <ActivityFilter
-        key="activity"
-        name="activity"
-        isFetching={getFetching('activity')}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-      />,
-      <DateFilter
-        key="date"
-        name="date"
-        isFetching={isFetching}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-      />,
+      // <DetailsFilter
+      //   key="company"
+      //   name="company"
+      //   data={companies}
+      //   isFetching={getFetching('company')}
+      //   activeFilter={activeFilter}
+      //   setActiveFilter={setActiveFilter}
+      //   clearActiveFilter={clearActiveFilter}
+      // />,
+      // <ActivityFilter
+      //   key="activity"
+      //   name="activity"
+      //   isFetching={getFetching('activity')}
+      //   activeFilter={activeFilter}
+      //   setActiveFilter={setActiveFilter}
+      //   clearActiveFilter={clearActiveFilter}
+      // />,
+      // <DateFilter
+      //   key="date"
+      //   name="date"
+      //   isFetching={isFetching}
+      //   activeFilter={activeFilter}
+      //   setActiveFilter={setActiveFilter}
+      //   clearActiveFilter={clearActiveFilter}
+      // />,
     ],
   };
 

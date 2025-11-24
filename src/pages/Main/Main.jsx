@@ -55,7 +55,7 @@ const Main = () => {
     transactionTypeFilter,
     transactionViewFilter,
     selectedRecognizedType,
-    selectedCompanies
+    selectedCompanies,
   });
 
   const {
@@ -76,8 +76,11 @@ const Main = () => {
     selectedStatus,
   });
 
-  const { data: extractionsList, isFetching: isFetchingExtractions, isLoading: isLoadingExtractions } =
-    useGetExtractionsInfiniteQuery(extractionsParams);
+  const {
+    data: extractionsList,
+    isFetching: isFetchingExtractions,
+    isLoading: isLoadingExtractions,
+  } = useGetExtractionsInfiniteQuery(extractionsParams);
 
   //////////////////////////////////////////////////////////////////////////////////
   //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
@@ -90,10 +93,10 @@ const Main = () => {
 
   useEffect(() => {
     if (!isLoadingExtractions && isFetchingExtractions) {
-      refetch()
-      return
+      refetch();
+      return;
     }
-  }, [isFetchingExtractions, isLoadingExtractions])
+  }, [isFetchingExtractions, isLoadingExtractions]);
 
   useEffect(() => {
     if (isSuccess && selectedRecognizedType === '') {

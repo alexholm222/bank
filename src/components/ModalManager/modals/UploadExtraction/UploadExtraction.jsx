@@ -31,7 +31,7 @@ import s from './UploadExtraction.module.scss';
 
 const UploadExtraction = () => {
   const [uploadExtraction, { isLoading, isError }] = useUploadExtractionMutation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
   const [validationError, setValidationError] = useState('');
@@ -84,7 +84,6 @@ const UploadExtraction = () => {
       .unwrap()
       .then(() => {
         setSucces('Успешно распознано');
-
       })
       .catch((error) => {
         setUploadError(`Не удалось распознать выписку.`);
@@ -103,7 +102,6 @@ const UploadExtraction = () => {
     setFile(null);
     setSucces('');
     hideModal();
-
   };
 
   useEffect(() => {
@@ -143,9 +141,7 @@ const UploadExtraction = () => {
             {isDragActive ? (
               <span>Отпустите здесь файл</span>
             ) : (
-              <>
-                Нажмите, чтобы загрузить файл, либо перетащите сюда
-              </>
+              <>Нажмите, чтобы загрузить файл, либо перетащите сюда</>
             )}
           </div>
           <div className={s.sizeInfo}>1С формат TXT до 20 Мбайт</div>
@@ -190,7 +186,7 @@ const UploadExtraction = () => {
             type="primary"
             onClick={success ? handleCancelUpload : handleSubmit}
             className={classNames(s.submit, (!file || isLoading) && s.disabledLike)}
-          // width={330}
+            // width={330}
           />
         </div>
       </div>
