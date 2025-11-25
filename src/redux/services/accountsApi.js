@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
+const BANK_URL = '/bank';
 export const accountsApi = createApi({
   reducerPath: 'accountsApi',
   baseQuery: fetchBaseQuery({
@@ -33,7 +33,39 @@ export const accountsApi = createApi({
         },
       },
     }),
+    createBankAccount: build.mutation({
+      query: (body) => ({
+        url: `${BANK_URL}/partnership_details/create`,
+        method: 'POST',
+        body,
+      }),
+    }),
+    deactivateBankAccount: build.mutation({
+      query: ({ id, new_main_detail_id }) => ({
+        url: `${BANK_URL}/partnership_details/deactivate/${id}`,
+        method: 'POST',
+        body: { new_main_detail_id },
+      }),
+    }),
+    setMainBankAccount: build.mutation({
+      query: (id) => ({
+        url: `${BANK_URL}/partnership_details/set-main/${id}`,
+        method: 'POST',
+      }),
+    }),
+    deleteBankAccount: build.mutation({
+      query: (id) => ({
+        url: `${BANK_URL}/partnership_details/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useGetAccountsInfiniteQuery } = accountsApi;
+export const {
+  useGetAccountsInfiniteQuery,
+  useCreateBankAccountMutation,
+  useDeactivateBankAccountMutation,
+  useSetMainBankAccountMutation,
+  useDeleteBankAccountMutation,
+} = accountsApi;

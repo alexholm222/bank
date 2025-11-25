@@ -1,14 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import 'dayjs/locale/ru';
 
-// Redux
-// import {
-//   useCreateBankAccountMutation,
-//   useUpdateBankAccountMutation,
-//   useDeleteBankAccountMutation,
-// } from '../../../../redux/services/counterpartyDetailsApiActions';
-// import { useGetBankByBikMutation } from '../../../../redux/services/dadataApiActions';
+//Redux
+import {
+  useCreateBankAccountMutation,
 
+} from '../../../../redux/services/accountsApi';
+import { useGetBankByBikMutation } from '../../../../redux/services/dadataApiActions';
+import { useGetCompaniesQuery } from '../../../../redux/services/filtersApiActions';
 // Hooks
 import { useModal } from 'hooks/useModal';
 import useToast from 'hooks/useToast';
@@ -17,22 +16,20 @@ import useToast from 'hooks/useToast';
 import Modal from 'components/General/Modal/Modal';
 import UniButton from 'components/General/UniButton/UniButton';
 import Field from 'components/General/Field/Field';
-import Switch from 'components/General/Switch/Switch';
 import InputBankAccount from './InputBankAccount/InputBankAccount';
 import InputBik from './InputBik/InputBik';
-import Label from 'components/General/Label/Label';
 import InputText from 'components/General/InputText/InputText';
 
 // Icons
 import { ReactComponent as IconCloseBlack } from 'assets/icons/iconCloseBlack.svg';
 import { ReactComponent as IconPlusBlack } from 'assets/icons/iconPlusBlack.svg';
-import { ReactComponent as IconRuble } from 'assets/icons/IconRubleBlack.svg';
-import { ReactComponent as IconDelete } from 'assets/icons/iconDeleteRed.svg';
+import { ReactComponent as IconCloseBlue } from 'assets/icons/iconCloseBlue.svg';
 import { ReactComponent as IconDoneWhite } from 'assets/icons/iconDoneWhite.svg';
 import { ReactComponent as IconDoneGrey } from 'assets/icons/iconDoneGrey.svg';
 
 // Styles
 import s from './BankAccount.module.scss';
+import Combobox from 'components/General/Combobox/Combobox';
 
 const BankAccount = () => {
   const { showToast } = useToast();
@@ -45,39 +42,63 @@ const BankAccount = () => {
   const [bank, setBank] = useState('');
   const [ks, setKs] = useState('');
   const [rs, setRs] = useState('');
-  const [isDefault, setIsDefault] = useState(0);
+  const [partnershipId, setPartnershipId] = useState(null);
+  const [selectedPartnership, setSelectedPartnership] = useState(null);
   const [dadata, setDadata] = useState({});
 
-  // const [getBankByBik] = useGetBankByBikMutation();
-  // const [createBankAccount, { isLoading: isCreating }] = useCreateBankAccountMutation();
-  // const [updateBankAccount, { isLoading: isUpdating }] = useUpdateBankAccountMutation();
-  // const [deleteBankAccount, { isLoading: isDeleting }] = useDeleteBankAccountMutation();
+  const [createBankAccount, { isLoading}] =  useCreateBankAccountMutation();
+  const { data: parameters } = useGetCompaniesQuery();
+  const [getBankByBik] = useGetBankByBikMutation();
+
+  const partnershipOptions = useMemo(() => {
+    const partnershipDetails = parameters?.partnership_details || [];
+    if (!Array.isArray(partnershipDetails) || partnershipDetails.length === 0) return [];
+    
+    // Убираем дубликаты по partnership_id, оставляя первое вхождение
+    const uniquePartnerships = new Map();
+    partnershipDetails.forEach((item) => {
+      const partnershipId = item.partnership_id;
+      if (partnershipId && !uniquePartnerships.has(partnershipId)) {
+        uniquePartnerships.set(partnershipId, item);
+      }
+    });
+    
+    // Преобразуем в формат, который ожидает Combobox
+    return Array.from(uniquePartnerships.values()).map((item) => ({
+      value: item.partnership_id,
+      label: item.partnership_name,
+      badge: item.label || null,
+      inn: item.inn || '',
+      kpp: item.kpp || '',
+      ogrn: item.ogrn || '',
+    }));
+  }, [parameters]);
 
   const disabledBtn = useMemo(
-    () => bik.length !== 9 || !bank || ks.length !== 20 || rs.length !== 20,
-    [bik, bank, ks, rs]
+    () => !partnershipId || bik.length !== 9 || !bank || ks.length !== 20 || rs.length !== 20,
+    [partnershipId, bik, bank, ks, rs]
   );
 
+
+
   useEffect(() => {
-    if (!bankAccount) return;
-    if (bankAccount.id) {
-      setBank(bankAccount.bank || '');
-      setBik(bankAccount.bik || '');
-      setKs(bankAccount.ks || '');
-      setRs(bankAccount.rs || '');
-
-      setIsDefault(bankAccount.is_default);
+    if (companyId && partnershipOptions.length > 0) {
+      const partnership = partnershipOptions.find((p) => p.value === companyId);
+      if (partnership) {
+        setSelectedPartnership(partnership);
+        setPartnershipId(partnership.value);
+      }
     }
-  }, [bankAccount]);
+  }, [companyId, partnershipOptions]);
 
-  // useEffect(() => {
-  //   if (bik.length !== 9) return;
+  useEffect(() => {
+    if (bik.length !== 9) return;
 
-  //   getBankByBik({ bik })
-  //     .unwrap()
-  //     .then(setDadata)
-  //     .catch((error) => console.error('Ошибка получения банка по БИК:', error));
-  // }, [bik, getBankByBik]);
+    getBankByBik({ bik })
+      .unwrap()
+      .then(setDadata)
+      .catch((error) => console.error('Ошибка получения банка по БИК:', error));
+  }, [bik, getBankByBik]);
 
   const handleFillByBik = () => {
     setBank(dadata.value || '');
@@ -85,56 +106,54 @@ const BankAccount = () => {
   };
 
   const getPayload = () => ({
-    company_id: companyId,
+    partnership_id: partnershipId,
     bank,
     bik,
     ks,
     rs,
-    is_default: isDefault,
   });
 
-  const handleSaveAccount = async () => {
-    // const mutation = isCreateMode ? createBankAccount : updateBankAccount;
-    // const params = isCreateMode
-    //   ? { data: getPayload() }
-    //   : { accountId: bankAccount.id, data: getPayload() };
-    // try {
-    //   const res = await mutation(params).unwrap();
-    //   if (res?.success) {
-    //     onSuccess?.();
-    //     hideModal();
-    //   }
-    //   showToast(isCreateMode ? 'Счет добавлен' : 'Счет обновлен', 'success');
-    // } catch {
-    //   showToast('Произошла ошибка', 'error');
-    // }
+  const handleAddAccount = async () => {
+    try {
+      const payload = getPayload();
+      await createBankAccount(payload).unwrap();
+      showToast('Счет успешно создан', 'success');
+      if (onSuccess) {
+        onSuccess();
+      }
+      hideModal();
+    } catch (error) {
+      console.error('Ошибка создания счета:', error);
+      showToast('Ошибка при создании счета', 'error');
+    }
   };
-
-  const handleDeleteAccount = async () => {
-    // try {
-    //   await deleteBankAccount({ accountId: bankAccount.id }).unwrap();
-    //   onSuccess?.();
-    //   hideModal();
-    //   showToast('Счет удален', 'success');
-    // } catch {
-    //   showToast('Произошла ошибка', 'error');
-    // }
-  };
+ 
 
   return (
     <Modal isOpen onClose={hideModal}>
       <div className={s.modal}>
         <div className={s.header}>
           <div className={s.title}>
-            {isCreateMode ? <IconPlusBlack /> : <IconRuble />}
-            <p>{isCreateMode ? 'Добавить счет' : 'Банковский счет'}</p>
+            <IconPlusBlack />
+            <p>Добавить счет</p>
           </div>
           <div onClick={hideModal} className={s.close}>
             <IconCloseBlack />
           </div>
         </div>
 
-        {/* <div className={s.content}>
+        <div className={s.content}>
+          <Field text="Партнерство">
+            <Combobox 
+              options={partnershipOptions} 
+              value={selectedPartnership} 
+              onChange={(option) => {
+                setSelectedPartnership(option);
+                setPartnershipId(option?.value || null);
+              }} 
+              width={300} 
+            />
+          </Field>
           <Field text="БИК">
             <InputBik account={bik} setAccount={setBik} width={300} />
           </Field>
@@ -159,48 +178,32 @@ const BankAccount = () => {
             <InputBankAccount account={rs} setAccount={setRs} width={300} />
           </Field>
 
-          {Boolean(bankAccount?.is_default) === false && (
-            <Switch
-              text="Назначить основным"
-              switchState={isDefault}
-              handleSwitch={() => setIsDefault((prev) => (prev === 0 ? 1 : 0))}
-              disabled={bankAccount?.is_default === 1}
-            />
-          )}
+          
 
-          {!isCreateMode && Boolean(bankAccount?.is_default) && (
-            <div className={s.warning}>
-              <Label label="Основной счет" width={120} />
-              <Field
-                info="Этот счет используется по умолчанию, его нельзя удалить. Чтобы назначить другой счет в качестве основного, перейди в его карточку."
-                width={300}
-              />
-            </div>
-          )}
-        </div> */}
+         
+        </div> 
 
-        {/* <div className={s.btns}>
+       <div className={s.btns}>
+          
           <UniButton
-            text={isCreateMode ? 'Готово' : 'Сохранить изменения'}
-            onClick={handleSaveAccount}
-            isLoading={isCreating || isUpdating}
-            icon={!isCreateMode ? IconDoneWhite : disabledBtn ? IconDoneGrey : IconDoneWhite}
-            width={300}
-            disabled={isCreateMode ? disabledBtn : false}
-          />
+            text="Отменить"
+            onClick={hideModal}
+            type="outline"
+            icon={IconCloseBlue}
+            iconPosition="right"
 
-          {!isCreateMode && !bankAccount?.is_active && (
-            <UniButton
-              text="Удалить"
-              onClick={handleDeleteAccount}
-              type="danger"
-              icon={bankAccount?.is_default === 1 ? null : IconDelete}
-              width={300}
-              isLoading={isDeleting}
-              disabled={bankAccount.is_default === 1}
-            />
-          )}
-        </div> */}
+          />
+          <UniButton
+          iconPosition="right"
+            text={'Добавить'}
+            onClick={handleAddAccount}
+            isLoading={isLoading}
+            icon={disabledBtn ? IconDoneGrey : IconDoneWhite }
+            width={174}
+            disabled={ disabledBtn }
+          />
+        
+        </div> 
       </div>
     </Modal>
   );

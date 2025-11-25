@@ -1,5 +1,6 @@
-import { toast } from 'react-toastify';
 import CustomToast from 'components/General/CustomToast/CustomToast';
+import { toast } from 'react-toastify';
+
 
 const useToast = () => {
   const showToast = (message, type = 'success', icon) => {

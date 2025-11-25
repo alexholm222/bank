@@ -11,6 +11,7 @@ import unknownTransactionsSliceReducer from './filters/unknownTransactionsSlice'
 import { transactionsApi } from './services/transactionsApi';
 import { extractionsApi } from './services/extractionsApi';
 import { filtersApiActions } from './services/filtersApiActions';
+import { dadataApiActions } from './services/dadataApiActions';
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     [transactionsApi.reducerPath]: transactionsApi.reducer,
     [extractionsApi.reducerPath]: extractionsApi.reducer,
     [filtersApiActions.reducerPath]: filtersApiActions.reducer,
+    [dadataApiActions.reducerPath]: dadataApiActions.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -32,7 +34,8 @@ export const store = configureStore({
     })
       .concat(transactionsApi.middleware)
       .concat(extractionsApi.middleware)
-      .concat(filtersApiActions.middleware),
+      .concat(filtersApiActions.middleware)
+      .concat(dadataApiActions.middleware),
 });
 
 setupListeners(store.dispatch);

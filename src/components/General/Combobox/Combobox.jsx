@@ -65,7 +65,7 @@ const CustomNoOptionsMessage = (props) => {
   );
 };
 
-const Combobox = ({ className, options, value, onChange, hasError = false }) => {
+const Combobox = ({ className, options, value, onChange, hasError = false, width }) => {
   const [inputValue, setInputValue] = useState('');
   const selectRef = useRef(null);
 
@@ -84,7 +84,7 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
   };
 
   return (
-    <div className={classNames(s.root, className)} onMouseDown={(e) => e.stopPropagation()}>
+    <div className={classNames(s.root, className)} onMouseDown={(e) => e.stopPropagation()} style={width ? { width: `${width}px` } : undefined}>
       <Select
         ref={selectRef}
         options={options}
@@ -95,7 +95,7 @@ const Combobox = ({ className, options, value, onChange, hasError = false }) => 
           option.data.inn.toLowerCase().includes(inputValue.toLowerCase())
         }
         placeholder=""
-        styles={getCustomStyles(hasError)}
+        styles={getCustomStyles(hasError, width)}
         isSearchable
         inputValue={inputValue}
         onInputChange={handleInputChange}

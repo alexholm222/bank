@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Slide } from 'react-toastify';
 // Components
 import Main from './pages/Main/Main';
 import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
@@ -26,7 +26,15 @@ const App = () => {
       <ModalManager />
 
       {/* Уведомления */}
-      <ToastContainer position="top-center" hideProgressBar closeOnClick pauseOnHover limit={3} />
+      <ToastContainer
+        position="top-center"
+        hideProgressBar
+        closeOnClick
+        pauseOnHover
+        transition={Slide}
+        limit={1}
+        stacked
+      />
 
       {/* Кнопка прокрутки вверх */}
       <ScrollToTopButton scrollContainerRef={scrollRef} />

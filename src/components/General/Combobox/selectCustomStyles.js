@@ -1,8 +1,8 @@
-const getCustomStyles = (hasError) => ({
+const getCustomStyles = (hasError, width) => ({
   control: (base, state) => ({
     ...base,
     maxWidth: '100%',
-    width: '100%',
+    width: width ? `${width}px` : '100%',
     backgroundColor: '#fff',
     borderColor: hasError ? '#E10D0D' : state.isFocused ? '#002cfb' : '#e0e5f2',
     boxShadow: 'none',

@@ -7,7 +7,7 @@ import BankAccount from './BankAccount/BankAccount';
 
 export const MODALS = {
   TRANSACTION: Transaction,
-  ADD_ACCOUNT: AddAccountModal,
+  // ADD_ACCOUNT: AddAccountModal,
   UPLOAD_EXTRACTION: UploadExtraction,
   ACCOUNT_INFO: AccountInfo,
   CHANGE_ACCOUNT_DETAIL: ChangeDetail,

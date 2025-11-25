@@ -1,20 +1,33 @@
-import { toast,ToastContainer } from 'react-toastify';
-
+import { ReactComponent as IconClose } from 'assets/icons/iconClose.svg';
+import { ReactComponent as IconDoneBlue } from 'assets/icons/iconDoneBlue.svg';
+import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 import s from './CustomToast.module.scss';
+import './index.css';
+import classNames from 'classnames';
 
-import 'react-toastify/dist/ReactToastify.css';
+const CustomToast = ({ closeToast, message, icon, type, buttonClose }) => {
+    const typeClassMap = {
+        error: s.notification_error,
+        success: s.notification_success,
+    };
 
-const CustomToast = ({ closeToast, message }) => {
-  return (
-    <div className={`${s.notification} ${s.notification_anim}`}>
-      <div className={s.line} />
-      <div className={s.icon}>{}</div>
-      <p>{message}</p>
-      <div className={s.close} onClick={closeToast}>
-        ✖
-      </div>
-    </div>
-  );
+    const defaultIcons = {
+        success: <IconDoneBlue />,
+        error: <IconWarning />,
+    };
+    const renderIcon = icon || defaultIcons[type];
+
+    return (
+        <div className={classNames(s.notification, typeClassMap[type])}>
+            {renderIcon && <div className={s.icon}>{renderIcon}</div>}
+            <p>{message}</p>
+            {buttonClose && (
+                <button className={s.close} onClick={closeToast}>
+                    <IconClose />
+                </button>
+            )}
+        </div>
+    );
 };
 
 export default CustomToast;
