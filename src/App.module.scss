@@ -1,16 +1,19 @@
 .root {
-    padding: 40px;
-    font-family: Inter;
-    height: 100vh;
-    min-width: 1600px;
-    overflow: scroll;
-    overflow-x: hidden;
-    scrollbar-gutter: stable;
-    cursor: default;
+  padding: 40px;
+  font-family: Inter;
+  height: 100vh;
+  min-width: 1440px;
+  overflow: scroll;
+  overflow: hidden;
+  scrollbar-gutter: stable;
+  cursor: default;
+  height: 100vh;
+  font-size: 14px;
+  overflow-y: auto;
 }
 
 h3 {
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
 }

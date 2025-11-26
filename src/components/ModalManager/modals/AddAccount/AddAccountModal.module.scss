@@ -1,0 +1,47 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 350px;
+  padding: 20px 24px 20px 24px;
+  background: #fff;
+  border-radius: 8px;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.closeBtn {
+  cursor: pointer;
+}
+.bikButton {
+  margin-top: 5px;
+  background: none;
+  border: none;
+  color: #002cfb;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+}
+
+.buttons {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}

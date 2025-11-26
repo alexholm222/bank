@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.queryPanel {
+  display: flex;
+  justify-content: space-between;
+}
+.container {
+  height: auto;
+  overflow: visible;
+  overflow-y: auto;
+}

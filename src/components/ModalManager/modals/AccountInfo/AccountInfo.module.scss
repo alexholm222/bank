@@ -1,0 +1,295 @@
+.modal {
+  padding: 20px 24px;
+
+  font-family: Inter;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+
+  .modalHeader {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 40px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    // gap: 6px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .close {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
+
+.body {
+  width: 452px;
+  padding: 12px;
+  border-radius: 4px;
+  background: rgba(212, 223, 243, 0.17);
+  border-radius: 8px;
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+
+  &::before {
+    content: '';
+    grid-column: 1 / 2;
+  }
+
+  .headerTitle {
+    font-weight: 500;
+    color: #6c7a89;
+    text-align: left;
+  }
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.label {
+  margin-right: 12px;
+  width: 120px;
+  text-align: right;
+  color: #71869d;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.content {
+  color: #121922;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.paymentSummary {
+  margin-top: 8px;
+
+  .sectionSubtitle {
+    width: 200px;
+    margin-left: 120px;
+    font-weight: 400;
+    color: #6c7a89;
+    border-bottom: 1px solid #eff4fb;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .label {
+    width: 108px;
+    margin-right: 12px;
+    text-align: right;
+    color: #71869d;
+    font-size: 14px;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
+  .content {
+    color: #121922;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    word-break: break-word;
+    max-width: 496px;
+    flex: 1;
+  }
+}
+
+.controlSection {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.controlBtn {
+  overflow: hidden;
+  transition: all 0.7s ease;
+  height: 0;
+  opacity: 0;
+  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+
+  &_vis {
+    opacity: 1;
+    height: 40px;
+  }
+}
+
+.activateBtn {
+  width: 0;
+  opacity: 0;
+  transition: all 0.7s ease;
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+  &_vis {
+    opacity: 1;
+    width: 100%;
+    height: 40px;
+  }
+}
+.link {
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #002cfb;
+  font-weight: 500;
+  text-decoration: none;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+
+  &_vis {
+    height: 40px;
+    opacity: 1;
+  }
+
+  .count {
+    border-radius: 9px;
+    background: rgba(0, 44, 251, 0.1);
+    padding: 2px 8px;
+    font-size: 14px;
+  }
+
+  .arrow {
+    font-size: 16px;
+  }
+
+  &:hover {
+    color: #0024cb;
+  }
+}
+.switchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #002cfb;
+  font-weight: 500;
+  text-decoration: none;
+  height: 40px;
+  // height: 0;
+  // opacity: 0;
+  // overflow: hidden;
+  // transition: all 0.3s ease;
+
+  // &_vis {
+  //   height: auto;
+  //   opacity: 1;
+  // }
+}
+.paymentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.gridRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+}
+
+.label {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  color: #71869d;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.payer {
+  color: #121922;
+}
+
+.receiver {
+  color: #1a73e8;
+}
+
+.paymentSummary {
+  padding: 16px;
+  background: #f7f8fa;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionSubtitle {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 12px;
+  align-items: center;
+}
