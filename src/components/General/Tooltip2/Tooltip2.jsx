@@ -1,20 +1,29 @@
-import classNames from 'classnames';
-import s from './Tooltip2.module.scss';
+import classNames from "classnames";
+import s from "./Tooltip2.module.scss";
 
-const Tooltip2 = ({ open, text, maxWidth, left, bottom }) => {
+import { createPortal } from "react-dom";
 
-    return (
-        <div
-            style={{
-                maxWidth: `${maxWidth}px`,
-                left: `${left}px`,
-                bottom: bottom ? `${bottom}px` : ''
-            }}
-            className={classNames(s.root, !left && s.root_center, open && s.root_open)}
-        >
-            <p>{text}</p>
-        </div>
-    )
+const Tooltip2 = ({ open, text, maxWidth, left, bottom, anchorRef }) => {
+  if (!anchorRef?.current) return null;
+
+  const rect = anchorRef.current.getBoundingClientRect();
+
+  /*   return createPortal( */
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: rect.bottom + 4,
+        left: rect.left,
+        maxWidth: `${maxWidth}px`,
+        zIndex: 9999,
+      }}
+      className={classNames(s.root, open && s.root_open)}
+    >
+      <p>{text}</p>
+    </div>
+  ); /* ,
+    document.body
+  ); */
 };
-
 export default Tooltip2;

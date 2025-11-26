@@ -21,6 +21,7 @@ import { ReactComponent as IconWarning } from 'assets/icons/iconWarning.svg';
 // styles
 import s from './Table.module.scss';
 import CompanyLabelBadge from 'components/General/CompanyLabelBadge/CompanyLabelBadge';
+import EllipsisWithTooltip from 'components/General/EllipsisWithTooltip/EllipsisWithTooltip';
 
 const ACTOR_POSITIONS = {
   director: 'Директор',
@@ -103,11 +104,15 @@ const TableRow = ({ row, type }) => {
   const renderAccountRow = () => {
     return (
       <div className={classNames(s.gridRow, s.accounts)}>
-        <div className={s.gridCell}>{row.bank || ''}</div>
+        <div className={s.gridCell}>
+          <EllipsisWithTooltip text={row.bank || ''} />
+        </div>
         <div className={s.gridCell}>{row.bik || ''}</div>
         <div className={s.gridCell}>{row.rs || ''}</div>
         <div className={s.gridCell}>{row.ks || ''}</div>
-        <div className={s.gridCell}>{row.partnership.name || ''}</div>
+        <div className={s.gridCell}>
+          <EllipsisWithTooltip text={row.partnership.name || ''} />
+        </div>
         <div className={s.gridCell}>{row.data || ''}</div>
         <div className={(s.gridCell, s.agents)}>{row.counterparties_count || ''}</div>
         <div className={s.gridCell}>

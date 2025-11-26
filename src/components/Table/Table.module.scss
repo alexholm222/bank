@@ -64,7 +64,7 @@
   }
 
   &.accounts {
-    grid-template-columns: minmax(200px, 200px) // Банк
+    grid-template-columns: minmax(200px, 1fr) // Банк
       minmax(120px, 120px) // БИК
       minmax(210px, 210px) // Корр. счет
       minmax(210px, 210px) // Расчетный счет
@@ -92,6 +92,7 @@
   padding-right: 12px;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 
   &.right {
     justify-self: end;

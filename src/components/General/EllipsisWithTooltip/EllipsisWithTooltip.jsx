@@ -1,7 +1,7 @@
-import { useEffect, useState, useRef } from "react";
-import Tooltip2 from "components/General/Tooltip2/Tooltip2";
-import s from "./EllipsisWithTooltip.module.scss";
-import { wrap } from "lodash";
+import { useEffect, useState, useRef } from 'react';
+import Tooltip2 from 'components/General/Tooltip2/Tooltip2';
+import s from './EllipsisWithTooltip.module.scss';
+import { wrap } from 'lodash';
 
 const EllipsisWithTooltip = ({ text, className, textStyle, wrapperStyle }) => {
   const textRef = useRef(null);
@@ -17,14 +17,14 @@ const EllipsisWithTooltip = ({ text, className, textStyle, wrapperStyle }) => {
     };
 
     checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
   }, [text]);
   if (!text || text.trim().length === 0) return null;
 
   return (
     <div
-      className={`${s.root} ${className || ""}`}
+      className={`${s.root} ${className || ''}`}
       onMouseEnter={() => isOverflowed && setTooltipOpen(true)}
       onMouseLeave={() => setTooltipOpen(false)}
       style={wrapperStyle}
