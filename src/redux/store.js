@@ -12,6 +12,7 @@ import { transactionsApi } from './services/transactionsApi';
 import { extractionsApi } from './services/extractionsApi';
 import { filtersApiActions } from './services/filtersApiActions';
 import { dadataApiActions } from './services/dadataApiActions';
+import { accountsApi } from './services/accountsApi';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [extractionsApi.reducerPath]: extractionsApi.reducer,
     [filtersApiActions.reducerPath]: filtersApiActions.reducer,
     [dadataApiActions.reducerPath]: dadataApiActions.reducer,
+    [accountsApi.reducerPath]: accountsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -35,6 +37,7 @@ export const store = configureStore({
       .concat(transactionsApi.middleware)
       .concat(extractionsApi.middleware)
       .concat(filtersApiActions.middleware)
+      .concat(accountsApi.middleware)
       .concat(dadataApiActions.middleware),
 });
 

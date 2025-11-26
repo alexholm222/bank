@@ -5,24 +5,25 @@ export const accountsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BASE_URL,
     prepareHeaders: (headers) => {
-      const token = document.getElementById('root_performers')?.getAttribute('token');
+      const token = document.getElementById('root_bank')?.getAttribute('token');
       if (token) headers.set('Authorization', token);
-      headers.set('Content-Type', 'application/json');
+      // headers.set('Content-Type', 'application/json');
+      // headers.set('Accept', 'application/json');
       return headers;
     },
   }),
   endpoints: (build) => ({
     getAccounts: build.infiniteQuery({
-      query: ({ pageParam = 1, filters }) => ({
-        url: `/?page=${pageParam}`,
+      query: ({ pageParam = 1, queryArg }) => ({
+        url: `${BANK_URL}/partnership_details/?page=${pageParam}`,
         method: 'GET',
-        params: filters,
+        params: queryArg,
       }),
-      transformResponse: (response) => ({
-        data: response?.data?.data || [],
-        links: response?.data?.links || {},
-        meta: response?.data?.meta || {},
-      }),
+      // transformResponse: (response) => ({
+      //   data: response?.pages || [],
+      //   // links: response?.data?.links || {},
+      //   // meta: response?.data?.meta || {},
+      // }),
       infiniteQueryOptions: {
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
@@ -32,6 +33,7 @@ export const accountsApi = createApi({
           return Number(nextPage);
         },
       },
+      providesTags: ['accounts'],
     }),
     createBankAccount: build.mutation({
       query: (body) => ({
@@ -39,25 +41,28 @@ export const accountsApi = createApi({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['accounts'],
     }),
-    deactivateBankAccount: build.mutation({
-      query: ({ id, new_main_detail_id }) => ({
-        url: `${BANK_URL}/partnership_details/deactivate/${id}`,
+    changeStatusBankAccount: build.mutation({
+      query: ({ id }) => ({
+        url: `${BANK_URL}/partnership_details/change-status/${id}`,
         method: 'POST',
-        body: { new_main_detail_id },
       }),
+      invalidatesTags: ['accounts'],
     }),
     setMainBankAccount: build.mutation({
       query: (id) => ({
         url: `${BANK_URL}/partnership_details/set-main/${id}`,
         method: 'POST',
       }),
+      invalidatesTags: ['accounts'],
     }),
     deleteBankAccount: build.mutation({
       query: (id) => ({
         url: `${BANK_URL}/partnership_details/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['accounts'],
     }),
   }),
 });
@@ -65,7 +70,7 @@ export const accountsApi = createApi({
 export const {
   useGetAccountsInfiniteQuery,
   useCreateBankAccountMutation,
-  useDeactivateBankAccountMutation,
+  useChangeStatusBankAccountMutation,
   useSetMainBankAccountMutation,
   useDeleteBankAccountMutation,
 } = accountsApi;

@@ -3,9 +3,6 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { isAnyFilterActive } from '../../redux/filters/selectors';
 
-// mock
-import { companies } from 'mock/mockData';
-
 // components
 import ActivityFilter from './ActivityFilter/ActivityFilter';
 import DetailsFilter from 'components/Filters/DetailsFilter/DetailsFilter';
@@ -66,7 +63,6 @@ const FiltersContainer = ({ type, isFetching }) => {
       <DetailsFilter
         key="company"
         name="company"
-        data={companies}
         isFetching={getFetching('company')}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}

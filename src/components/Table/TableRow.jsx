@@ -60,13 +60,13 @@ const TableRow = ({ row, type }) => {
             label={row?.label}
           />
         </div>
-        <div className={classNames(s.gridCell, s.shrinkable)}><Goal text={row?.goal}/></div>
+        <div className={classNames(s.gridCell, s.shrinkable)}>
+          <Goal text={row?.goal} />
+        </div>
         <div className={s.gridCell}>{row?.kind}</div>
         <div className={classNames(s.gridCell, s.right)}>
           <DeleteTransaction id={row.id} onClick={handleDeleteTransaction} />
         </div>
-
-       
       </div>
     );
   };
@@ -82,9 +82,9 @@ const TableRow = ({ row, type }) => {
 
     return (
       <div className={classNames(s.gridRow, s.extractions)}>
-        <div className={s.gridCell}>{row?.date}</div>
-        <div className={s.gridCell}>{row?.partnership?.name}</div>
-        <div className={s.gridCell}>{row?.partnership?.rs}</div>
+        <div className={s.gridCell}>{row?.date || ''}</div>
+        <div className={s.gridCell}>{row?.partnership?.name || ''}</div>
+        <div className={s.gridCell}>{row?.partnership?.rs || ''}</div>
         <div className={s.gridCell}>
           <DownloadButton onClick={() => handleDownloadExtraction(row.id)} />
         </div>
@@ -101,27 +101,27 @@ const TableRow = ({ row, type }) => {
   };
 
   const renderAccountRow = () => {
-    const p = row?.payer || {};
     return (
       <div className={classNames(s.gridRow, s.accounts)}>
-        <div className={s.gridCell}>{p.bank}</div>
-        <div className={s.gridCell}>{p.bik}</div>
-        <div className={s.gridCell}>{p.correspondentAccount}</div>
-        <div className={s.gridCell}>{p.accountNumber}</div>
-        <div className={s.gridCell}>{p.name}</div>
-        <div className={s.gridCell}>01.07.2025</div>
-        <div className={(s.gridCell, s.agents)}>123</div>
+        <div className={s.gridCell}>{row.bank || ''}</div>
+        <div className={s.gridCell}>{row.bik || ''}</div>
+        <div className={s.gridCell}>{row.rs || ''}</div>
+        <div className={s.gridCell}>{row.ks || ''}</div>
+        <div className={s.gridCell}>{row.partnership.name || ''}</div>
+        <div className={s.gridCell}>{row.data || ''}</div>
+        <div className={(s.gridCell, s.agents)}>{row.counterparties_count || ''}</div>
         <div className={s.gridCell}>
-          <TagLabel alert={false} inactive={true} />
+          {row.status === 'noactive' && <TagLabel inactive={true} />}
+          {Boolean(row.is_main) && <TagLabel alert={false} inactive={false} />}
         </div>
         <div className={classNames(s.gridCell, s.copyCell, s.right)}>
           <CopyTextIcon
             textToCopy={
-              `Банк: ${p.bank}\n` +
-              `БИК: ${p.bik}\n` +
-              `Корр. счет: ${p.correspondentAccount}\n` +
-              `Расчетный счет: ${p.accountNumber}\n` +
-              `Компания: ${p.name}`
+              `Банк: ${row.bank}\n` +
+              `БИК: ${row.bik}\n` +
+              `Корр. счет: ${row.rs}\n` +
+              `Расчетный счет: ${row.ks}\n` +
+              `Компания: ${row.partnership.name}`
             }
           />
         </div>

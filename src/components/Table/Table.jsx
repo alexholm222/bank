@@ -50,7 +50,7 @@ const Table = ({ type, anim, isLoading, isFetching, list = [], error }) => {
           onClick={() => handlerOpenFlow(row)}
         >
           <TableRow row={row} type={type} />
-           <div className={s.line}></div>
+          <div className={s.line}></div>
         </div>
       ))}
     </div>

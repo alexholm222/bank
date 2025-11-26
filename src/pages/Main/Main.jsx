@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 //utils
@@ -6,6 +6,7 @@ import getTransactionsParams from '../../utils/queryParams/getTransactionsParams
 
 //redux
 import { useGetTransactionsInfiniteQuery } from '../../redux/services/transactionsApi';
+import { useGetAccountsInfiniteQuery } from '../../redux/services/accountsApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTabData } from '../../redux/tableData/tableDataSlice';
 import { useGetCompaniesQuery } from '../../redux/services/filtersApiActions';
@@ -82,6 +83,14 @@ const Main = () => {
     isLoading: isLoadingExtractions,
   } = useGetExtractionsInfiniteQuery(extractionsParams);
 
+  const {
+    data: accountsList,
+    isFetching: isFetchingAccounts,
+    isLoading: isLoadingAccounts,
+  } = useGetAccountsInfiniteQuery({
+    searchQuery,
+  });
+
   //////////////////////////////////////////////////////////////////////////////////
   //Если data.length > 0, то показываем предупреждение о не распознанных транзакциях
   const { data: transactionsListUnknown, isSuccess } = useGetTransactionsInfiniteQuery(
@@ -123,6 +132,7 @@ const Main = () => {
   const isFetching = useMemo(() => {
     if (activeTab === 'transactions') return isFetchingTransactions;
     if (activeTab === 'extractions') return isFetchingExtractions;
+    if (activeTab === 'accounts') return isFetchingAccounts;
     return false;
   }, [activeTab, isFetchingTransactions, isFetchingExtractions]);
 
@@ -139,6 +149,13 @@ const Main = () => {
       dispatch(setTabData({ tab: 'extractions', data: allItems }));
     }
   }, [extractionsList, dispatch, activeTab]);
+  useEffect(() => {
+    if (activeTab === 'accounts' && accountsList?.pages?.length) {
+      const allItems = accountsList.pages.flatMap((page) => page?.data ?? []);
+      console.log(allItems, 'allItems');
+      dispatch(setTabData({ tab: 'accounts', data: allItems }));
+    }
+  }, [accountsList, dispatch, activeTab]);
 
   return (
     <div className={s.root} ref={containerRef}>
@@ -153,7 +170,13 @@ const Main = () => {
       />
 
       <div className={s.queryPanel}>
-        <Search isFetching={isFetching} searchValue={searchQuery} setSearchQuery={setSearchQuery} />
+        {activeTab !== 'accounts' && (
+          <Search
+            isFetching={isFetching}
+            searchValue={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        )}
 
         <FiltersContainer type={activeTab} isFetching={isFetching} />
       </div>

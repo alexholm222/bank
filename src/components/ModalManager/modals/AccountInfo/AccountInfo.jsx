@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+
+//redux
+import {
+  useChangeStatusBankAccountMutation,
+  useSetMainBankAccountMutation,
+} from '../../../../redux/services/accountsApi';
 
 import Tippy from '@tippyjs/react';
 // Hooks
@@ -8,7 +14,7 @@ import { useModal } from 'hooks/useModal';
 
 // Components
 import Modal from 'components/General/Modal/Modal';
-import Switch from 'components/General/Switch/Switch';
+import Switch from './components/Switch/Switch';
 import UniButton from 'components/General/UniButton/UniButton';
 
 // Icons
@@ -21,104 +27,13 @@ import { ReactComponent as RowBlue } from 'assets/icons/rowBlue.svg';
 
 // Styles
 import s from './AccountInfo.module.scss';
+import useToast from 'hooks/useToast';
+import { set } from 'lodash';
 
 const options = [
   { value: 'passport', label: 'Паспорт' },
   { value: 'med_book', label: 'Мед. книжка' },
   { value: 'patent', label: 'Патент' },
-];
-const data1 = [
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
-  { value: '1', label: 'Рога и копыта ООО', inn: '123456789', kpp: '123456789' },
-  {
-    value: '2',
-    label: 'Шабашкин Александр Сергеевич ИП',
-    inn: '4363464777',
-    ogrnip: '102773964228146',
-  },
-  {
-    value: '3',
-    label: 'Очень длинное название Скилла Инновации ООО',
-    inn: '4703170282',
-    kpp: '780601001',
-  },
 ];
 
 const docTypes = ['Оказание услуг', 'Транспортный'];
@@ -126,18 +41,68 @@ const incomeTransactionTypes = ['Поступление', 'Возврат'];
 // const outcomeTransactionTypes = ['Платеж', 'Возврат'];
 
 const AccountInfo = () => {
+  const { showToast } = useToast();
   const { modalProps, hideModal, showModal } = useModal();
+  const [isDefault, setIsDefault] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const { data } = modalProps || {};
+  const [setMainBankAccount] = useSetMainBankAccountMutation();
+  const [changeStatusBankAccount, { isLoading }] = useChangeStatusBankAccountMutation();
 
-  const count = 3;
-  const handleDeactivate = () => {
-    hideModal();
-    showModal('CHANGE_ACCOUNT_DETAIL');
+  useEffect(() => {
+    setIsDefault(data?.is_main === 1);
+    setIsActive(data?.status === 1);
+  }, [data]);
+
+  const handleChangeStatus = async () => {
+    try {
+      const res = await changeStatusBankAccount({ id: data.id }).unwrap();
+      if (res.success) {
+        showToast('Статус счета изменен', 'success');
+        setIsActive(!isActive);
+      }
+    } catch (error) {
+      showToast('Произошла ошибка', 'error');
+    }
   };
-  const handleActivate = () => {
-    setIsActive(true);
+  const handleSetDefault = async () => {
+    try {
+      const res = await setMainBankAccount(data.id).unwrap();
+      if (res.success) {
+        showToast('Счет выбран как основной', 'success');
+        setIsDefault(true);
+      }
+    } catch (error) {
+      showToast('Произошла ошибка', 'error');
+    }
   };
+
+  const getValue = (value) => (value?.toString().trim() ? value : '');
+
+  const handleCopyDetails = async () => {
+    try {
+      const requisites = `
+          Компания: ${getValue(data?.partnership?.name)}
+          ИНН: ${getValue(data?.partnership?.inn)}
+          КПП: ${getValue(data?.partnership?.kpp)}
+          ОГРН: ${getValue(data?.partnership?.ogrn)}
+
+          Банк: ${getValue(data?.bank)}
+          БИК: ${getValue(data?.bik)}
+          Корр. счёт: ${getValue(data?.kr)}
+          Расчетный счёт: ${getValue(data?.rs)}
+
+          Юридический адрес: ${getValue(data?.partnership?.ur_adress)}
+          Фактический адрес: ${getValue(data?.partnership?.address)}
+        `.trim();
+
+      await navigator.clipboard.writeText(requisites);
+      showToast('Реквизиты скопированы в буфер обмена', 'success');
+    } catch (e) {
+      showToast('Не удалось скопировать', 'error');
+    }
+  };
+
   return (
     <Modal isOpen={true} onClose={hideModal}>
       <div className={s.modal}>
@@ -150,7 +115,7 @@ const AccountInfo = () => {
           </button>
         </div>
 
-        <Link
+        {/* <Link
           to="/counterparties"
           className={classNames(s.link, { [s.link_vis]: isActive })}
           onClick={hideModal}
@@ -160,46 +125,59 @@ const AccountInfo = () => {
           <span className={s.arrow}>
             <RowBlue />
           </span>
-        </Link>
+        </Link> */}
 
         <div className={s.body}>
           <PaymentDetails data={data} />
         </div>
 
-        <div className={classNames(s.switchWrapper, { [s.switchWrapper_vis]: isActive })}>
-          <Switch label="Основной счет" />
-          <Tippy content="Отметка автоматичсеки снимается при назначении нового основного счета">
-            <IconInfo />
-          </Tippy>
-        </div>
+        {/* <div className={classNames(s.switchWrapper, { [s.switchWrapper_vis]: isActive })}> */}
+        {isActive && (
+          <div className={classNames(s.switchWrapper)}>
+            <Switch
+              text="Основной счет"
+              switchState={isDefault}
+              setSwitchState={handleSetDefault}
+              disabled={isDefault}
+            />
+            <Tippy content="Отметка автоматичсеки снимается при назначении нового основного счета">
+              <IconInfo />
+            </Tippy>
+          </div>
+        )}
         <div className={s.controlSection}>
-          <UniButton
-            onClick={handleActivate}
-            text="Сделать активным"
-            type="primary"
-            iconPosition="right"
-            icon={IconViewing}
-            width={452}
-            className={classNames(s.activateBtn, { [s.activateBtn_vis]: !isActive })}
-          />
-          <div className={classNames(s.controlBtn, { [s.switchWrapper_vis]: isActive })}>
+          {!isActive && (
             <UniButton
-              onClick={handleDeactivate}
+              onClick={handleChangeStatus}
+              text="Сделать активным"
+              type="primary"
+              iconPosition="right"
+              icon={IconViewing}
+              width={452}
+            />
+          )}
+
+          {!isDefault && isActive && (
+            <UniButton
+              onClick={handleChangeStatus}
               text="Сделать неактивным"
               type="danger"
               iconPosition="right"
               icon={EyeRed}
               width={212}
             />
+          )}
+
+          {(isDefault || isActive) && (
             <UniButton
-              onClick={hideModal}
+              onClick={handleCopyDetails}
               text="Копировать реквизиты"
               type="primary"
               iconPosition="right"
               icon={IconCopyWhite}
-              width={228}
+              width={isDefault ? 452 : 228}
             />
-          </div>
+          )}
         </div>
       </div>
     </Modal>
@@ -209,24 +187,25 @@ const AccountInfo = () => {
 export default AccountInfo;
 
 const PaymentDetails = ({ data }) => {
-  const { payer, receiver, amount, transactionType, paymentType, description } = data;
+  const { amount, transactionType, paymentType, description } = data;
 
-  const isSummaryFirst = true;
+  const fields = [
+    { label: 'Компания', key: 'name' },
+    { label: 'ИНН', key: 'inn' },
+    { label: 'КПП', key: 'kpp' },
+    { label: 'ОГРН', key: 'ogrn' },
+    { label: 'Юр. адрес', key: 'ur_adress' },
+    { label: 'Факт. адрес', key: 'address' },
+    { label: 'Банк', key: 'bank' },
+    { label: 'БИК', key: 'bik' },
+    { label: 'Корр. счет', key: 'ks' },
+    { label: 'Расчетный счет', key: 'rs' },
+  ];
 
-  const renderFields = (entity) =>
-    [
-      entity?.company,
-      entity?.inn,
-      entity?.kpp,
-      entity?.bank,
-      entity?.bik,
-      entity?.correspondentAccount,
-      entity?.accountNumber,
-    ].map((value, index) => (
-      <div key={index} className={s.row}>
-        <div className={s.content}>{value?.toString().trim() ? value : '-'}</div>
-      </div>
-    ));
+  const getValue = (obj, key) => {
+    const value = obj?.partnership?.[key] ?? obj?.[key];
+    return value?.toString().trim() ? value : '-';
+  };
 
   const summaryData = [
     ['Сумма', amount],
@@ -235,46 +214,16 @@ const PaymentDetails = ({ data }) => {
     ['Назначение', description],
   ];
 
-  const summaryBlock = (
-    <div className={s.paymentSummary}>
-      <div className={s.sectionSubtitle}>Детали платежа из выписки</div>
-      {summaryData.map(([label, value], index) => (
-        <div key={index} className={s.row}>
-          <div className={s.label}>{label}</div>
-          <div className={s.content}>{value?.toString().trim() ? value : '-'}</div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const labels = [
-    'Компания',
-    'ИНН',
-    'КПП',
-    'ОГРН',
-    'Юр. адрес',
-    'Факт. адрес',
-    'Руководитель',
-    'Банк',
-    'БИК',
-    'Корр. счет',
-    'Расчетный счет',
-  ];
-
   return (
     <div className={s.paymentDetails}>
-      <div className={s.detailsGrid}>
-        <div className={s.column}>
-          {labels.map((label, index) => (
-            <div key={index} className={s.row}>
-              <div className={s.label}>{label}</div>
-            </div>
-          ))}
-        </div>
-        <div className={classNames(s.column, s.payer)}>{renderFields(payer)}</div>
+      <div className={s.grid}>
+        {fields.map(({ label, key }, i) => (
+          <div className={s.gridRow} key={i}>
+            <div className={s.label}>{label}</div>
+            <div className={classNames(s.content, s.payer)}>{getValue(data, key)}</div>
+          </div>
+        ))}
       </div>
-
-      {!isSummaryFirst && summaryBlock}
     </div>
   );
 };
