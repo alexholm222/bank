@@ -1,0 +1,239 @@
+.root {
+  table-layout: fixed;
+  width: 100%;
+  /*  padding: 0 0 20px 0; */
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  border-spacing: 0;
+  opacity: 1;
+  color: var(--Text-Primary, #121922);
+  transition: all 0.15s;
+
+  &_anim {
+    opacity: 1;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.gridRow {
+  display: grid;
+  align-items: center;
+  padding: 0 20px;
+  margin-top: -1px;
+  height: 50px;
+  /*  border-bottom: 1px solid #eff4fb; */
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #121922;
+
+  &.transactions {
+    grid-template-columns: minmax(100px, 100px) // Дата
+      minmax(100px, 100px) // Номер
+      minmax(200px, 200px) // Сумма
+      minmax(200px, 1.5fr) // Плательщик
+      minmax(150px, 1.5fr) // Получатель
+      minmax(200px, 1.8fr) // Назначение
+      minmax(200px, 200px) // Вид
+      minmax(80px, 80px); // Кнопка удалить
+
+    cursor: pointer;
+    &:hover {
+      background-color: #eaf0fa;
+      .deleteWrapper {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &.extractions {
+    grid-template-columns: minmax(100px, 0.5fr) // Поступил
+      minmax(250px, 1.5fr) // Компания
+      minmax(120px, 1fr) // Счет
+      minmax(100px, 0.5fr) // Файл
+      minmax(250px, 1fr) // Кто загрузил
+      // minmax(100px, 0.5fr) // Должность
+      minmax(150px, 150px); // Распознана/Не распознана
+
+    cursor: default;
+  }
+
+  &.accounts {
+    grid-template-columns: minmax(200px, 1fr) // Банк
+      minmax(120px, 120px) // БИК
+      minmax(210px, 210px) // Корр. счет
+      minmax(210px, 210px) // Расчетный счет
+      minmax(200px, 1fr) // Компания
+      minmax(120px, 120px) // Добавлен
+      minmax(120px, 120px) // Контрагенты
+      minmax(150px, 150px) // Статус бейдж
+      minmax(50px, 50px); // Копировать
+
+    cursor: pointer;
+    &:hover {
+      background-color: #eaf0fa;
+    }
+  }
+}
+
+.line {
+  margin: -1px 20px 0;
+  width: calc(100% - 40px);
+  height: 1px;
+  background-color: #eaf0fa;
+}
+
+.gridCell {
+  padding-right: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  &.right {
+    justify-self: end;
+    text-align: right;
+    padding-right: 0;
+  }
+  &.center {
+    text-align: center;
+  }
+
+  &.gray {
+    color: #71869d;
+  }
+  &.amount {
+    padding-right: 40px;
+  }
+}
+
+.gridHeader {
+  @extend .gridRow;
+  font-weight: 400;
+  color: #71869d;
+
+  &:hover {
+    background-color: transparent !important;
+
+    .deleteWrapper {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  }
+  > div {
+    padding: 16px 20px 16px 0px;
+  }
+}
+
+.warningCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #e10d0d;
+}
+.tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background-color: #e0f7f0;
+  color: #28a879;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+
+  &_red {
+    background-color: #fee9ef;
+    color: #cc0101;
+  }
+
+  &_grey {
+    background-color: #f1f4f9;
+    color: #71869d;
+  }
+}
+
+.deleteWrapper {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #eff4fb;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.deleteIconButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  .deleteIconRed {
+    display: none;
+  }
+
+  &:hover {
+    .deleteIcon {
+      display: none;
+    }
+
+    .deleteIconRed {
+      display: block;
+    }
+  }
+}
+.agents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.noData {
+  text-align: left;
+  color: #71869d;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.error {
+  text-align: left;
+  color: #e10d0d;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.withLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.companyText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.flexCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  .gray {
+    color: #71869d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

@@ -1,27 +1,43 @@
-import s from "./App.module.scss";
-import { Routes, Route } from "react-router-dom";
-//components
-import Main from "./pages/Main/Main";
-import Detail from "./pages/Detail/Detail";
+import { useRef } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer, Slide } from 'react-toastify';
+// Components
+import Main from './pages/Main/Main';
+import ScrollToTopButton from 'components/General/ScrollToTopBtn/ScrollToTopBtn';
+import ModalManager from 'components/ModalManager/ModalManager';
+// Styles
+import s from './App.module.scss';
 
 const App = () => {
+  const scrollRef = useRef(null);
 
   return (
-    <div
-      id="scrollableDiv"
-      className={s.root}
-    >
+    <div className={s.root} ref={scrollRef} id="scrollableDiv">
+      {/* Основные маршруты */}
       <Routes>
-        <Route
-          path="/"
-          element={<Main />}
-        />
-
-        <Route
-          path="/detail/:id"
-          element={<Detail />}
-        />
+        <Route path="/" element={<Main />} />
       </Routes>
+
+      <Routes>
+        <Route path="/statements" element={<Main />} />
+      </Routes>
+
+      {/* Глобальные модалки */}
+      <ModalManager />
+
+      {/* Уведомления */}
+      <ToastContainer
+        position="top-center"
+        hideProgressBar
+        closeOnClick
+        pauseOnHover
+        transition={Slide}
+        limit={1}
+        stacked
+      />
+
+      {/* Кнопка прокрутки вверх */}
+      <ScrollToTopButton scrollContainerRef={scrollRef} />
     </div>
   );
 };

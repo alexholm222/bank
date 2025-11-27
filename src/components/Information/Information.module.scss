@@ -1,0 +1,55 @@
+.root {
+  height: 0;
+  margin-top: -12px;
+  overflow: hidden;
+  transition: all 0.2s;
+  opacity: 0;
+
+  &_open {
+    opacity: 1;
+    height: 64px;
+  }
+}
+
+.content {
+  border-radius: 8px;
+  background: #e6eaff;
+  height: 64px;
+  width: 100%;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  p {
+    font-size: 14px;
+  }
+}
+
+.button {
+  height: 40px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: 1px solid #002cfb;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #002cfb;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 140%;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: #0024cb;
+    color: #0024cb;
+  }
+}
