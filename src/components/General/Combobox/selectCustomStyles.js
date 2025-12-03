@@ -11,6 +11,7 @@ const getCustomStyles = (hasError, width) => ({
     height: '40px',
     display: 'flex',
     justifyContent: 'space-between',
+    transition: '0.15s',
     '&:hover': {
       borderColor: hasError ? '#E10D0D' : '#002cfb',
     },

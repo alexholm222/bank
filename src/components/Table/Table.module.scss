@@ -42,8 +42,9 @@
       minmax(80px, 80px); // Кнопка удалить
 
     cursor: pointer;
+    transition: all 0.15s;
     &:hover {
-      background-color: #eaf0fa;
+      background-color: #f8fafd;
       .deleteWrapper {
         opacity: 1;
         pointer-events: auto;
@@ -75,8 +76,9 @@
       minmax(50px, 50px); // Копировать
 
     cursor: pointer;
+    transition: all 0.15s;
     &:hover {
-      background-color: #eaf0fa;
+      background-color: #f8fafd;
     }
   }
 }

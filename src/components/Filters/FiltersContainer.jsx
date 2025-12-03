@@ -26,14 +26,6 @@ const FiltersContainer = ({ type, isFetching }) => {
 
   const filtersMap = {
     transactions: [
-      <DetailsFilter
-        key="details"
-        name="details"
-        isFetching={getFetching('details')}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        clearActiveFilter={clearActiveFilter}
-      />,
       <CompanyFilter
         key="companies"
         name="companies"
@@ -129,3 +121,17 @@ const FiltersContainer = ({ type, isFetching }) => {
   );
 };
 export default FiltersContainer;
+
+
+
+
+
+
+{/* <DetailsFilter
+key="details"
+name="details"
+isFetching={getFetching('details')}
+activeFilter={activeFilter}
+setActiveFilter={setActiveFilter}
+clearActiveFilter={clearActiveFilter}
+/>, */}
