@@ -124,8 +124,8 @@ const TableRow = ({ row, type }) => {
             textToCopy={
               `Банк: ${row.bank}\n` +
               `БИК: ${row.bik}\n` +
-              `Корр. счет: ${row.rs}\n` +
-              `Расчетный счет: ${row.ks}\n` +
+              `Корр. счет: ${row.ks}\n` +
+              `Расчетный счет: ${row.rs}\n` +
               `Компания: ${row.partnership.name}`
             }
           />
