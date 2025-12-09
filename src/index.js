@@ -13,7 +13,7 @@ import { ErrorBoundary } from 'components/ErrorBoundary';
 const root = ReactDOM.createRoot(document.getElementById('root_bank'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="new/test/bank">
+    <BrowserRouter basename={`new/${process.env.REACT_APP_TEST}bank`}>
       <Provider store={store}>
         <ErrorBoundary fallback={<div>Произошла ошибка. Пожалуйста, обновите страницу.</div>}>
           <App />
