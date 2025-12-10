@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 
 // Redux
@@ -17,6 +18,8 @@ import { ReactComponent as IconDocBag } from 'assets/icons/iconDocBag.svg';
 import s from './CompanyFilter.module.scss';
 
 const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const counterpartyId = searchParams.get('counterparty_id');
   const dispatch = useDispatch();
   const selectedCompanies = useSelector(selectSelectedCompanies);
   const companieslist = useSelector((state) => state.companiesList.companies) ?? [];
@@ -24,6 +27,7 @@ const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name })
   const [isOpen, setIsOpen] = useState(false);
   const [load, setLoad] = useState(false);
   const [done, setDone] = useState(false);
+  const navigate = useNavigate();
 
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
@@ -45,11 +49,20 @@ const CompanyFilter = ({ isFetching, setActiveFilter, clearActiveFilter, name })
     dispatch(setSelectedCompanies([]));
     setIsOpen(false);
     clearActiveFilter();
+    navigate('/')
   };
 
   const handleChange = (newSelected) => {
     setLocalSelected(newSelected);
   };
+
+  useEffect(() => {
+    if (counterpartyId) {
+      dispatch(setSelectedCompanies([Number(counterpartyId)]))
+    }
+  }, [counterpartyId])
+
+
   useEffect(() => {
     setLoad(isFetching);
 
