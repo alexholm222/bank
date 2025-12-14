@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedRecognizedType } from '../../redux/filters/slice';
@@ -5,7 +7,7 @@ import { setSelectedRecognizedType } from '../../redux/filters/slice';
 //Components
 import UniButton from 'components/General/UniButton/UniButton';
 import Information from 'components/Information/Information';
-import SectionButtons from 'components/SectionButtons/SectionButtons';
+import SegmentButtons from 'components/General/SegmentButtons/SegmentButtons';
 
 // Icons
 import { ReactComponent as IconPlus } from 'assets/icons/iconPlus.svg';
@@ -13,12 +15,6 @@ import { ReactComponent as IconUploadWhite } from 'assets/icons/iconUploadWhite.
 
 // Styles
 import s from './Main.module.scss';
-
-const TABS = [
-  { id: 'transactions', title: 'Транзакции' },
-  { id: 'extractions', title: 'Выписки' },
-  { id: 'accounts', title: 'Банковские счета' },
-];
 
 const MainHeader = ({
   activeTab,
@@ -46,7 +42,17 @@ const MainHeader = ({
         open={isUnknownTransaction && selectedRecognizedType !== '1'}
       />
       <div className={s.block}>
-        <SectionButtons load={isLoading} list={TABS} active={activeTab} setActive={setActiveTab} />
+        <SegmentButtons
+          style={1}
+          value={activeTab}
+          callback={(val) => setActiveTab(val)}
+          controlRef={useRef()}
+          segments={[
+            { label: "Транзакции", value: "transactions", ref: useRef() },
+            { label: "Выписки", value: "extractions", ref: useRef() },
+            { label: "Банковские счета", value: "accounts", ref: useRef() },
+          ]}
+        />
         <div className={s.buttons}>
           {showAddAccountBtn ? (
             <UniButton onClick={handleAddAccount} text="Добавить счет" icon={IconPlus} />
