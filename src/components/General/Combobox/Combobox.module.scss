@@ -47,6 +47,7 @@
   gap: 20px;
   overflow: hidden;
   max-width: 100%;
+
   .companyInfo {
     display: flex;
     flex-direction: row;
@@ -59,6 +60,7 @@
 
   .companyName {
     max-width: 60%;
+    min-width: 40%;
     flex-grow: 0;
     flex-shrink: 1;
     flex-basis: auto;
@@ -101,6 +103,7 @@
     white-space: nowrap;
   }
 }
+
 .error {
   overflow: hidden;
   height: 0;
@@ -126,6 +129,7 @@
     height: 16px;
   }
 }
+
 .noOptionsMessage {
   padding: 12px;
   text-align: left;

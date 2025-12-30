@@ -46,31 +46,20 @@ const BankAccount = () => {
   const [selectedPartnership, setSelectedPartnership] = useState(null);
   const [dadata, setDadata] = useState({});
 
-  const [createBankAccount, { isLoading}] =  useCreateBankAccountMutation();
+  const [createBankAccount, { isLoading }] = useCreateBankAccountMutation();
   const { data: parameters } = useGetCompaniesQuery();
   const [getBankByBik] = useGetBankByBikMutation();
 
+  console.log(partnershipId)
+
   const partnershipOptions = useMemo(() => {
-    const partnershipDetails = parameters?.partnership_details || [];
-    if (!Array.isArray(partnershipDetails) || partnershipDetails.length === 0) return [];
-    
-    // Убираем дубликаты по partnership_id, оставляя первое вхождение
-    const uniquePartnerships = new Map();
-    partnershipDetails.forEach((item) => {
-      const partnershipId = item.partnership_id;
-      if (partnershipId && !uniquePartnerships.has(partnershipId)) {
-        uniquePartnerships.set(partnershipId, item);
-      }
-    });
-    
+    const partnerships = parameters?.partnerships;
     // Преобразуем в формат, который ожидает Combobox
-    return Array.from(uniquePartnerships.values()).map((item) => ({
-      value: item.partnership_id,
-      label: item.partnership_name,
-      badge: item.label || null,
+    return Array.from(partnerships.values()).map((item) => ({
+      value: item.id,
+      label: item.name,
       inn: item.inn || '',
-      kpp: item.kpp || '',
-      ogrn: item.ogrn || '',
+      kpp: item.kpp || ''
     }));
   }, [parameters]);
 
@@ -127,7 +116,7 @@ const BankAccount = () => {
       showToast('Ошибка при создании счета', 'error');
     }
   };
- 
+
 
   return (
     <Modal isOpen onClose={hideModal}>
@@ -143,15 +132,15 @@ const BankAccount = () => {
         </div>
 
         <div className={s.content}>
-          <Field text="Партнерство">
-            <Combobox 
-              options={partnershipOptions} 
-              value={selectedPartnership} 
+          <Field text="Компания">
+            <Combobox
+              options={partnershipOptions}
+              value={selectedPartnership}
               onChange={(option) => {
                 setSelectedPartnership(option);
                 setPartnershipId(option?.value || null);
-              }} 
-              width={300} 
+              }}
+              width={300}
             />
           </Field>
           <Field text="БИК">
@@ -178,13 +167,13 @@ const BankAccount = () => {
             <InputBankAccount account={rs} setAccount={setRs} width={300} />
           </Field>
 
-          
 
-         
-        </div> 
 
-       <div className={s.btns}>
-          
+
+        </div>
+
+        <div className={s.btns}>
+
           <UniButton
             text="Отменить"
             onClick={hideModal}
@@ -194,16 +183,16 @@ const BankAccount = () => {
 
           />
           <UniButton
-          iconPosition="right"
+            iconPosition="right"
             text={'Добавить'}
             onClick={handleAddAccount}
             isLoading={isLoading}
-            icon={disabledBtn ? IconDoneGrey : IconDoneWhite }
+            icon={disabledBtn ? IconDoneGrey : IconDoneWhite}
             width={174}
-            disabled={ disabledBtn }
+            disabled={disabledBtn}
           />
-        
-        </div> 
+
+        </div>
       </div>
     </Modal>
   );
